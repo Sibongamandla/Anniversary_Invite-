@@ -44,7 +44,16 @@ const TiltCard = () => {
                     className="absolute bottom-10 left-10 z-30 pointer-events-none"
                 >
                     <h3 className="text-3xl font-serif text-gold mb-2">Cape Town</h3>
-                    <p className="text-white/80 text-sm tracking-widest uppercase">Interactive Map</p>
+                    <p className="text-white/80 text-sm tracking-widest uppercase mb-4">Interactive Map</p>
+                    <a
+                        href="https://www.google.com/maps/search/?api=1&query=Constantia+Main+Road,+Cape+Town"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="pointer-events-auto inline-flex items-center gap-2 px-4 py-2 bg-gold/20 backdrop-blur-md border border-gold/40 rounded-full text-gold text-xs uppercase tracking-wider hover:bg-gold hover:text-charcoal transition-all"
+                    >
+                        <span>Navigate</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11" /></svg>
+                    </a>
                 </motion.div>
 
                 {/* Pin */}
@@ -170,6 +179,7 @@ const Venue = () => {
                             </div>
                             <h3 className="text-2xl font-serif text-charcoal">{spot.name}</h3>
                             <p className="text-gold text-xs uppercase tracking-widest mt-1">{spot.desc}</p>
+                            <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.name + ", Cape Town")}`} target="_blank" rel="noopener noreferrer" className="inline-block mt-4 text-xs uppercase tracking-widest border-b border-charcoal pb-1 hover:text-gold transition-colors text-charcoal">Get Directions</a>
                         </motion.div>
                     ))}
                 </div>
