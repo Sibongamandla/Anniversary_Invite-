@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import api from '../services/mockApi';
 import GlassCard from '../components/GlassCard';
 import GuestTable from '../components/GuestTable';
 import InviteModal from '../components/InviteModal';

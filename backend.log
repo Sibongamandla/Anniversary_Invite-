@@ -3944,3 +3944,7 @@ INFO:     Finished server process [4811]
 INFO:     Started server process [4925]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+INFO:     127.0.0.1:53777 - "OPTIONS /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53777 - "POST /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53777 - "OPTIONS /guests/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53777 - "GET /guests/ HTTP/1.1" 200 OK
