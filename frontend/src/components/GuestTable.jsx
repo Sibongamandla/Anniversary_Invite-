@@ -6,7 +6,10 @@ const GuestTable = ({ guests }) => {
 
         const domain = window.location.origin;
         const inviteLink = `${domain}/join/${guest.unique_code}`;
-        const message = `Hi ${guest.name}, we'd love for you to celebrate with us! Please RSVP here: ${inviteLink}`;
+        const message = `Hi ${guest.name}, we'd love for you to celebrate with us! 
+Please RSVP here: ${inviteLink}
+
+Your unique code is: *${guest.unique_code}*`;
 
         // Robust Phone Formatting
         let phone = guest.phone_number.toString().replace(/\D/g, ''); // Remove all non-digits
