@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import heroImage from '../assets/hero.png';
+import heroImage from '../assets/couple_header.png';
 import { useGuest } from '../context/GuestContext';
 
 const Home = () => {
