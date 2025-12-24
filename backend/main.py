@@ -19,6 +19,18 @@ root_path = "/api" if os.getenv("VERCEL") else ""
 
 app = FastAPI(title="Wedding Anniversary API", root_path=root_path)
 
+@app.get("/health")
+def health_check():
+    return {"status": "ok", "app": "Wedding Anniversary API"}
+
+@app.get("/debug-db")
+def debug_db(db: Session = Depends(get_db)):
+    try:
+        admin_count = db.query(models.Admin).count()
+        return {"status": "connected", "admin_count": admin_count}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
 # CORS setup
 origins = [
     "http://localhost:3000",
