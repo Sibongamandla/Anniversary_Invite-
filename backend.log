@@ -3920,3 +3920,11 @@ INFO:     Finished server process [2702]
 INFO:     Started server process [4277]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'backend/database.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4277]
+INFO:     Started server process [4450]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
