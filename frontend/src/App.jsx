@@ -13,6 +13,7 @@ import Venue from './pages/Venue';
 import Program from './pages/Program';
 import Guide from './pages/Guide';
 import { GuestProvider, useGuest } from './context/GuestContext';
+import ScrollToTop from './components/ScrollToTop';
 
 const ProtectedRoute = ({ children }) => {
   const { guestCode } = useGuest();
@@ -70,29 +71,25 @@ function App() {
 
   return (
     <GuestProvider>
-      import ScrollToTop from './components/ScrollToTop';
 
-      // ... (lines omitted)
+      <Router>
+        <ScrollToTop />
+        <div className="text-white min-h-screen font-sans antialiased">
+          <AnimatePresence>
+            {loading && <Preloader onComplete={() => setLoading(false)} />}
+          </AnimatePresence>
 
-      <GuestProvider>
-        <Router>
-          <ScrollToTop />
-          <div className="text-white min-h-screen font-sans antialiased">
-            <AnimatePresence>
-              {loading && <Preloader onComplete={() => setLoading(false)} />}
-            </AnimatePresence>
-
-            {!loading && (
-              <>
-                <div className="grain-overlay" />
-                <Navbar />
-                <AnimatedRoutes />
-              </>
-            )}
-          </div>
-        </Router>
-      </GuestProvider>
-      );
+          {!loading && (
+            <>
+              <div className="grain-overlay" />
+              <Navbar />
+              <AnimatedRoutes />
+            </>
+          )}
+        </div>
+      </Router>
+    </GuestProvider>
+  );
 }
 
-      export default App;
+export default App;
