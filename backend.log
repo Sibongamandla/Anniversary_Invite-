@@ -3952,3 +3952,11 @@ INFO:     127.0.0.1:60654 - "OPTIONS /guests/ HTTP/1.1" 200 OK
 INFO:     127.0.0.1:60656 - "OPTIONS /guests/ HTTP/1.1" 200 OK
 INFO:     127.0.0.1:60654 - "GET /guests/ HTTP/1.1" 401 Unauthorized
 INFO:     127.0.0.1:60656 - "GET /guests/ HTTP/1.1" 401 Unauthorized
+WARNING:  StatReload detected changes in 'api/index.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4925]
+INFO:     Started server process [5890]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
