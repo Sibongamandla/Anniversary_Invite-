@@ -5,7 +5,15 @@ const GuestTable = ({ guests }) => {
         const domain = window.location.origin;
         const inviteLink = `${domain}/join/${guest.unique_code}`;
         const message = `Hi ${guest.name}, we'd love for you to celebrate with us! Please RSVP here: ${inviteLink}`;
-        return `https://wa.me/${guest.phone_number.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+
+        // Format Phone Number
+        let phone = guest.phone_number.replace(/\D/g, '');
+        // specific fix for South African numbers (common issue)
+        if (phone.startsWith('0') && phone.length === 10) {
+            phone = '27' + phone.substring(1);
+        }
+
+        return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     };
 
     return (
