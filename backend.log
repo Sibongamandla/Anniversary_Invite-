@@ -3908,3 +3908,15 @@ INFO:     127.0.0.1:58881 - "GET /guests/ HTTP/1.1" 200 OK
 INFO:     127.0.0.1:65268 - "POST /token HTTP/1.1" 200 OK
 INFO:     127.0.0.1:65268 - "OPTIONS /guests/ HTTP/1.1" 200 OK
 INFO:     127.0.0.1:65268 - "GET /guests/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56021 - "OPTIONS /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56021 - "POST /token HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56021 - "OPTIONS /guests/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56021 - "GET /guests/ HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'backend/database.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2702]
+INFO:     Started server process [4277]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
