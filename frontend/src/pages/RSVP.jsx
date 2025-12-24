@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../services/mockApi';
+import api from '../api';
 import { motion } from 'framer-motion';
 
 const RSVP = () => {
