@@ -7,12 +7,17 @@ from typing import List
 import csv
 import io
 
+import os
 from . import crud, models, schemas, database, auth
 from .database import engine, get_db
 
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="Wedding Anniversary API")
+# On Vercel, requests to /api/xyz are rewritten to this app.
+# FastAPI needs to know it's mounted at /api so it can parse routes correctly.
+root_path = "/api" if os.getenv("VERCEL") else ""
+
+app = FastAPI(title="Wedding Anniversary API", root_path=root_path)
 
 # CORS setup
 origins = [
