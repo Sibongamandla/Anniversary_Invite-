@@ -2,18 +2,26 @@ import { MessageCircle, StickyNote } from 'lucide-react';
 
 const GuestTable = ({ guests }) => {
     const generateWhatsAppLink = (guest) => {
+        if (!guest.phone_number) return '#';
+
         const domain = window.location.origin;
         const inviteLink = `${domain}/join/${guest.unique_code}`;
         const message = `Hi ${guest.name}, we'd love for you to celebrate with us! Please RSVP here: ${inviteLink}`;
 
-        // Format Phone Number
-        let phone = guest.phone_number.replace(/\D/g, '');
-        // specific fix for South African numbers (common issue)
+        // Robust Phone Formatting
+        let phone = guest.phone_number.toString().replace(/\D/g, ''); // Remove all non-digits
+
+        // Check for South African format (082...) -> Convert to 2782...
         if (phone.startsWith('0') && phone.length === 10) {
             phone = '27' + phone.substring(1);
         }
+        // If it's short (9 digits), assume it's SA without the 0
+        else if (phone.length === 9) {
+            phone = '27' + phone;
+        }
 
-        return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+        // Use the full API link which is often more reliable than wa.me on some devices
+        return `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
     };
 
     return (
