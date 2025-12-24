@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../services/mockApi';
+import api from '../api';
 import GlassCard from '../components/GlassCard';
 
 const AdminLogin = () => {
