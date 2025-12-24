@@ -118,7 +118,7 @@ const Home = () => {
                 </div>
 
                 <footer className="bg-charcoal text-white py-12 text-center">
-                    <p className="font-serif text-2xl mb-4">S & K</p>
+                    <p className="font-script text-5xl mb-4 text-gold">S & K</p>
                     <p className="text-xs uppercase tracking-widest opacity-50">Cape Town • 2025</p>
                 </footer>
             </div>
@@ -155,7 +155,7 @@ const Home = () => {
                     initial={{ y: 50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.7, duration: 1 }}
-                    className="text-sm md:text-xl text-white tracking-[0.5em] uppercase mt-4 mix-blend-difference font-light"
+                    className="text-2xl md:text-3xl text-gold mt-4 font-script mix-blend-screen"
                 >
                     Est. 2015
                 </motion.p>

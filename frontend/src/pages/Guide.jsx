@@ -135,12 +135,12 @@ const Guide = () => {
                 {/* Magazine Header */}
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b-2 border-charcoal pb-4">
                     <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.4em] mb-2 text-gold">The Anniversary Edition</p>
+                        <p className="font-script text-3xl text-gold mb-2 pl-2">The Anniversary Edition</p>
                         <h1 className="text-7xl md:text-9xl font-serif text-charcoal leading-[0.8]">GUIDE<span className="text-4xl align-top ml-2">©</span></h1>
                     </div>
                     <div className="text-right mt-8 md:mt-0">
                         <p className="text-charcoal font-serif italic text-lg">Vol. 10</p>
-                        <p className="text-xs uppercase tracking-widest text-gray-400">Cape Town • 2025</p>
+                        <p className="font-script text-2xl text-gold mt-2">Cape Town • 2025</p>
                     </div>
                 </div>
 
@@ -179,7 +179,7 @@ const Guide = () => {
                                     <div className="absolute bottom-0 left-0 bg-white p-6 md:p-12 max-w-lg border-t-4 border-gold z-10">
                                         <span className="text-xs font-bold uppercase tracking-widest text-gold mb-2 block">Editor's Choice</span>
                                         <h2 className="text-4xl md:text-5xl font-serif text-charcoal mb-4">{featured.name}</h2>
-                                        <p className="text-gray-600 font-serif italic leading-relaxed text-lg">"{featured.tip}"</p>
+                                        <p className="text-gold font-script text-3xl leading-relaxed">"{featured.tip}"</p>
                                     </div>
                                 </div>
                             </div>
@@ -213,7 +213,7 @@ const Guide = () => {
                                     </h3>
                                     <p className="text-gray-600 text-sm leading-relaxed mb-4 border-b border-gray-100 pb-4">{place.desc}</p>
                                     <p className="text-xs font-bold uppercase tracking-widest text-gray-400 group-hover:text-charcoal transition-colors">
-                                        Insider Tip: <span className="text-gold normal-case font-serif italic">{place.tip}</span>
+                                        Insider Tip: <span className="text-gold normal-case font-script text-xl pl-1">{place.tip}</span>
                                     </p>
                                 </div>
                             ))}

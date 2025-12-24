@@ -38,7 +38,7 @@ const Program = () => {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-16"
                 >
-                    <p className="text-gold font-bold tracking-[0.3em] uppercase text-xs mb-4">Itinerary</p>
+                    <p className="text-gold font-script text-4xl mb-2">Itinerary</p>
                     <h1 className="text-6xl md:text-8xl font-serif text-charcoal">The Weekend</h1>
                 </motion.div>
 
@@ -54,7 +54,7 @@ const Program = () => {
                         >
                             <div className="mb-8 border-b border-charcoal border-opacity-10 pb-4">
                                 <h2 className="text-2xl font-serif text-charcoal mb-1">{day.day}</h2>
-                                <p className="text-gold text-xs uppercase tracking-widest">{day.title}</p>
+                                <p className="text-gold font-script text-2xl mt-1">{day.title}</p>
                             </div>
 
                             <div className="space-y-8 relative border-l border-charcoal border-opacity-20 ml-2 pl-6">

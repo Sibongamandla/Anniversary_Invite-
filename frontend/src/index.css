@@ -2,10 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '@fontsource/playfair-display/400.css';
-@import '@fontsource/playfair-display/700.css';
-@import '@fontsource/inter/300.css';
-@import '@fontsource/inter/400.css';
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Great+Vibes&family=Lato:wght@300;400;700&display=swap');
 
 html.lenis {
   height: auto;

@@ -12,8 +12,9 @@ export default {
                 gold: '#d4af37',
             },
             fontFamily: {
-                serif: ['"Playfair Display"', 'serif'],
-                sans: ['"Inter"', 'sans-serif'],
+                serif: ['"Cormorant Garamond"', 'serif'],
+                sans: ['"Lato"', 'sans-serif'],
+                script: ['"Great Vibes"', 'cursive'],
             },
         },
     },
