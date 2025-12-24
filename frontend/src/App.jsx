@@ -70,23 +70,29 @@ function App() {
 
   return (
     <GuestProvider>
-      <Router>
-        <div className="text-white min-h-screen font-sans antialiased">
-          <AnimatePresence>
-            {loading && <Preloader onComplete={() => setLoading(false)} />}
-          </AnimatePresence>
+      import ScrollToTop from './components/ScrollToTop';
 
-          {!loading && (
-            <>
-              <div className="grain-overlay" />
-              <Navbar />
-              <AnimatedRoutes />
-            </>
-          )}
-        </div>
-      </Router>
-    </GuestProvider>
-  );
+      // ... (lines omitted)
+
+      <GuestProvider>
+        <Router>
+          <ScrollToTop />
+          <div className="text-white min-h-screen font-sans antialiased">
+            <AnimatePresence>
+              {loading && <Preloader onComplete={() => setLoading(false)} />}
+            </AnimatePresence>
+
+            {!loading && (
+              <>
+                <div className="grain-overlay" />
+                <Navbar />
+                <AnimatedRoutes />
+              </>
+            )}
+          </div>
+        </Router>
+      </GuestProvider>
+      );
 }
 
-export default App;
+      export default App;

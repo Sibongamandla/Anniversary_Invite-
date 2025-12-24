@@ -18,11 +18,9 @@ const Navbar = () => {
     }, []);
 
     // Admin routes shouldn't show the guest navbar (when actually ON the admin page)
-    if (location.pathname.startsWith('/admin') && location.pathname !== '/admin/login') {
-        // Allow navbar on login page? Or just keep it hidden on all /admin?
-        // User said "can't access admin directory", implies they need a link TO it.
-        // If I hide navbar ON /admin, that's fine.
-        // The issue is getting THERE.
+    // Hide Navbar on Admin Dashboard
+    if (location.pathname.startsWith('/admin/dashboard')) {
+        return null;
     }
     // Reverting that thought: The existing check `if (location.pathname.startsWith('/admin')) return null;` hides the navbar when you are viewing the dashboard. This is standard.
     // The user wants a LINK to get there.
