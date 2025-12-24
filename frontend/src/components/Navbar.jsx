@@ -17,8 +17,15 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Admin routes shouldn't show the guest navbar
-    if (location.pathname.startsWith('/admin')) return null;
+    // Admin routes shouldn't show the guest navbar (when actually ON the admin page)
+    if (location.pathname.startsWith('/admin') && location.pathname !== '/admin/login') {
+        // Allow navbar on login page? Or just keep it hidden on all /admin?
+        // User said "can't access admin directory", implies they need a link TO it.
+        // If I hide navbar ON /admin, that's fine.
+        // The issue is getting THERE.
+    }
+    // Reverting that thought: The existing check `if (location.pathname.startsWith('/admin')) return null;` hides the navbar when you are viewing the dashboard. This is standard.
+    // The user wants a LINK to get there.
 
     const links = [
         { name: 'Home', path: '/' },
@@ -26,7 +33,15 @@ const Navbar = () => {
         { name: 'The Venue', path: '/venue' },
         { name: 'Program', path: '/program' },
         { name: 'Guide', path: '/guide' },
+        { name: 'Admin', path: '/admin/login' }, // Added Admin
     ];
+
+    // Filter links based on auth state
+    const visibleLinks = links.filter(link => {
+        if (link.name === 'Admin') return true; // Always show Admin (per request)
+        if (link.name === 'Home') return true;  // Always show Home
+        return guestCode; // Only show others if unlocked
+    });
 
     return (
         <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out ${scrolled ? 'bg-white bg-opacity-90 backdrop-blur-md py-4 border-b border-charcoal border-opacity-5 shadow-sm' : 'bg-transparent py-8'}`}>
@@ -35,43 +50,38 @@ const Navbar = () => {
                     ANNIVERSARY
                 </Link>
 
-                {/* Only show nav links if unlocked */}
-                {guestCode && (
-                    <>
-                        {/* Desktop Menu */}
-                        <div className="hidden md:flex gap-10">
-                            {links.map((link) => (
-                                <Link
-                                    key={link.name}
-                                    to={link.path}
-                                    className={`text-xs uppercase tracking-[0.2em] transition-all duration-300 hover:text-gold ${scrolled ? (location.pathname === link.path ? 'text-gold' : 'text-gray-600') : (location.pathname === link.path ? 'text-gold' : 'text-gray-300 mix-blend-difference')}`}
-                                >
-                                    {link.name}
-                                </Link>
-                            ))}
-                        </div>
+                {/* Desktop Menu */}
+                <div className="hidden md:flex gap-10">
+                    {visibleLinks.map((link) => (
+                        <Link
+                            key={link.name}
+                            to={link.path}
+                            className={`text-xs uppercase tracking-[0.2em] transition-all duration-300 hover:text-gold ${scrolled ? (location.pathname === link.path ? 'text-gold' : 'text-gray-600') : (location.pathname === link.path ? 'text-gold' : 'text-gray-300 mix-blend-difference')}`}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                </div>
 
-                        {/* Mobile Toggle */}
-                        <button className={`md:hidden hover:text-gold transition-colors ${scrolled ? 'text-charcoal' : 'text-white mix-blend-difference'}`} onClick={() => setIsOpen(!isOpen)}>
-                            {isOpen ? <X size={24} /> : <Menu size={24} />}
-                        </button>
+                {/* Mobile Toggle */}
+                <button className={`md:hidden hover:text-gold transition-colors ${scrolled ? 'text-charcoal' : 'text-white mix-blend-difference'}`} onClick={() => setIsOpen(!isOpen)}>
+                    {isOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
 
-                        {/* Mobile Menu */}
-                        {isOpen && (
-                            <div className="absolute top-full left-0 w-full h-screen bg-white flex flex-col items-center justify-center gap-8 md:hidden z-40">
-                                {links.map((link) => (
-                                    <Link
-                                        key={link.name}
-                                        to={link.path}
-                                        onClick={() => setIsOpen(false)}
-                                        className={`text-2xl font-serif ${location.pathname === link.path ? 'text-gold' : 'text-charcoal'}`}
-                                    >
-                                        {link.name}
-                                    </Link>
-                                ))}
-                            </div>
-                        )}
-                    </>
+                {/* Mobile Menu */}
+                {isOpen && (
+                    <div className="absolute top-full left-0 w-full h-screen bg-white flex flex-col items-center justify-center gap-8 md:hidden z-40">
+                        {visibleLinks.map((link) => (
+                            <Link
+                                key={link.name}
+                                to={link.path}
+                                onClick={() => setIsOpen(false)}
+                                className={`text-2xl font-serif ${location.pathname === link.path ? 'text-gold' : 'text-charcoal'}`}
+                            >
+                                {link.name}
+                            </Link>
+                        ))}
+                    </div>
                 )}
             </div>
         </nav>
