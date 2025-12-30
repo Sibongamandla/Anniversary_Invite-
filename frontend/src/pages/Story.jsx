@@ -1,128 +1,122 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
-import coupleImage from '../assets/couple.png';
-import floralDivider from '../assets/floral_divider.png';
-
-const TimelineNode = ({ year, title, text, align = "left", isLast = false }) => {
-    return (
-        <div className={`relative flex ${align === 'right' ? 'flex-row-reverse' : 'flex-row'} items-center justify-between w-full max-w-6xl mx-auto py-24 md:py-32 px-4`}>
-            {/* Center Line Node */}
-            <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-gold border-[3px] border-white z-20 shadow-lg" />
-
-            {/* Content Side */}
-            <motion.div
-                initial={{ opacity: 0, x: align === 'left' ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: true, margin: "-100px" }}
-                className={`w-full md:w-[45%] ${align === 'right' ? 'text-left md:text-left' : 'text-right md:text-right'} relative`}
-            >
-                <span className="text-8xl md:text-9xl font-serif text-charcoal opacity-5 absolute -top-16 block w-full select-none pointer-events-none">
-                    {year}
-                </span>
-                <div className="relative z-10">
-                    <h3 className="text-3xl md:text-5xl font-serif text-charcoal mb-4">{title}</h3>
-                    <img src={floralDivider} alt="decoration" className="h-4 w-auto object-contain mb-6 opacity-60 mx-auto md:mx-0 inline-block" />
-                    <p className="text-gray-600 font-light leading-loose text-lg">
-                        {text}
-                    </p>
-                </div>
-            </motion.div>
-
-            {/* Scale Balance for Layout */}
-            <div className="hidden md:block w-[45%]" />
-        </div>
-    );
-};
+import { motion } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import { Volume2, VolumeX } from 'lucide-react';
 
 const Story = () => {
-    const containerRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end end"]
-    });
+    const [isMuted, setIsMuted] = useState(false);
+    const audioRef = useRef(null);
+    const videoRef = useRef(null);
 
-    const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
-    const lineHeight = useTransform(scrollYProgress, [0, 0.9], ["0%", "100%"]);
+    // Attempt to handle audio based on user interaction preference (default browser policy might block)
+    // We'll try to play if not muted, but handle errors gracefully.
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.volume = 0.3; // Gentle volume
+            if (!isMuted) {
+                audioRef.current.play().catch(e => console.log("Audio play failed (waiting for interaction):", e));
+            } else {
+                audioRef.current.pause();
+            }
+        }
+    }, [isMuted]);
+
+    const toggleMute = () => {
+        setIsMuted(!isMuted);
+    };
 
     return (
-        <div ref={containerRef} className="bg-white min-h-screen">
-            {/* Parallax Hero */}
-            <div className="h-screen sticky top-0 z-0 overflow-hidden flex items-center justify-center">
-                <motion.div
-                    style={{ scale }}
-                    className="absolute inset-0 bg-cover bg-center"
-                >
-                    <img src={coupleImage} alt="Couple" className="w-full h-full object-cover grayscale opacity-90" />
-                    <div className="absolute inset-0 bg-black/30" />
-                </motion.div>
+        <div className="bg-rich-black min-h-screen text-white">
+            {/* Hidden Audio Element - using a placeholder gentle instrumental */}
+            <audio ref={audioRef} loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=piano-moment-111161.mp3" />
+
+            {/* Hero Section with Video */}
+            <div className="relative h-screen flex items-center justify-center overflow-hidden">
+                <div className="absolute inset-0 bg-black">
+                    {/* Romantic Couple Video Placeholder */}
+                    <motion.video
+                        ref={videoRef}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 0.6 }}
+                        transition={{ duration: 2 }}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover opacity-60"
+                    >
+                        <source src="https://videos.pexels.com/video-files/3655611/3655611-hd_1920_1080_25fps.mp4" type="video/mp4" />
+                    </motion.video>
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-transparent to-black/40" />
 
                 <div className="relative z-10 text-center px-4">
-                    <motion.p
-                        initial={{ opacity: 0, letterSpacing: "0.2em" }}
-                        animate={{ opacity: 1, letterSpacing: "0.5em" }}
-                        transition={{ duration: 1.5 }}
-                        className="text-white text-sm md:text-base uppercase tracking-[0.5em] mb-4"
-                    >
-                        Ten Years In The Making
-                    </motion.p>
                     <motion.h1
-                        initial={{ y: 50, opacity: 0 }}
+                        initial={{ y: 30, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 1, delay: 0.2 }}
-                        className="text-7xl md:text-9xl font-serif text-white mix-blend-overlay"
+                        transition={{ duration: 1, delay: 0.5 }}
+                        className="text-6xl md:text-8xl lg:text-9xl font-script text-gold mb-4"
                     >
-                        Our Story
+                        Our Making
                     </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 1 }}
+                        className="text-sm md:text-base uppercase tracking-[0.4em] font-light text-white/80"
+                    >
+                        A Love Matured in Grace
+                    </motion.p>
                 </div>
 
-                {/* Fade to White at Bottom */}
-                <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white via-white/80 to-transparent z-10" />
+                {/* Sound Toggle */}
+                <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 2 }}
+                    onClick={toggleMute}
+                    className="absolute bottom-10 right-10 z-20 text-white/50 hover:text-white transition-colors p-4 border border-white/10 rounded-full bg-black/20 backdrop-blur-sm"
+                >
+                    {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                </motion.button>
             </div>
 
-            {/* Timeline Section */}
-            <div className="relative z-10 bg-white pt-32 pb-64">
-                {/* Vertical Line */}
-                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] -translate-x-1/2 bg-gray-200 z-0">
-                    <motion.div
-                        style={{ height: lineHeight }}
-                        className="w-full bg-gold origin-top"
-                    />
-                </div>
+            <div className="max-w-4xl mx-auto px-6 py-24 md:py-32">
+                {/* Poetic Text */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    className="text-center font-serif text-lg md:text-2xl leading-loose font-light space-y-12 text-gray-300"
+                >
+                    <p>
+                        What began as a spark grew slowly and patiently,<br />
+                        like wine, deepening with time. Through seasons painted in red—<br />
+                        passion, laughter, sacrifice, and fire—<br />
+                        they learned that love isn’t rushed.
+                    </p>
+                    <p className="text-gold text-3xl md:text-4xl italic">
+                        It’s chosen.<br />
+                        Tended.<br />
+                        Poured out, again and again.
+                    </p>
+                    <p>
+                        What started young became divine—<br />
+                        a love refined by years,<br />
+                        strengthened renewed by grace,<br />
+                        a sealed by commitment.
+                    </p>
+                    <p>
+                        Twenty years later, their story is full-bodied and bold.<br />
+                        Still rich.<br />
+                        Still rare.<br />
+                        Still worth raising a glass to.
+                    </p>
+                </motion.div>
 
-                <div className="max-w-7xl mx-auto">
-                    <TimelineNode
-                        year="2015"
-                        title="The First Meeting"
-                        text="It started not with a spark, but with a slow, deliberate burn. A chance encounter at a gallery opening in downtown New York. We talked about art for hours, unaware that we were painting the first strokes of our own masterpiece."
-                        align="left"
-                    />
-
-                    <TimelineNode
-                        year="2017"
-                        title="Building A Life"
-                        text="Two years of coffee dates, late-night drives, and shared dreams. We moved into our first apartment—a small, sun-drenched studio that smelled of old books and fresh espresso. It wasn't much, but it was ours."
-                        align="right"
-                    />
-
-                    <TimelineNode
-                        year="2019"
-                        title="The Yes"
-                        text="Under the vast canopy of the Icelandic sky, with the northern lights dancing emerald and violet above, a question was asked. A kneeling silhouette against the glow. The silence of the snow was broken only by a whispered 'Yes'."
-                        align="left"
-                    />
-
-                    <TimelineNode
-                        year="2024"
-                        title="Forever & Always"
-                        text="Ten years later, we stand here. Not just looking back at the memories we've built, but looking forward to the horizons yet to be explored. This anniversary isn't just a date on a calendar; it's a testament to the journey."
-                        align="right"
-                    />
-                </div>
-
-                <div className="text-center mt-32">
-                    <img src={floralDivider} alt="Decoration" className="h-8 md:h-12 w-auto mx-auto opacity-40 mb-8" />
-                    <p className="text-gold uppercase tracking-[0.3em] text-xs">To Be Continued...</p>
+                {/* Decorative End */}
+                <div className="mt-32 flex justify-center opacity-30">
+                    <div className="w-1 h-24 bg-gradient-to-b from-gold to-transparent" />
                 </div>
             </div>
         </div>

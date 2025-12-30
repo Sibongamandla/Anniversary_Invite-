@@ -1,158 +1,116 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Mountain, ShoppingBag, Utensils, Wine, Sun, Car, Shield, Bed, Coffee, Anchor } from 'lucide-react';
+import { Plane, Car, Map, Home, Palette as PaletteIcon, Sparkles, AlertCircle } from 'lucide-react';
+import heroImage from '../assets/hero_couple_romantic.png';
 
 const Guide = () => {
-    const [activeTab, setActiveTab] = useState('Stay');
+    const [activeTab, setActiveTab] = useState('Abode');
 
-    const allPlaces = [
-        // Stay
-        {
-            category: 'Stay',
-            name: 'The Silo Hotel',
-            type: 'Architecture & Art',
-            desc: 'A structure of geometric glass towering above the V&A Waterfront. It is not just a hotel; it is a modern masterpiece built into a historic grain elevator.',
-            tip: 'Visit the rooftop for the best sunset in the city.',
-            icon: Bed,
-            highlight: true,
-            image: "https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1200&q=80"
+    const sections = {
+        Sojourn: {
+            title: "The Journey",
+            subtitle: "Travel Logistics",
+            items: [
+                {
+                    title: "Cape Town Int. Airport",
+                    desc: "The primary gateway. We recommend arranging transport prior to arrival.",
+                    icon: Plane
+                },
+                {
+                    title: "Car Hire",
+                    desc: "For those who wish to wander at their own pace, car hire offers freedom to explore.",
+                    action: { label: "View Options", link: "https://www.google.com/search?q=car+hire+cape+town+international+airport" },
+                    icon: Car
+                },
+                {
+                    title: "Uber Black",
+                    desc: "Reliable, safe, and readily available for city transfers.",
+                    icon: Map
+                },
+                {
+                    title: "Private Transfers",
+                    desc: "Shared transfers can be arranged by special request. Please note flexibility is required.",
+                    icon: Car
+                }
+            ],
+            notes: [
+                "Early flight bookings often present the most favorable fares.",
+                "When parking at OR Tambo, use long-term parking for cost effective rates.",
+                "We invite you to arrive a day early to settle gracefully."
+            ]
         },
-        {
-            category: 'Stay',
-            name: 'Mount Nelson',
-            type: 'Iconic Heritage',
-            desc: 'The "Pink Lady" of Cape Town. A colonial-era retreat hidden behind palm-lined avenues and lush gardens.',
-            tip: 'High Tea here is a non-negotiable tradition.',
-            icon: Coffee,
-            image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80"
+        Abode: {
+            title: "Your Stay",
+            subtitle: "Accommodation",
+            intro: "We’ve highlighted a selection of areas to stay—choose the abode that best suits your pace.",
+            items: [
+                {
+                    title: "Sunsets & Sea Views",
+                    desc: "Camps Bay, Clifton, Bantry Bay, Fresnaye",
+                    time: "+/- 1hr to vine",
+                    image: "https://images.unsplash.com/photo-1576485290814-1c72aa4bbb8e?auto=format&fit=crop&w=800&q=80"
+                },
+                {
+                    title: "City Culture",
+                    desc: "V & A Waterfront, Foreshore, Greenpoint",
+                    time: "+/- 1hr to vine",
+                    image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=800&q=80"
+                },
+                {
+                    title: "Winelands",
+                    desc: "Stellenbosch (+/-15 min), Somerset West (+/-30 min), Franschhoek (+/- 50min)",
+                    time: "Closest to Venue",
+                    image: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=800&q=80"
+                },
+                {
+                    title: "Seaside Nearby",
+                    desc: "Somerset Strand",
+                    time: "Nearby Coastal",
+                    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+                }
+            ]
         },
-        {
-            category: 'Stay',
-            name: 'Ellerman House',
-            type: 'Private Luxury',
-            desc: 'Perched on the slopes of Lion\'s Head, offerring the most exclusive ocean views in Bantry Bay.',
-            tip: 'Ask to see the private wine gallery.',
-            icon: Wine,
-            image: "https://images.unsplash.com/photo-1626019253444-239638708761?auto=format&fit=crop&w=800&q=80"
-        },
+        Palette: {
+            title: "The Look",
+            subtitle: "Attire & Beauty",
+            content: {
+                theme: "A Red Affair | Black Tie Elegance",
+                desc: "We request the pleasure of your company in your finest formal attire. Think rich reds, classic blacks, and touches of gold.",
+                makeup: [
+                    { name: "@Makeup_by_Hedwin", handle: "Makeup_by_Hedwin", link: "https://www.instagram.com/Makeup_by_Hedwin" },
+                    { name: "@SnehhOnlineBeauty_studio", handle: "SnehhOnlineBeauty_studio", link: "https://www.instagram.com/SnehhOnlineBeauty_studio" }
+                ]
+            }
+        }
+    };
 
-        // Eat
-        {
-            category: 'Eat',
-            name: 'La Colombe',
-            type: 'Gastronomy',
-            desc: 'A theatrical dining experience perched atop the Silvermist estate. Consistently ranked among the world\'s best.',
-            tip: 'Book 3 months in advance.',
-            icon: Utensils,
-            highlight: true,
-            image: "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-            category: 'Eat',
-            name: 'The Pot Luck Club',
-            type: 'Tapas & Views',
-            desc: 'Located at the top of the Silo district, offering 360-degree views and a "sharing plate" concept that redefined Cape Town dining.',
-            tip: 'Sunday Brunch is dazzling.',
-            icon: Utensils,
-            image: "https://images.unsplash.com/photo-1514362545857-3bc16549766b?auto=format&fit=crop&w=800&q=80"
-        },
-        {
-            category: 'Eat',
-            name: 'Kloof Street House',
-            type: 'Eclectic Dining',
-            desc: 'Stepping inside is like entering a Victorian curiosity shop. Magical garden fairy lights meet plush velvet interiors.',
-            tip: 'Request a table in the garden.',
-            icon: Utensils,
-            image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
-        },
-        {
-            category: 'Eat',
-            name: 'FYN',
-            type: 'Japanese-African',
-            desc: 'Where Japan meets South Africa. A complex, urban culinary journey with views of Lion\'s Head.',
-            tip: 'The lunch special is a hidden gem.',
-            icon: Utensils,
-            image: "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?auto=format&fit=crop&w=800&q=80"
-        },
-
-        // Play
-        {
-            category: 'Play',
-            name: 'Table Mountain',
-            type: 'The Icon',
-            desc: 'The flat-topped mountain that watches over the city. A playground for hikers and nature lovers alike.',
-            tip: 'Sunset cable car ride.',
-            icon: Mountain,
-            highlight: true,
-            image: "https://images.unsplash.com/photo-1580060839134-75a5edca2e99?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-            category: 'Play',
-            name: 'Kirstenbosch',
-            type: 'Botanical Wonder',
-            desc: 'Acclaimed as one of the great botanic gardens of the world. Few gardens can match the sheer grandeur of the setting against the eastern slopes of Table Mountain.',
-            tip: 'Walk the "Boomslang" canopy walkway.',
-            icon: Sun,
-            image: "https://images.unsplash.com/photo-1616423640778-2cfd1e3d06cb?auto=format&fit=crop&w=800&q=80"
-        },
-        {
-            category: 'Play',
-            name: 'Boulders Beach',
-            type: 'Wildlife',
-            desc: 'A sheltered cove made up of inlets between granite boulders, from which the name originated. Home to a colony of African Penguins.',
-            tip: 'Go at 8am to swim with them.',
-            icon: Anchor,
-            image: "https://images.unsplash.com/photo-1520106212299-d99c443e4568?auto=format&fit=crop&w=800&q=80"
-        },
-        {
-            category: 'Play',
-            name: 'Wine Tram',
-            type: 'Excursion',
-            desc: 'A hop-on hop-off railway through the heart of the Franschhoek Valley vineyards.',
-            tip: 'The Blue Line offers the best views.',
-            icon: Wine,
-            image: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?auto=format&fit=crop&w=800&q=80"
-        },
-    ];
-
-    const tips = [
-        { icon: Car, title: "Getting Around", desc: "Uber is the gold standard here. Reliable, safe, and tracked." },
-        { icon: Sun, title: "The Elements", desc: "The 'Cape Doctor' wind clears the sky but demands a jacket." },
-        { icon: Shield, title: "Street Smarts", desc: "Like any major city: be aware, stick to the lights, and enjoy." }
-    ];
-
-    const tabs = ['Stay', 'Eat', 'Play'];
-
-    // Filter places
-    const filteredPlaces = allPlaces.filter(p => p.category === activeTab);
-    const featured = filteredPlaces.find(p => p.highlight) || filteredPlaces[0];
-    const others = filteredPlaces.filter(p => p !== featured);
+    const tabs = ['Sojourn', 'Abode', 'Palette'];
 
     return (
-        <div className="min-h-screen bg-[#FDFCF8] pt-32 px-4 pb-20 border-t-8 border-charcoal">
+        <div className="min-h-screen bg-rich-black pt-32 px-4 pb-20 border-t-8 border-gold text-white">
             <div className="container mx-auto max-w-6xl">
 
-                {/* Magazine Header */}
-                <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b-2 border-charcoal pb-4">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b-2 border-white/10 pb-4">
                     <div>
-                        <p className="font-script text-3xl text-gold mb-2 pl-2">The Anniversary Edition</p>
-                        <h1 className="text-7xl md:text-9xl font-serif text-charcoal leading-[0.8]">GUIDE<span className="text-4xl align-top ml-2">©</span></h1>
+                        <p className="font-script text-3xl text-gold mb-2 pl-2">The Guest Guide</p>
+                        <h1 className="text-7xl md:text-9xl font-serif text-white leading-[0.8]">INFO<span className="text-4xl align-top ml-2">©</span></h1>
                     </div>
                     <div className="text-right mt-8 md:mt-0">
-                        <p className="text-charcoal font-serif italic text-lg">Vol. 10</p>
-                        <p className="font-script text-2xl text-gold mt-2">Cape Town • 2025</p>
+                        <p className="text-gray-400 font-serif italic text-lg opacity-60">Vol. 10</p>
+                        <p className="font-script text-2xl text-gold mt-2">Cape Town • 2026</p>
                     </div>
                 </div>
 
-                {/* Navigation (Table of Contents Style) */}
-                <div className="flex gap-12 mb-20 text-sm uppercase tracking-[0.2em] justify-center md:justify-start">
+                {/* Navigation */}
+                <div className="flex gap-8 md:gap-12 mb-20 text-sm uppercase tracking-[0.2em] justify-center md:justify-start overflow-x-auto pb-4">
                     {tabs.map((tab) => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`pb-1 border-b-2 transition-colors duration-300 ${activeTab === tab ? 'border-gold text-charcoal font-bold' : 'border-transparent text-gray-400 hover:text-charcoal'}`}
+                            className={`pb-1 border-b-2 transition-colors duration-300 whitespace-nowrap ${activeTab === tab ? 'border-gold text-white font-bold' : 'border-transparent text-gray-500 hover:text-white'}`}
                         >
-                            0{activeTab === 'Stay' && tab === 'Stay' ? '1' : tab === 'Eat' ? '2' : '3'} • {tab}
+                            {tab}
                         </button>
                     ))}
                 </div>
@@ -166,78 +124,100 @@ const Guide = () => {
                         transition={{ duration: 0.5 }}
                         className="mb-32"
                     >
-                        {/* FEATURED ARTICLE LAYOUT */}
-                        <div className="grid lg:grid-cols-12 gap-12 mb-24 items-center">
-                            <div className="lg:col-span-8 relative">
-                                <div className="aspect-[16/9] w-full overflow-hidden relative group rounded-sm">
-                                    <img
-                                        src={featured.image}
-                                        alt={featured.name}
-                                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 filter brightness-90 group-hover:brightness-100"
-                                    />
-
-                                    <div className="absolute bottom-0 left-0 bg-white p-6 md:p-12 max-w-lg border-t-4 border-gold z-10">
-                                        <span className="text-xs font-bold uppercase tracking-widest text-gold mb-2 block">Editor's Choice</span>
-                                        <h2 className="text-4xl md:text-5xl font-serif text-charcoal mb-4">{featured.name}</h2>
-                                        <p className="text-gold font-script text-3xl leading-relaxed">"{featured.tip}"</p>
-                                    </div>
+                        {activeTab === 'Sojourn' && (
+                            <div className="grid lg:grid-cols-2 gap-16">
+                                <div className="space-y-8">
+                                    <h2 className="text-4xl font-serif text-gold mb-8">Travel Logistics</h2>
+                                    {sections.Sojourn.items.map((item, idx) => (
+                                        <div key={idx} className="bg-white/5 p-6 rounded-sm border border-white/10">
+                                            <div className="flex items-start gap-4">
+                                                <item.icon className="text-gold mt-1" size={24} />
+                                                <div>
+                                                    <h3 className="text-xl font-serif text-white mb-2">{item.title}</h3>
+                                                    <p className="text-gray-400 font-light text-sm leading-relaxed">{item.desc}</p>
+                                                    {item.action && (
+                                                        <a href={item.action.link} target="_blank" rel="noreferrer" className="inline-block mt-3 text-xs uppercase tracking-widest text-gold border-b border-gold pb-0.5 hover:text-white hover:border-white transition-colors">
+                                                            {item.action.label}
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="bg-gold/10 p-8 border border-gold/20 rounded-sm">
+                                    <h3 className="text-2xl font-serif text-gold mb-6 flex items-center gap-2">
+                                        <AlertCircle size={20} />
+                                        Travel Notes
+                                    </h3>
+                                    <ul className="space-y-4">
+                                        {sections.Sojourn.notes.map((note, idx) => (
+                                            <li key={idx} className="flex gap-3 text-gray-300 font-light leading-relaxed">
+                                                <span className="text-gold">•</span>
+                                                {note}
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
                             </div>
-                            <div className="lg:col-span-4 flex flex-col justify-center">
-                                <span className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4 block">The Experience</span>
-                                <h3 className="text-2xl font-serif text-charcoal mb-6 leading-tight">{featured.desc}</h3>
-                                <p className="text-sm leading-7 text-gray-500 font-light border-l-2 border-gray-200 pl-4">
-                                    A must-visit destination that defines the {activeTab.toLowerCase()} experience in Cape Town.
-                                    Expect world-class service and unforgettable memories.
-                                </p>
-                            </div>
-                        </div>
+                        )}
 
-                        {/* EDITORIAL COLUMNS FOR OTHERS */}
-                        <div className="grid md:grid-cols-3 gap-12 border-t border-charcoal border-opacity-10 pt-12">
-                            {others.map((place, idx) => (
-                                <div key={idx} className="group cursor-pointer">
-                                    <div className="mb-6 overflow-hidden h-64 bg-gray-100 relative rounded-sm">
-                                        <img
-                                            src={place.image}
-                                            alt={place.name}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter grayscale group-hover:grayscale-0"
-                                        />
-                                        <div className="absolute top-4 left-4 z-10">
-                                            <span className="text-[10px] font-bold uppercase tracking-widest bg-white text-charcoal px-2 py-1 rounded-full shadow-sm">{place.type}</span>
+                        {activeTab === 'Abode' && (
+                            <div>
+                                <h2 className="text-4xl font-serif text-gold mb-4">Accommodation Areas</h2>
+                                <p className="text-gray-400 font-light mb-12 max-w-2xl">{sections.Abode.intro}</p>
+                                <div className="grid md:grid-cols-2 gap-8">
+                                    {sections.Abode.items.map((item, idx) => (
+                                        <div key={idx} className="group relative h-80 overflow-hidden rounded-sm border border-white/10">
+                                            <img src={item.image} alt={item.title} className="w-full h-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-110" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent p-8 flex flex-col justify-end">
+                                                <h3 className="text-2xl font-serif text-white mb-1">{item.title}</h3>
+                                                <p className="text-gold text-xs uppercase tracking-widest mb-2">{item.time}</p>
+                                                <p className="text-gray-300 text-sm font-light">{item.desc}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'Palette' && (
+                            <div className="grid lg:grid-cols-2 gap-16 items-center">
+                                <div>
+                                    <h2 className="text-5xl font-serif text-white mb-6">{sections.Palette.content.theme}</h2>
+                                    <p className="text-xl text-gray-300 font-light leading-relaxed mb-12 border-l-2 border-gold pl-6">
+                                        {sections.Palette.content.desc}
+                                    </p>
+
+                                    <div className="space-y-6">
+                                        <h3 className="text-gold font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                                            <Sparkles size={16} />
+                                            Suggested Makeup Artists
+                                        </h3>
+                                        <div className="bg-white/5 p-6 rounded-sm border border-white/10">
+                                            {sections.Palette.content.makeup.map((artist, idx) => (
+                                                <a key={idx} href={artist.link} target="_blank" rel="noreferrer" className="block py-3 border-b border-white/10 last:border-0 hover:pl-2 transition-all group">
+                                                    <span className="text-gray-300 group-hover:text-gold transition-colors">{artist.name}</span>
+                                                </a>
+                                            ))}
                                         </div>
                                     </div>
-                                    <h3 className="text-2xl font-serif text-charcoal group-hover:text-gold transition-colors mb-3">
-                                        <span className="text-gold text-sm font-sans mr-2 align-middle">0{idx + 2}</span>
-                                        {place.name}
-                                    </h3>
-                                    <p className="text-gray-600 text-sm leading-relaxed mb-4 border-b border-gray-100 pb-4">{place.desc}</p>
-                                    <p className="text-xs font-bold uppercase tracking-widest text-gray-400 group-hover:text-charcoal transition-colors">
-                                        Insider Tip: <span className="text-gold normal-case font-script text-xl pl-1">{place.tip}</span>
-                                    </p>
                                 </div>
-                            ))}
-                        </div>
+                                <div className="h-[600px] border border-gold/20 p-4 relative">
+                                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none" />
+                                    <div className="w-full h-full bg-red-900/20 backdrop-blur-sm flex items-center justify-center">
+                                        <div className="text-center">
+                                            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-red-900 to-black mx-auto mb-6 border-4 border-gold shadow-lg" />
+                                            <p className="font-script text-4xl text-gold">Red & Gold</p>
+                                            <p className="text-white uppercase tracking-widest text-xs mt-2">The Aesthetic</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                     </motion.div>
                 </AnimatePresence>
-
-                {/* FOOTER STRIP */}
-                <div className="bg-charcoal text-white p-12 grid md:grid-cols-4 gap-8 rounded-sm">
-                    <div className="md:col-span-1 border-r border-white border-opacity-10 pr-8">
-                        <h3 className="font-serif text-3xl mb-2">Essential<br />Intel.</h3>
-                        <p className="text-xs text-gray-400 uppercase tracking-widest mt-4">Read before flight</p>
-                    </div>
-                    {tips.map((tip, index) => (
-                        <div key={index} className="md:col-span-1">
-                            <div className="flex gap-3 mb-2 items-center">
-                                <tip.icon size={16} className="text-gold" />
-                                <h4 className="font-bold uppercase tracking-widest text-xs">{tip.title}</h4>
-                            </div>
-                            <p className="text-sm text-gray-400 font-light leading-relaxed">{tip.desc}</p>
-                        </div>
-                    ))}
-                </div>
 
             </div>
         </div>

@@ -5,28 +5,23 @@ import { motion } from 'framer-motion';
 
 const RSVP = () => {
     const { code } = useParams();
-    const [guest, setGuest] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [status, setStatus] = useState(null);
-    const [email, setEmail] = useState('');
-    const [isFamily, setIsFamily] = useState(false);
-    const [plusOneCount, setPlusOneCount] = useState(0);
-    const [dietaryRestrictions, setDietaryRestrictions] = useState('');
-    const [notes, setNotes] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
+
+    // Form Fields
+    const [name, setName] = useState('');
+    const [status, setStatus] = useState('attending');
+    const [plusOneName, setPlusOneName] = useState('');
+    const [songRequest, setSongRequest] = useState('');
 
     useEffect(() => {
         const fetchGuest = async () => {
             try {
                 const response = await api.get(`/rsvp/${code}`);
-                setGuest(response.data);
-                setStatus(response.data.rsvp_status);
-                setEmail(response.data.email || '');
-                setIsFamily(response.data.is_family || false);
-                setPlusOneCount(response.data.plus_one_count || 0);
-                setDietaryRestrictions(response.data.dietary_restrictions || '');
-                setNotes(response.data.notes || '');
+                setName(response.data.name || '');
+                // Pre-fill status if available
+                if (response.data.rsvp_status) setStatus(response.data.rsvp_status);
             } catch (err) {
                 setError('Invalid invitation code.');
             } finally {
@@ -41,151 +36,144 @@ const RSVP = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            // Construct notes from specific fields
+            const compiledNotes = `Plus One: ${plusOneName} | Song Request: ${songRequest}`;
+
             await api.post(`/rsvp/${code}`, {
                 rsvp_status: status,
-                notes,
-                email,
-                is_family: isFamily,
-                plus_one_count: plusOneCount,
-                dietary_restrictions: dietaryRestrictions
+                notes: compiledNotes,
+                // We send name just in case backend accepts it, otherwise it's just local state for the form experience
+                // If backend doesn't support 'name' update, it will likely be ignored, which is fine as we are relying on 'notes' for the new info.
+                name: name,
+                plus_one_count: plusOneName ? 1 : 0
             });
-            setSuccessMsg('Thank you! Your RSVP has been updated.');
+            setSuccessMsg('Thank you! Your response has been recorded.');
 
-            // Redirect to home after 2 seconds to explore the site
             setTimeout(() => {
-                navigate('/');
-            }, 2000);
+                navigate('/?rsvp=success');
+            }, 3000);
 
         } catch (err) {
-            setError('Failed to update RSVP. Please try again.');
+            setError('Failed to submit. Please try again.');
         }
     };
 
-    if (loading) return <div className="flex justify-center items-center h-screen text-charcoal">Loading...</div>;
-    if (error) return <div className="flex justify-center items-center h-screen text-red-500 font-serif text-xl">{error}</div>;
+    if (loading) return <div className="flex justify-center items-center h-screen bg-rich-black text-gold">Loading...</div>;
+    if (error) return <div className="flex justify-center items-center h-screen bg-rich-black text-red-500 font-serif text-xl">{error}</div>;
 
     return (
-        <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="min-h-screen bg-rich-black flex items-center justify-center p-4 text-white relative">
+            <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none" />
+
             <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="max-w-xl w-full text-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="max-w-xl w-full"
             >
-                <p className="text-sm font-bold tracking-[0.3em] text-gold uppercase mb-6">RSVP</p>
-                <h1 className="text-5xl md:text-7xl font-serif text-charcoal mb-4">Hello, {guest.name.split(' ')[0]}</h1>
-                <p className="text-gray-600 font-light mb-12">
-                    We would be honored by your presence.
-                </p>
+                <div className="text-center mb-12">
+                    <p className="text-sm font-bold tracking-[0.3em] text-gold uppercase mb-4">The Question</p>
+                    <h1 className="text-5xl md:text-6xl font-serif text-white">R.S.V.P</h1>
+                </div>
 
                 {successMsg ? (
-                    <div className="text-2xl font-serif text-green-600 animate-pulse">
-                        {successMsg}
+                    <div className="bg-gold/10 border border-gold/30 p-8 rounded-sm text-center">
+                        <h3 className="text-3xl font-serif text-gold mb-4">Destiny Awaits</h3>
+                        <p className="text-white/80">{successMsg}</p>
                     </div>
                 ) : (
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div className="flex justify-center gap-8 mb-8">
-                            <label className="cursor-pointer group">
-                                <input
-                                    type="radio"
-                                    name="status"
-                                    value="attending"
-                                    checked={status === 'attending'}
-                                    onChange={(e) => setStatus(e.target.value)}
-                                    className="hidden"
-                                />
-                                <div className={`w-32 h-32 border border-charcoal border-opacity-20 flex flex-col items-center justify-center rounded-full transition-all duration-300 ${status === 'attending' ? 'bg-charcoal text-white scale-105' : 'hover:border-gold hover:text-gold text-gray-500'}`}>
-                                    <span className="text-lg uppercase tracking-widest">Accept</span>
-                                </div>
-                            </label>
+                    <form onSubmit={handleSubmit} className="space-y-12">
 
-                            <label className="cursor-pointer group">
-                                <input
-                                    type="radio"
-                                    name="status"
-                                    value="declined"
-                                    checked={status === 'declined'}
-                                    onChange={(e) => setStatus(e.target.value)}
-                                    className="hidden"
-                                />
-                                <div className={`w-32 h-32 border border-charcoal border-opacity-20 flex flex-col items-center justify-center rounded-full transition-all duration-300 ${status === 'declined' ? 'bg-gray-200 text-charcoal scale-105' : 'hover:border-gray-400 hover:text-gray-400 text-gray-500'}`}>
-                                    <span className="text-lg uppercase tracking-widest">Decline</span>
-                                </div>
-                            </label>
+                        {/* Question 1: Who */}
+                        <div className="space-y-4">
+                            <label className="block text-gold font-script text-3xl">1. Name & Surname</label>
+                            <input
+                                type="text"
+                                className="w-full bg-transparent border-b border-white/20 py-2 text-white placeholder-gray-600 focus:border-gold focus:outline-none transition-colors text-xl font-serif"
+                                placeholder="Your full name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
                         </div>
 
+                        {/* Question 2: Status */}
+                        <div className="space-y-6">
+                            <label className="block text-gold font-script text-3xl">2. Will you join us?</label>
+                            <div className="flex gap-8">
+                                <label className="flex items-center gap-3 cursor-pointer group">
+                                    <div className={`w-6 h-6 border rounded-full flex items-center justify-center transition-colors ${status === 'attending' ? 'border-gold' : 'border-white/30 group-hover:border-gold'}`}>
+                                        {status === 'attending' && <div className="w-3 h-3 bg-gold rounded-full" />}
+                                    </div>
+                                    <input
+                                        type="radio"
+                                        name="status"
+                                        value="attending"
+                                        checked={status === 'attending'}
+                                        onChange={() => setStatus('attending')}
+                                        className="hidden"
+                                    />
+                                    <span className={`uppercase tracking-widest text-sm ${status === 'attending' ? 'text-white' : 'text-gray-500 group-hover:text-white'}`}>Gladly, Yes</span>
+                                </label>
+
+                                <label className="flex items-center gap-3 cursor-pointer group">
+                                    <div className={`w-6 h-6 border rounded-full flex items-center justify-center transition-colors ${status === 'declined' ? 'border-red-500' : 'border-white/30 group-hover:border-red-500'}`}>
+                                        {status === 'declined' && <div className="w-3 h-3 bg-red-500 rounded-full" />}
+                                    </div>
+                                    <input
+                                        type="radio"
+                                        name="status"
+                                        value="declined"
+                                        checked={status === 'declined'}
+                                        onChange={() => setStatus('declined')}
+                                        className="hidden"
+                                    />
+                                    <span className={`uppercase tracking-widest text-sm ${status === 'declined' ? 'text-white' : 'text-gray-500 group-hover:text-white'}`}>Sadly, No</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        {/* Conditional Questions */}
                         {status === 'attending' && (
                             <motion.div
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
-                                className="space-y-6 text-left max-w-sm mx-auto"
+                                className="space-y-12"
                             >
-                                <div>
-                                    <label className="block text-xs uppercase tracking-widest text-charcoal mb-2 ml-1">Email (for updates)</label>
+                                {/* Question 3: Plus One */}
+                                <div className="space-y-4">
+                                    <label className="block text-gold font-script text-3xl">3. Name & Surname of plus one</label>
                                     <input
-                                        type="email"
-                                        className="w-full glass-input bg-white"
-                                        placeholder="your@email.com"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
+                                        type="text"
+                                        className="w-full bg-transparent border-b border-white/20 py-2 text-white placeholder-gray-600 focus:border-gold focus:outline-none transition-colors text-xl font-serif"
+                                        placeholder="Leave blank if attending solo"
+                                        value={plusOneName}
+                                        onChange={(e) => setPlusOneName(e.target.value)}
                                     />
                                 </div>
 
-                                <div className="flex gap-4">
-                                    <div className="flex-1">
-                                        <label className="block text-xs uppercase tracking-widest text-charcoal mb-2 ml-1">Bringing a Plus One?</label>
-                                        <select
-                                            value={plusOneCount}
-                                            onChange={(e) => setPlusOneCount(parseInt(e.target.value))}
-                                            className="w-full glass-input bg-white appearance-none"
-                                        >
-                                            <option value={0}>No, just me</option>
-                                            <option value={1}>Yes +1</option>
-                                            <option value={2}>Yes +2 (Family)</option>
-                                            <option value={3}>Yes +3 (Family)</option>
-                                        </select>
-                                    </div>
-                                    <div className="flex-1">
-                                        <label className="block text-xs uppercase tracking-widest text-charcoal mb-2 ml-1">Relationship</label>
-                                        <select
-                                            value={isFamily ? 'family' : 'guest'}
-                                            onChange={(e) => setIsFamily(e.target.value === 'family')}
-                                            className="w-full glass-input bg-white appearance-none"
-                                        >
-                                            <option value="guest">Guest</option>
-                                            <option value="family">Immediate Family</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-xs uppercase tracking-widest text-charcoal mb-2 ml-1">Dietary Restrictions / Allergies</label>
-                                    <textarea
-                                        className="w-full glass-input bg-white"
-                                        rows="2"
-                                        placeholder="Gluten-free, vegan, nut allergy, etc."
-                                        value={dietaryRestrictions}
-                                        onChange={(e) => setDietaryRestrictions(e.target.value)}
+                                {/* Question 4: Music */}
+                                <div className="space-y-4">
+                                    <label className="block text-gold font-script text-3xl">4. You’ll find me on the dance floor when they play?</label>
+                                    <input
+                                        type="text"
+                                        className="w-full bg-transparent border-b border-white/20 py-2 text-white placeholder-gray-600 focus:border-gold focus:outline-none transition-colors text-xl font-serif"
+                                        placeholder="Song title / Artist"
+                                        value={songRequest}
+                                        onChange={(e) => setSongRequest(e.target.value)}
                                     />
                                 </div>
                             </motion.div>
                         )}
 
-                        {/* Always show notes */}
-                        <div className="text-left w-full max-w-sm mx-auto">
-                            <label className="block text-xs uppercase tracking-widest text-charcoal mb-2 ml-1">Other Notes / Message</label>
-                            <textarea
-                                className="w-full glass-input bg-white"
-                                rows="2"
-                                placeholder="Any other questions or a message for us?"
-                                value={notes}
-                                onChange={(e) => setNotes(e.target.value)}
-                            />
+                        <div className="pt-8">
+                            <button
+                                type="submit"
+                                className="w-full py-4 bg-gold/10 border border-gold hover:bg-gold hover:text-rich-black text-gold uppercase tracking-[0.2em] transition-all duration-300 rounded-sm"
+                            >
+                                Submit Response
+                            </button>
                         </div>
 
-                        <button type="submit" className="glass-btn border border-charcoal border-opacity-10">
-                            Confirm RSVP
-                        </button>
                     </form>
                 )}
             </motion.div>

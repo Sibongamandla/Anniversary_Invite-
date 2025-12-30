@@ -1,11 +1,11 @@
 const MetricCard = ({ title, value, color = "text-champagne", icon: Icon }) => {
     return (
-        <div className="glass p-6 flex items-center justify-between">
+        <div className="glass p-6 flex items-center justify-between border border-white/5 bg-white/5">
             <div>
-                <p className="text-gray-600 text-sm uppercase tracking-wider mb-1">{title}</p>
+                <p className="text-white/60 text-xs uppercase tracking-wider mb-1">{title}</p>
                 <p className={`text-3xl font-bold ${color}`}>{value}</p>
             </div>
-            {Icon && <Icon className={`opacity-20 ${color}`} size={48} />}
+            {Icon && <Icon className={`opacity-80 ${color}`} size={32} />}
         </div>
     );
 };

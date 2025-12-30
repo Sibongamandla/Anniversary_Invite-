@@ -17,12 +17,12 @@ const InviteModal = ({ isOpen, onClose, onInvite }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-            <GlassCard className="w-full max-w-md relative">
-                <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-charcoal transition-colors">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-sm">
+            <GlassCard className="w-full max-w-md relative border border-gold/20 bg-rich-black/50">
+                <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
                     <X size={24} />
                 </button>
-                <h3 className="text-2xl font-serif text-charcoal mb-6">Quick Invite</h3>
+                <h3 className="text-2xl font-serif text-white mb-6">Quick Invite</h3>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <input
                         type="text"

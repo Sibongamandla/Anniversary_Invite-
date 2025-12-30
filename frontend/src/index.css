@@ -4,6 +4,47 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .rotate-x-180 {
+    transform: rotateX(180deg);
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .origin-top {
+    transform-origin: top;
+  }
+}
+
+/* Custom Envelope Animations */
+.envelope-flap {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.envelope.open .envelope-flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+.envelope-letter {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+}
+
+.envelope.open .envelope-letter {
+  transform: translateY(-100px);
+  z-index: 2;
+}
+
 html.lenis {
   height: auto;
 }
@@ -25,8 +66,8 @@ html.lenis {
 }
 
 body {
-  @apply bg-white text-charcoal overflow-x-hidden font-sans;
-  background-color: #ffffff;
+  @apply bg-rich-black text-white overflow-x-hidden font-sans;
+  background-color: #0A0A0A;
 }
 
 /* Film Grain Overlay */
@@ -48,9 +89,9 @@ body {
 }
 
 .glass-input {
-  @apply bg-charcoal bg-opacity-5 border border-charcoal border-opacity-10 rounded px-4 py-3 text-charcoal placeholder-gray-500 focus:outline-none focus:border-gold transition-all duration-300 backdrop-blur-sm;
+  @apply bg-white bg-opacity-5 border border-white border-opacity-10 rounded px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gold transition-all duration-300 backdrop-blur-sm;
 }
 
 .glass-btn {
-  @apply bg-charcoal text-white font-bold py-3 px-8 rounded shadow-lg transition-all duration-300 hover:bg-gold hover:text-white hover:scale-105 active:scale-95 uppercase tracking-widest text-sm;
+  @apply bg-gold/10 border border-gold/30 text-gold font-bold py-3 px-8 rounded shadow-lg transition-all duration-300 hover:bg-gold hover:text-rich-black hover:scale-105 active:scale-95 uppercase tracking-widest text-sm;
 }
