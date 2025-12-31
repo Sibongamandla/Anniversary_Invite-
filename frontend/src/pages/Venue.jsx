@@ -1,9 +1,12 @@
 import { motion, useMotionValue, useTransform } from 'framer-motion';
-import venueImage from '../assets/venue.png';
+import venueImage from '../assets/venue_main.jpg'; // Updated main image
+import venueDetail from '../assets/venue_detail.jpg'; // New secondary image
 import mapImage from '../assets/map_stylized.png';
 import tableMountain from '../assets/table_mountain.png';
 import waterfront from '../assets/waterfront.png';
 import heroImage from '../assets/hero_couple_romantic.png'; // Fallback if needed or stylistic choice
+import rosemaryIcon from '../assets/rosemary_gold.svg';
+import lemonIcon from '../assets/lemon_gold.svg';
 
 const TiltCard = () => {
     const x = useMotionValue(0);
@@ -116,11 +119,17 @@ const Venue = () => {
                 </div>
             </div>
 
-            {/* Interactive Map Section */}
+            {/* Interactive Section with Second Image */}
             <div className="py-24 px-4 md:px-12 bg-black relative">
+                {/* Secondary Image Background Effect */}
+                <div className="absolute inset-0 z-0">
+                    <img src={venueDetail} className="w-full h-full object-cover opacity-20" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-rich-black via-transparent to-rich-black" />
+                </div>
+
                 <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none" />
 
-                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
                     <div>
                         <motion.h2
                             initial={{ y: 20, opacity: 0 }}
@@ -133,21 +142,30 @@ const Venue = () => {
                             Explore the beauty of the winelands through our interactive location guide.
                         </p>
 
-                        <div className="space-y-6">
-                            <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 rounded-full border border-gold/30 flex items-center justify-center text-gold font-serif text-xl">1</div>
+                        <div className="space-y-6 relative">
+                            {/* Watermark */}
+                            <img src={rosemaryIcon} className="absolute -left-20 -top-10 w-64 h-64 opacity-25 pointer-events-none -rotate-12 mix-blend-screen" />
+
+                            <div className="flex items-start gap-4 relative z-10">
+                                <div className="w-12 h-12 rounded-full border border-gold/30 flex items-center justify-center text-gold font-serif text-xl relative overflow-hidden bg-rich-black">
+                                    <span className="relative z-10">1</span>
+                                </div>
                                 <div>
                                     <h4 className="text-white font-bold uppercase tracking-wider text-sm">Ceremony</h4>
                                     <p className="text-gray-500 text-sm">Quoin Rock Gardens • 15:00</p>
                                 </div>
                             </div>
-                            <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 rounded-full border border-gold/30 flex items-center justify-center text-gold font-serif text-xl">2</div>
+                            <div className="flex items-start gap-4 relative z-10">
+                                <div className="w-12 h-12 rounded-full border border-gold/30 flex items-center justify-center text-gold font-serif text-xl relative overflow-hidden bg-rich-black">
+                                    <span className="relative z-10">2</span>
+                                </div>
                                 <div>
                                     <h4 className="text-white font-bold uppercase tracking-wider text-sm">Reception</h4>
                                     <p className="text-gray-500 text-sm">The Hall • 18:30</p>
                                 </div>
                             </div>
+
+                            <img src={lemonIcon} className="absolute -right-10 -bottom-10 w-56 h-56 opacity-25 pointer-events-none rotate-45 mix-blend-screen" />
                         </div>
                     </div>
 

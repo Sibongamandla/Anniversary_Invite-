@@ -1,27 +1,34 @@
 import { motion } from 'framer-motion';
 
+// Assets
+import iconRings from '../assets/rings_gold.svg';
+import iconHeart from '../assets/heart_gold.svg';
+import iconLemon from '../assets/lemon_gold.svg';
+import iconRosemary from '../assets/rosemary_gold.svg';
+import iconGrapes from '../assets/grapes_red.svg';
+
 const Program = () => {
     const schedule = [
         {
             day: "Thursday, 05 March 2026",
             title: "The Beginning",
             events: [
-                { time: "17:00", name: "Rehearsal Dinner", desc: "An intimate gathering to begin the festivities." },
+                { time: "17:00", name: "Rehearsal Dinner", desc: "An intimate gathering to begin the festivities.", icon: iconGrapes },
             ]
         },
         {
             day: "Friday, 06 March 2026",
             title: "The Covenant Renewed",
             events: [
-                { time: "15:00", name: "Ceremony", desc: "We gather to renew our vows and celebrate a love matured." },
-                { time: "18:30", name: "Reception", desc: "An evening of laughter, joy, restaurant dining, and dancing." }
+                { time: "15:00", name: "Ceremony", desc: "We gather to renew our vows and celebrate a love matured.", icon: iconRings },
+                { time: "18:30", name: "Reception", desc: "An evening of laughter, joy, restaurant dining, and dancing.", icon: iconHeart }
             ]
         },
         {
             day: "Saturday, 07 March 2026",
             title: "Sunset Surprise",
             events: [
-                { time: "17:00", name: "Performance by The Bangers", desc: "A special sunset surprise to close our celebration." }
+                { time: "17:00", name: "Performance by The Bangers", desc: "A special sunset surprise to close our celebration.", icon: iconLemon }
             ]
         }
     ];
@@ -74,22 +81,42 @@ const Program = () => {
                                 <p className="text-white font-serif text-2xl mt-1 tracking-wide">{day.title}</p>
                             </div>
 
-                            <div className="space-y-8 relative border-l border-white/20 ml-2 pl-6">
+                            <div className="space-y-12 relative border-l border-white/10 ml-2 pl-8 pt-4 pb-4">
                                 {day.events.map((event, idx) => (
-                                    <div key={idx} className="relative group">
-                                        <span className="absolute -left-[1.95rem] top-1.5 w-3 h-3 bg-red-900 rounded-full border-2 border-rich-black shadow-[0_0_0_2px_rgba(184,134,11,0.5)]"></span>
-                                        <div className="flex justify-between items-start">
-                                            <span className="text-xs font-bold text-gold/80 block mb-1 tracking-widest">{event.time}</span>
-                                            <button
-                                                onClick={() => addToGoogleCalendar(event, day.day)}
-                                                className="text-[10px] text-white/30 hover:text-gold transition-colors flex items-center gap-1 uppercase tracking-wider"
-                                                title="Add to Google Calendar"
-                                            >
-                                                <span>+ Calendar</span>
-                                            </button>
+                                    <div key={idx} className="relative z-10">
+
+                                        {/* Timeline Dot */}
+                                        <span className="absolute -left-[2.45rem] top-2 w-3 h-3 bg-red-900 rounded-full border-2 border-rich-black shadow-[0_0_0_2px_rgba(184,134,11,0.5)] z-20"></span>
+
+                                        {/* Content Container with Watermark */}
+                                        <div className="relative overflow-hidden rounded-md p-6 border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors group">
+
+                                            {/* Watermark Icon */}
+                                            {event.icon && (
+                                                <div className="absolute -right-4 -bottom-4 w-48 h-48 z-0 opacity-30 pointer-events-none group-hover:opacity-40 transition-opacity duration-700 mix-blend-screen">
+                                                    <img
+                                                        src={event.icon}
+                                                        alt=""
+                                                        className="w-full h-full object-contain transform rotate-12"
+                                                    />
+                                                </div>
+                                            )}
+
+                                            <div className="relative z-10">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <span className="text-sm font-bold text-gold tracking-widest">{event.time}</span>
+                                                    <button
+                                                        onClick={() => addToGoogleCalendar(event, day.day)}
+                                                        className="text-[10px] text-white/30 hover:text-gold transition-colors flex items-center gap-1 uppercase tracking-wider"
+                                                        title="Add to Google Calendar"
+                                                    >
+                                                        <span>+ Calendar</span>
+                                                    </button>
+                                                </div>
+                                                <h3 className="text-2xl font-serif text-white mb-2">{event.name}</h3>
+                                                <p className="text-gray-400 font-light leading-relaxed max-w-sm">{event.desc}</p>
+                                            </div>
                                         </div>
-                                        <h3 className="text-lg font-serif text-white">{event.name}</h3>
-                                        <p className="text-sm text-gray-400 font-light leading-relaxed mt-1">{event.desc}</p>
                                     </div>
                                 ))}
                             </div>

@@ -116,8 +116,8 @@ Your unique code is: *${guest.unique_code}*`;
                                 <td className="p-3 flex gap-2">
                                     {guest.notes && (
                                         <div className="group relative">
-                                            <StickyNote size={18} className="text-blue-400 cursor-help" />
-                                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-black border border-white/20 text-white rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                                            <StickyNote size={18} className="text-gold cursor-help" />
+                                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-black border border-gold/30 text-white rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg shadow-gold/10">
                                                 Notes: {guest.notes}
                                             </div>
                                         </div>
@@ -136,10 +136,10 @@ Your unique code is: *${guest.unique_code}*`;
                                         href={generateWhatsAppLink(guest)}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors"
+                                        className="flex items-center gap-2 text-gold hover:text-white transition-colors border border-gold/30 px-3 py-1 rounded-full bg-gold/5"
                                     >
-                                        <MessageCircle size={18} />
-                                        <span className="hidden md:inline">Invite</span>
+                                        <MessageCircle size={14} />
+                                        <span className="hidden md:inline text-xs uppercase tracking-wider">Invite</span>
                                     </a>
                                 </td>
                             </tr>

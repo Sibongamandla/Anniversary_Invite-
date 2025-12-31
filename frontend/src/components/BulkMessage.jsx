@@ -11,8 +11,8 @@ const BulkMessage = () => {
 
     return (
         <GlassCard>
-            <h2 className="text-xl font-bold mb-4 text-charcoal">Bulk Communications</h2>
-            <p className="text-gray-600 text-sm mb-4">Send updates to all guests (e.g. "Venue change", "Program update").</p>
+            <h2 className="text-xl font-bold mb-4 text-white">Bulk Communications</h2>
+            <p className="text-white/70 text-sm mb-4">Send updates to all guests (e.g. "Venue change", "Program update").</p>
             <textarea
                 className="glass-input w-full h-32 mb-4 resize-none"
                 placeholder="Type your update here..."

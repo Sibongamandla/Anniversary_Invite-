@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Lenis from '@studio-freight/lenis';
 import Navbar from './components/Navbar';
@@ -57,6 +57,7 @@ const AnimatedRoutes = () => {
         <Route path="/venue" element={<ProtectedRoute><PageTransition><Venue /></PageTransition></ProtectedRoute>} />
         <Route path="/program" element={<ProtectedRoute><PageTransition><Program /></PageTransition></ProtectedRoute>} />
         <Route path="/guide" element={<ProtectedRoute><PageTransition><Guide /></PageTransition></ProtectedRoute>} />
+        <Route path="/guide" element={<ProtectedRoute><PageTransition><Guide /></PageTransition></ProtectedRoute>} />
       </Routes>
     </AnimatePresence>
   );
@@ -64,6 +65,10 @@ const AnimatedRoutes = () => {
 
 function App() {
   const [loading, setLoading] = useState(true);
+
+  const handleLoadingComplete = useCallback(() => {
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -96,7 +101,7 @@ function App() {
 
         <div className="text-white min-h-screen font-sans antialiased relative">
           <AnimatePresence>
-            {loading && <Preloader onComplete={() => setLoading(false)} />}
+            {loading && <Preloader onComplete={handleLoadingComplete} />}
           </AnimatePresence>
 
           {!loading && (

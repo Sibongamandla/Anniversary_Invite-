@@ -90,9 +90,8 @@ const AdminDashboard = () => {
                 </button>
             </div>
 
-            {/* Metrics Row */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <MetricCard title="Total Heads" value={metrics.totalHeads} icon={Users} color="text-blue-400" />
+                <MetricCard title="Total Heads" value={metrics.totalHeads} icon={Users} color="text-gold" />
                 <MetricCard title="Invites" value={metrics.attendingGuests} icon={CheckCircle} color="text-green-400" />
                 <MetricCard title="Declined" value={metrics.declined} icon={XCircle} color="text-red-400" />
                 <MetricCard title="Pending" value={metrics.pending} icon={Clock} color="text-yellow-400" />
@@ -101,7 +100,7 @@ const AdminDashboard = () => {
             <div className="grid lg:grid-cols-3 gap-8">
                 {/* Main Guest List - Takes up 2 columns on large screens */}
                 <div className="lg:col-span-2">
-                    <GlassCard className="h-full border border-gold/10 bg-white/5">
+                    <GlassCard className="h-full border border-gold/10">
                         <div className="flex flex-col md:flex-row gap-4 mb-6 justify-between items-start md:items-center">
                             <h2 className="text-xl font-bold text-white">Guest List</h2>
                             <div className="flex gap-4">
@@ -125,7 +124,7 @@ const AdminDashboard = () => {
                 <div className="lg:col-span-1 space-y-8">
                     <BulkMessage />
 
-                    <GlassCard className="border border-gold/10 bg-white/5">
+                    <GlassCard className="border border-gold/10">
                         <h3 className="text-lg font-bold mb-4 text-gold">Guest Notes & Requests</h3>
                         <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
                             {guests.filter(g => g.notes).length > 0 ? (

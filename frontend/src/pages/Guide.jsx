@@ -3,6 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plane, Car, Map, Home, Palette as PaletteIcon, Sparkles, AlertCircle } from 'lucide-react';
 import heroImage from '../assets/hero_couple_romantic.png';
 
+// Icons
+import iconRosemary from '../assets/rosemary_white.svg';
+import iconGrapes from '../assets/grapes_white.svg';
+import iconBouquet from '../assets/bouquet_white.svg';
+
 const Guide = () => {
     const [activeTab, setActiveTab] = useState('Abode');
 
@@ -145,12 +150,13 @@ const Guide = () => {
                                         </div>
                                     ))}
                                 </div>
-                                <div className="bg-gold/10 p-8 border border-gold/20 rounded-sm">
-                                    <h3 className="text-2xl font-serif text-gold mb-6 flex items-center gap-2">
+                                <div className="relative overflow-hidden bg-white/[0.02] border border-white/10 p-8 rounded-sm">
+                                    <img src={iconRosemary} className="absolute -bottom-12 -right-12 w-64 h-64 opacity-25 pointer-events-none rotate-12 mix-blend-screen" />
+                                    <h3 className="text-2xl font-serif text-gold mb-6 flex items-center gap-2 relative z-10">
                                         <AlertCircle size={20} />
                                         Travel Notes
                                     </h3>
-                                    <ul className="space-y-4">
+                                    <ul className="space-y-4 relative z-10">
                                         {sections.Sojourn.notes.map((note, idx) => (
                                             <li key={idx} className="flex gap-3 text-gray-300 font-light leading-relaxed">
                                                 <span className="text-gold">•</span>
@@ -178,12 +184,21 @@ const Guide = () => {
                                         </div>
                                     ))}
                                 </div>
+
+                                {/* Decorative Grapes Watermark */}
+                                <div className="mt-16 relative h-48 flex items-center justify-center overflow-hidden border-t border-white/10">
+                                    <div className="absolute inset-0 bg-gradient-to-b from-rich-black to-transparent z-10" />
+                                    <img src={iconGrapes} className="w-96 h-96 opacity-25 rotate-90 transform translate-y-12 mix-blend-screen" />
+                                </div>
                             </div>
                         )}
 
+
                         {activeTab === 'Palette' && (
-                            <div className="grid lg:grid-cols-2 gap-16 items-center">
-                                <div>
+                            <div className="grid lg:grid-cols-2 gap-16 items-center relative">
+                                <img src={iconBouquet} className="absolute -left-32 -top-10 w-[600px] h-[600px] opacity-15 pointer-events-none -rotate-12 mix-blend-overlay" />
+
+                                <div className="relative z-10">
                                     <h2 className="text-5xl font-serif text-white mb-6">{sections.Palette.content.theme}</h2>
                                     <p className="text-xl text-gray-300 font-light leading-relaxed mb-12 border-l-2 border-gold pl-6">
                                         {sections.Palette.content.desc}
@@ -194,12 +209,14 @@ const Guide = () => {
                                             <Sparkles size={16} />
                                             Suggested Makeup Artists
                                         </h3>
-                                        <div className="bg-white/5 p-6 rounded-sm border border-white/10">
-                                            {sections.Palette.content.makeup.map((artist, idx) => (
-                                                <a key={idx} href={artist.link} target="_blank" rel="noreferrer" className="block py-3 border-b border-white/10 last:border-0 hover:pl-2 transition-all group">
-                                                    <span className="text-gray-300 group-hover:text-gold transition-colors">{artist.name}</span>
-                                                </a>
-                                            ))}
+                                        <div className="bg-white/5 p-6 rounded-sm border border-white/10 relative overflow-hidden">
+                                            <div className="relative z-10">
+                                                {sections.Palette.content.makeup.map((artist, idx) => (
+                                                    <a key={idx} href={artist.link} target="_blank" rel="noreferrer" className="block py-3 border-b border-white/10 last:border-0 hover:pl-2 transition-all group">
+                                                        <span className="text-gray-300 group-hover:text-gold transition-colors">{artist.name}</span>
+                                                    </a>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -220,7 +237,7 @@ const Guide = () => {
                 </AnimatePresence>
 
             </div>
-        </div>
+        </div >
     );
 };
 export default Guide;

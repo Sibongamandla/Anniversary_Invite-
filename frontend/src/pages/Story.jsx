@@ -1,24 +1,14 @@
 import { motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
+
 import { Volume2, VolumeX } from 'lucide-react';
+import iconCouples from '../assets/couple_gold.svg';
+import iconRosemary from '../assets/rosemary_gold.svg';
+import videoSource from '../assets/our_story.mp4';
 
 const Story = () => {
-    const [isMuted, setIsMuted] = useState(false);
-    const audioRef = useRef(null);
+    const [isMuted, setIsMuted] = useState(false); // Audio enabled by default
     const videoRef = useRef(null);
-
-    // Attempt to handle audio based on user interaction preference (default browser policy might block)
-    // We'll try to play if not muted, but handle errors gracefully.
-    useEffect(() => {
-        if (audioRef.current) {
-            audioRef.current.volume = 0.3; // Gentle volume
-            if (!isMuted) {
-                audioRef.current.play().catch(e => console.log("Audio play failed (waiting for interaction):", e));
-            } else {
-                audioRef.current.pause();
-            }
-        }
-    }, [isMuted]);
 
     const toggleMute = () => {
         setIsMuted(!isMuted);
@@ -26,13 +16,10 @@ const Story = () => {
 
     return (
         <div className="bg-rich-black min-h-screen text-white">
-            {/* Hidden Audio Element - using a placeholder gentle instrumental */}
-            <audio ref={audioRef} loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=piano-moment-111161.mp3" />
-
             {/* Hero Section with Video */}
-            <div className="relative h-screen flex items-center justify-center overflow-hidden">
+            <div className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-black">
-                    {/* Romantic Couple Video Placeholder */}
+                    {/* Romantic Couple Video */}
                     <motion.video
                         ref={videoRef}
                         initial={{ opacity: 0 }}
@@ -40,33 +27,18 @@ const Story = () => {
                         transition={{ duration: 2 }}
                         autoPlay
                         loop
-                        muted
+                        muted={isMuted}
                         playsInline
-                        className="w-full h-full object-cover opacity-60"
+                        className="w-full h-full object-contain object-center opacity-80"
                     >
-                        <source src="https://videos.pexels.com/video-files/3655611/3655611-hd_1920_1080_25fps.mp4" type="video/mp4" />
+                        <source src={videoSource} type="video/mp4" />
                     </motion.video>
                 </div>
 
                 <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-transparent to-black/40" />
 
                 <div className="relative z-10 text-center px-4">
-                    <motion.h1
-                        initial={{ y: 30, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 1, delay: 0.5 }}
-                        className="text-6xl md:text-8xl lg:text-9xl font-script text-gold mb-4"
-                    >
-                        Our Making
-                    </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 1 }}
-                        className="text-sm md:text-base uppercase tracking-[0.4em] font-light text-white/80"
-                    >
-                        A Love Matured in Grace
-                    </motion.p>
+                    {/* Title Removed */}
                 </div>
 
                 {/* Sound Toggle */}
@@ -113,6 +85,14 @@ const Story = () => {
                         Still worth raising a glass to.
                     </p>
                 </motion.div>
+
+                {/* Watermark Section Example */}
+                <div className="mt-32 relative h-96 flex items-center justify-center">
+                    <img src={iconCouples} className="h-full w-auto max-w-full opacity-25 absolute pointer-events-none mix-blend-screen object-contain" />
+                    <p className="relative z-10 text-center text-gold font-script text-4xl max-w-2xl px-4">
+                        "Two souls, one heart, a journey forever unfolding."
+                    </p>
+                </div>
 
                 {/* Decorative End */}
                 <div className="mt-32 flex justify-center opacity-30">

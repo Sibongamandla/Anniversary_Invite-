@@ -4,7 +4,9 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Envelope from '../components/Envelope';
 import { useGuest } from '../context/GuestContext';
-import heroImage from '../assets/hero_couple_romantic.png';
+import heroImage from '../assets/couple_formal_red.jpg';
+import iconBouquet from '../assets/bouquet_white.svg';
+import iconOlive from '../assets/olive_gold.svg';
 
 const Home = () => {
     const { guest, logout } = useGuest();
@@ -52,16 +54,27 @@ const Home = () => {
             <main className="h-full w-full">
                 {/* Hero Section */}
                 <div className="relative h-full w-full overflow-hidden">
-                    <div className="absolute inset-0">
-                        <img
-                            src={heroImage}
-                            alt="Couple"
-                            className="w-full h-full object-cover opacity-60"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-transparent to-black opacity-60" />
-                    </div>
+                    <motion.div
+                        className="absolute inset-0 z-0 opacity-20"
+                        initial={{ scale: 1.2 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 10, repeat: Infinity, repeatType: "mirror" }}
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-rich-black/50 to-rich-black" />
+                        <img src={heroImage} alt="Couple" className="w-full h-full object-cover" />
+                    </motion.div>
 
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-10">
+                    {/* White Bouquet Watermark */}
+                    <motion.div
+                        initial={{ opacity: 0, rotate: -5 }}
+                        animate={{ opacity: 0.3, rotate: 0 }}
+                        transition={{ duration: 2, delay: 0.5 }}
+                        className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none z-10 mix-blend-overlay"
+                    >
+                        <img src={iconBouquet} className="w-full h-full object-contain" />
+                    </motion.div>
+
+                    <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center">
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}

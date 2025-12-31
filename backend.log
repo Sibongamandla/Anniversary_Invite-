@@ -1,26 +1,7 @@
 INFO:     Will watch for changes in these directories: ['/Users/SKM/.gemini/antigravity/scratch/wedding_anniversary']
 INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [6671] using StatReload
-INFO:     Started server process [6677]
+INFO:     Started reloader process [7942] using StatReload
+INFO:     Started server process [8008]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-INFO:     127.0.0.1:57167 - "GET / HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:57167 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:57437 - "POST /token HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57437 - "OPTIONS /guests/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57437 - "GET /guests/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57548 - "OPTIONS /guests/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57548 - "POST /guests/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57548 - "GET /guests/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57730 - "GET /rsvp/K9EXUO HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58155 - "OPTIONS /rsvp/K9EXUO HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58155 - "POST /rsvp/K9EXUO HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62977 - "POST /token HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62977 - "OPTIONS /guests/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62977 - "GET /guests/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63052 - "OPTIONS /guests/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63052 - "POST /guests/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63052 - "GET /guests/ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63285 - "GET /rsvp/N2CQBJ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63548 - "OPTIONS /rsvp/N2CQBJ HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63548 - "POST /rsvp/N2CQBJ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53276 - "GET / HTTP/1.1" 404 Not Found
