@@ -103,7 +103,7 @@ const RSVP = () => {
                                 <label className="block text-gold font-script text-3xl">1. Name & Surname</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-transparent border-b border-white/20 py-2 text-white placeholder-gray-600 focus:border-gold focus:outline-none transition-colors text-xl font-serif"
+                                    className="w-full bg-transparent border-b border-gold/30 py-2 text-white placeholder-gray-600 focus:border-red-500 focus:outline-none transition-colors text-xl font-serif"
                                     placeholder="Your full name"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
@@ -159,7 +159,7 @@ const RSVP = () => {
                                         <label className="block text-gold font-script text-3xl">3. Name & Surname of plus one</label>
                                         <input
                                             type="text"
-                                            className="w-full bg-transparent border-b border-white/20 py-2 text-white placeholder-gray-600 focus:border-gold focus:outline-none transition-colors text-xl font-serif"
+                                            className="w-full bg-transparent border-b border-gold/30 py-2 text-white placeholder-gray-600 focus:border-red-500 focus:outline-none transition-colors text-xl font-serif"
                                             placeholder="Leave blank if attending solo"
                                             value={plusOneName}
                                             onChange={(e) => setPlusOneName(e.target.value)}
@@ -171,7 +171,7 @@ const RSVP = () => {
                                         <label className="block text-gold font-script text-3xl">4. You’ll find me on the dance floor when they play?</label>
                                         <input
                                             type="text"
-                                            className="w-full bg-transparent border-b border-white/20 py-2 text-white placeholder-gray-600 focus:border-gold focus:outline-none transition-colors text-xl font-serif"
+                                            className="w-full bg-transparent border-b border-gold/30 py-2 text-white placeholder-gray-600 focus:border-red-500 focus:outline-none transition-colors text-xl font-serif"
                                             placeholder="Song title / Artist"
                                             value={songRequest}
                                             onChange={(e) => setSongRequest(e.target.value)}
@@ -183,7 +183,7 @@ const RSVP = () => {
                             <div className="pt-8">
                                 <button
                                     type="submit"
-                                    className="w-full py-4 bg-gold/10 border border-gold hover:bg-gold hover:text-rich-black text-gold uppercase tracking-[0.2em] transition-all duration-300 rounded-sm"
+                                    className="w-full py-4 bg-gradient-to-r from-red-900 to-black border border-gold/50 hover:bg-red-800 hover:border-gold hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] text-gold uppercase tracking-[0.2em] transition-all duration-300 rounded-sm font-bold"
                                 >
                                     Submit Response
                                 </button>

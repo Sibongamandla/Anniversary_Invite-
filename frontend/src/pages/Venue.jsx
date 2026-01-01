@@ -55,7 +55,7 @@ const TiltCard = () => {
                         rel="noopener noreferrer"
                         className="pointer-events-auto inline-flex items-center gap-2 px-4 py-2 bg-gold/20 backdrop-blur-md border border-gold/40 rounded-full text-gold text-xs uppercase tracking-wider hover:bg-gold hover:text-rich-black transition-all"
                     >
-                        <span>Navigate</span>
+                        <span className="text-gold font-bold">Navigate</span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11" /></svg>
                     </a>
                 </motion.div>
@@ -67,8 +67,8 @@ const TiltCard = () => {
                     transition={{ delay: 0.5, type: "spring" }}
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30"
                 >
-                    <div className="w-4 h-4 bg-gold rounded-full animate-ping absolute inset-0" />
-                    <div className="w-4 h-4 bg-gold rounded-full relative shadow-[0_0_20px_rgba(212,175,55,0.8)]" />
+                    <div className="w-4 h-4 bg-red-600 rounded-full animate-ping absolute inset-0" />
+                    <div className="w-4 h-4 bg-red-700 border-2 border-gold rounded-full relative shadow-[0_0_20px_rgba(212,175,55,0.8)]" />
                 </motion.div>
             </motion.div>
         </motion.div>
@@ -93,7 +93,7 @@ const Venue = () => {
                         className="text-6xl md:text-8xl font-serif text-white leading-none"
                     >
                         Quoin<br />
-                        <span className="text-gold italic ml-10">Rock.</span>
+                        <span className="text-gold-gradient italic ml-10 drop-shadow-md">Rock.</span>
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0 }}
@@ -147,8 +147,8 @@ const Venue = () => {
                             <img src={rosemaryIcon} className="absolute -left-20 -top-10 w-64 h-64 opacity-25 pointer-events-none -rotate-12 mix-blend-screen" />
 
                             <div className="flex items-start gap-4 relative z-10">
-                                <div className="w-12 h-12 rounded-full border border-gold/30 flex items-center justify-center text-gold font-serif text-xl relative overflow-hidden bg-rich-black">
-                                    <span className="relative z-10">1</span>
+                                <div className="w-12 h-12 rounded-full border border-gold/50 flex items-center justify-center bg-gold text-rich-black font-serif text-xl relative overflow-hidden shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+                                    <span className="relative z-10 font-bold">1</span>
                                 </div>
                                 <div>
                                     <h4 className="text-white font-bold uppercase tracking-wider text-sm">Ceremony</h4>
@@ -156,8 +156,8 @@ const Venue = () => {
                                 </div>
                             </div>
                             <div className="flex items-start gap-4 relative z-10">
-                                <div className="w-12 h-12 rounded-full border border-gold/30 flex items-center justify-center text-gold font-serif text-xl relative overflow-hidden bg-rich-black">
-                                    <span className="relative z-10">2</span>
+                                <div className="w-12 h-12 rounded-full border border-gold/50 flex items-center justify-center bg-gold text-rich-black font-serif text-xl relative overflow-hidden shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+                                    <span className="relative z-10 font-bold">2</span>
                                 </div>
                                 <div>
                                     <h4 className="text-white font-bold uppercase tracking-wider text-sm">Reception</h4>

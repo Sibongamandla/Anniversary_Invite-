@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plane, Car, Map, Home, Palette as PaletteIcon, Sparkles, AlertCircle } from 'lucide-react';
+import { Plane, Car, Map, Home, Palette as PaletteIcon, Sparkles, AlertCircle, Instagram } from 'lucide-react';
 import heroImage from '../assets/hero_couple_romantic.png';
 
 // Icons
 import iconRosemary from '../assets/rosemary_white.svg';
 import iconGrapes from '../assets/grapes_white.svg';
 import iconBouquet from '../assets/bouquet_white.svg';
+import imgMen from '../assets/dress_code_men.png';
+import imgWomen from '../assets/dress_code_women.png';
 
 const Guide = () => {
     const [activeTab, setActiveTab] = useState('Abode');
@@ -19,12 +21,18 @@ const Guide = () => {
                 {
                     title: "Cape Town Int. Airport",
                     desc: "The primary gateway. We recommend arranging transport prior to arrival.",
+                    action: { label: "Airport Info", link: "https://www.airports.co.za/airports/cape-town-international-airport" },
                     icon: Plane
                 },
                 {
                     title: "Car Hire",
                     desc: "For those who wish to wander at their own pace, car hire offers freedom to explore.",
-                    action: { label: "View Options", link: "https://www.google.com/search?q=car+hire+cape+town+international+airport" },
+
+                    providers: [
+                        { label: "Avis", link: "https://www.avis.co.za/drive-avis/car-hire-locations/cape-town-international-airport" },
+                        { label: "Europcar", link: "https://www.europcar.co.za/en-us/stations/south-africa/cape-town-international-airport" },
+                        { label: "Woodford", link: "https://www.woodford.co.za/" }
+                    ],
                     icon: Car
                 },
                 {
@@ -136,7 +144,7 @@ const Guide = () => {
                                     {sections.Sojourn.items.map((item, idx) => (
                                         <div key={idx} className="bg-white/5 p-6 rounded-sm border border-white/10">
                                             <div className="flex items-start gap-4">
-                                                <item.icon className="text-gold mt-1" size={24} />
+                                                <item.icon className="text-gold mt-1 drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]" size={24} />
                                                 <div>
                                                     <h3 className="text-xl font-serif text-white mb-2">{item.title}</h3>
                                                     <p className="text-gray-400 font-light text-sm leading-relaxed">{item.desc}</p>
@@ -144,6 +152,21 @@ const Guide = () => {
                                                         <a href={item.action.link} target="_blank" rel="noreferrer" className="inline-block mt-3 text-xs uppercase tracking-widest text-gold border-b border-gold pb-0.5 hover:text-white hover:border-white transition-colors">
                                                             {item.action.label}
                                                         </a>
+                                                    )}
+                                                    {item.providers && (
+                                                        <div className="flex flex-wrap gap-3 mt-4">
+                                                            {item.providers.map((provider, i) => (
+                                                                <a
+                                                                    key={i}
+                                                                    href={provider.link}
+                                                                    target="_blank"
+                                                                    rel="noreferrer"
+                                                                    className="px-3 py-1.5 text-xs uppercase tracking-wider border border-white/20 hover:border-gold hover:text-gold hover:bg-white/5 transition-all rounded-sm"
+                                                                >
+                                                                    {provider.label}
+                                                                </a>
+                                                            ))}
+                                                        </div>
                                                     )}
                                                 </div>
                                             </div>
@@ -196,7 +219,7 @@ const Guide = () => {
 
                         {activeTab === 'Palette' && (
                             <div className="grid lg:grid-cols-2 gap-16 items-center relative">
-                                <img src={iconBouquet} className="absolute -left-32 -top-10 w-[600px] h-[600px] opacity-15 pointer-events-none -rotate-12 mix-blend-overlay" />
+                                <img src={iconBouquet} className="absolute -left-32 -top-10 w-[600px] h-[600px] opacity-25 pointer-events-none -rotate-12 mix-blend-screen z-0" />
 
                                 <div className="relative z-10">
                                     <h2 className="text-5xl font-serif text-white mb-6">{sections.Palette.content.theme}</h2>
@@ -207,20 +230,50 @@ const Guide = () => {
                                     <div className="space-y-6">
                                         <h3 className="text-gold font-bold uppercase tracking-widest text-sm flex items-center gap-2">
                                             <Sparkles size={16} />
+                                            Mood Boards
+                                        </h3>
+                                        <div className="grid md:grid-cols-2 gap-6 relative z-10">
+                                            <div className="space-y-2 group">
+                                                <div className="relative p-2 border border-gold/40">
+                                                    <div className="absolute inset-0 border-[3px] border-gold/10 m-1 pointer-events-none" />
+                                                    <div className="aspect-[3/4] overflow-hidden bg-rich-black relative">
+                                                        <div className="absolute inset-2 border border-gold/50 z-10 opacity-70 group-hover:inset-4 transition-all duration-500" />
+                                                        <img src={imgMen} alt="Gentlemen Dress Code" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale-[20%] group-hover:grayscale-0" />
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-gold uppercase tracking-widest text-center mt-3">Gentlemen</p>
+                                            </div>
+                                            <div className="space-y-2 group">
+                                                <div className="relative p-2 border border-gold/40">
+                                                    <div className="absolute inset-0 border-[3px] border-gold/10 m-1 pointer-events-none" />
+                                                    <div className="aspect-[3/4] overflow-hidden bg-rich-black relative">
+                                                        <div className="absolute inset-2 border border-gold/50 z-10 opacity-70 group-hover:inset-4 transition-all duration-500" />
+                                                        <img src={imgWomen} alt="Ladies Dress Code" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale-[20%] group-hover:grayscale-0" />
+                                                    </div>
+                                                </div>
+                                                <p className="text-xs text-gold uppercase tracking-widest text-center mt-3">Ladies</p>
+                                            </div>
+                                        </div>
+
+                                        <h3 className="text-gold font-bold uppercase tracking-widest text-sm flex items-center gap-2 mt-8">
+                                            <Sparkles size={16} />
                                             Suggested Makeup Artists
                                         </h3>
                                         <div className="bg-white/5 p-6 rounded-sm border border-white/10 relative overflow-hidden">
                                             <div className="relative z-10">
                                                 {sections.Palette.content.makeup.map((artist, idx) => (
                                                     <a key={idx} href={artist.link} target="_blank" rel="noreferrer" className="block py-3 border-b border-white/10 last:border-0 hover:pl-2 transition-all group">
-                                                        <span className="text-gray-300 group-hover:text-gold transition-colors">{artist.name}</span>
+                                                        <span className="text-gray-300 group-hover:text-gold transition-colors flex items-center gap-3">
+                                                            <Instagram size={18} />
+                                                            {artist.name}
+                                                        </span>
                                                     </a>
                                                 ))}
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="h-[600px] border border-gold/20 p-4 relative">
+                                <div className="h-[600px] border border-gold/20 p-4 relative hidden lg:block">
                                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none" />
                                     <div className="w-full h-full bg-red-900/20 backdrop-blur-sm flex items-center justify-center">
                                         <div className="text-center">

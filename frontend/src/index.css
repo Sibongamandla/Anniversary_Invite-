@@ -88,10 +88,50 @@ body {
   @apply bg-white bg-opacity-60 backdrop-blur-xl border border-charcoal border-opacity-5 shadow-2xl;
 }
 
-.glass-input {
-  @apply bg-white bg-opacity-5 border border-white border-opacity-10 rounded px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gold transition-all duration-300 backdrop-blur-sm;
+/* Luxury Selection */
+::selection {
+  @apply bg-gold/20 text-white;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-rich-black;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gold/40 rounded-full hover:bg-gold transition-colors;
+}
+
+
+/* Luxury Utilities */
+.text-gold-gradient {
+  background: linear-gradient(to right, #D4AF37, #F2E8C9, #D4AF37);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 200% auto;
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
 }
 
 .glass-btn {
-  @apply bg-gold/10 border border-gold/30 text-gold font-bold py-3 px-8 rounded shadow-lg transition-all duration-300 hover:bg-gold hover:text-rich-black hover:scale-105 active:scale-95 uppercase tracking-widest text-sm;
+  @apply bg-red-950/20 border border-gold/40 text-gold font-bold py-3 px-8 rounded transition-all duration-300 hover:bg-gold hover:text-rich-black hover:scale-105 active:scale-95 uppercase tracking-widest text-sm relative overflow-hidden;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+}
+
+.glass-btn:hover {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+.glass-input {
+  @apply bg-white bg-opacity-5 border border-gold/20 rounded px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300 backdrop-blur-sm shadow-inner;
 }

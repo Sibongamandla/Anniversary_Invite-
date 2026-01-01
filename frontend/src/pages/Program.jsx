@@ -74,22 +74,22 @@ const Program = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: dayIndex * 0.2 }}
-                            className="bg-white/5 border border-white/10 p-8 rounded-sm hover:border-gold/30 transition-colors duration-500 backdrop-blur-sm"
+                            className="bg-white/5 border border-gold/10 p-8 rounded-sm hover:border-gold/40 transition-colors duration-500 backdrop-blur-sm shadow-xl"
                         >
                             <div className="mb-8 border-b border-white/10 pb-4">
                                 <h2 className="text-xl font-serif text-gold mb-1">{day.day}</h2>
                                 <p className="text-white font-serif text-2xl mt-1 tracking-wide">{day.title}</p>
                             </div>
 
-                            <div className="space-y-12 relative border-l border-white/10 ml-2 pl-8 pt-4 pb-4">
+                            <div className="space-y-12 relative border-l border-gold/30 ml-2 pl-8 pt-4 pb-4">
                                 {day.events.map((event, idx) => (
                                     <div key={idx} className="relative z-10">
 
                                         {/* Timeline Dot */}
-                                        <span className="absolute -left-[2.45rem] top-2 w-3 h-3 bg-red-900 rounded-full border-2 border-rich-black shadow-[0_0_0_2px_rgba(184,134,11,0.5)] z-20"></span>
+                                        <span className="absolute -left-[2.45rem] top-2 w-3 h-3 bg-red-900 rounded-full border-2 border-gold shadow-[0_0_10px_rgba(212,175,55,0.5)] z-20"></span>
 
                                         {/* Content Container with Watermark */}
-                                        <div className="relative overflow-hidden rounded-md p-6 border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition-colors group">
+                                        <div className="relative overflow-hidden rounded-md p-6 border border-gold/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-gold/30 transition-all duration-500 group shadow-lg">
 
                                             {/* Watermark Icon */}
                                             {event.icon && (

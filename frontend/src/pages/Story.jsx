@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 
 import { Volume2, VolumeX } from 'lucide-react';
@@ -7,15 +7,47 @@ import iconRosemary from '../assets/rosemary_gold.svg';
 import videoSource from '../assets/our_story.mp4';
 
 const Story = () => {
-    const [isMuted, setIsMuted] = useState(false); // Audio enabled by default
+    const [isMuted, setIsMuted] = useState(true); // Muted by default for auto-play
+    const [showFloating, setShowFloating] = useState(false);
+    const [hasCompletedOnce, setHasCompletedOnce] = useState(false);
     const videoRef = useRef(null);
+    const floatingVideoRef = useRef(null);
 
     const toggleMute = () => {
         setIsMuted(!isMuted);
     };
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const heroHeight = window.innerHeight; // Assuming hero is 100dvh
+            if (window.scrollY > heroHeight && !hasCompletedOnce) {
+                setShowFloating(true);
+            } else {
+                setShowFloating(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [hasCompletedOnce]);
+
+    // Sync floating video time with main video
+    useEffect(() => {
+        if (showFloating && videoRef.current && floatingVideoRef.current) {
+            floatingVideoRef.current.currentTime = videoRef.current.currentTime;
+            floatingVideoRef.current.play().catch(e => console.log("Floating play prevented", e));
+        } else if (!showFloating && floatingVideoRef.current) {
+            floatingVideoRef.current.pause();
+        }
+    }, [showFloating]);
+
+    const handleVideoEnded = () => {
+        setHasCompletedOnce(true);
+        setShowFloating(false);
+    };
+
     return (
-        <div className="bg-rich-black min-h-screen text-white">
+        <div className="bg-rich-black min-h-screen text-white relative">
             {/* Hero Section with Video */}
             <div className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-black">
@@ -26,7 +58,8 @@ const Story = () => {
                         animate={{ opacity: 0.6 }}
                         transition={{ duration: 2 }}
                         autoPlay
-                        loop
+                        loop={false} // Don't loop if we want to track 'ended' for the requirement
+                        onEnded={handleVideoEnded}
                         muted={isMuted}
                         playsInline
                         className="w-full h-full object-contain object-center opacity-80"
@@ -52,6 +85,40 @@ const Story = () => {
                     {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
                 </motion.button>
             </div>
+
+            {/* Floating Video Widget */}
+            <AnimatePresence>
+                {showFloating && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 100, scale: 0.8 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 100, scale: 0.8 }}
+                        className="fixed bottom-6 right-6 z-50 w-64 h-36 bg-black border border-gold/30 rounded-lg shadow-2xl overflow-hidden"
+                    >
+                        <video
+                            ref={floatingVideoRef}
+                            className="w-full h-full object-cover"
+                            autoPlay
+                            playsInline
+                            muted={isMuted} // Sync with main state
+                            onEnded={handleVideoEnded}
+                        >
+                            <source src={videoSource} type="video/mp4" />
+                        </video>
+                        <div className="absolute top-2 right-2 flex gap-2">
+                            {/* Sound Toggle */}
+                            <button
+                                onClick={toggleMute}
+                                className="text-white/70 hover:text-white bg-black/50 rounded-full p-1 transition-colors"
+                            >
+                                {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                            </button>
+                            {/* Close Button (optional, maybe keep it simple or remove if user implies just sound control. Sticking to sound + close for UX) */}
+                            {/* Actually, user didn't ask to remove close, but 'visa versa' implies sound control. Let's keep close but make it clear it's close. */}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <div className="max-w-4xl mx-auto px-6 py-24 md:py-32">
                 {/* Poetic Text */}
