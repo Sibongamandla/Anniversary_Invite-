@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 import { Volume2, VolumeX, X } from 'lucide-react';
 import iconCouples from '../assets/couple_gold.svg';
@@ -13,7 +14,9 @@ const Story = () => {
     const [hasCompletedOnce, setHasCompletedOnce] = useState(false);
 
     const videoRef = useRef(null);
+    const videoRef = useRef(null);
     const floatingVideoRef = useRef(null);
+    const widgetRef = useRef(null); // Ref for scrolling to widget
 
     const toggleMute = (e) => {
         if (e) e.stopPropagation();
@@ -71,48 +74,61 @@ const Story = () => {
         setHasCompletedOnce(true);
         setShowFloating(false);
         setIsExpanded(false);
-    };
+        const handleVideoEnded = () => {
+            setHasCompletedOnce(true);
+            setShowFloating(false);
+            setIsExpanded(false);
+        };
 
-    return (
-        <div className="bg-rich-black min-h-screen text-white relative">
-            {/* Hero Section with Video */}
-            <div className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
-                <div className="absolute inset-0 bg-black">
-                    <motion.video
-                        ref={videoRef}
+        // Auto-scroll to center when expanded
+        useEffect(() => {
+            if (isExpanded && widgetRef.current) {
+                // Small delay to allow expansion animation to start
+                setTimeout(() => {
+                    widgetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                }, 100);
+            }
+        }, [isExpanded]);
+
+        return (
+            <div className="bg-rich-black min-h-screen text-white relative">
+                {/* Hero Section with Video */}
+                <div className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 bg-black">
+                        <motion.video
+                            ref={videoRef}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 0.6 }}
+                            transition={{ duration: 0.8 }} // Faster fade-in
+                            autoPlay
+                            loop={false}
+                            preload="auto" // Preload for faster start
+                            onEnded={handleVideoEnded}
+                            muted={isMuted} // Controlled by state
+                            playsInline
+                            className="w-full h-full object-contain object-center opacity-80"
+                        >
+                            <source src={videoSource} type="video/mp4" />
+                        </motion.video>
+                    </div>
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-transparent to-black/40" />
+
+                    {/* Hero Sound Toggle */}
+                    <motion.button
                         initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.6 }}
-                        transition={{ duration: 0.8 }} // Faster fade-in
-                        autoPlay
-                        loop={false}
-                        preload="auto" // Preload for faster start
-                        onEnded={handleVideoEnded}
-                        muted={isMuted} // Controlled by state
-                        playsInline
-                        className="w-full h-full object-contain object-center opacity-80"
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 2 }}
+                        onClick={toggleMute}
+                        className="absolute bottom-24 right-6 md:bottom-10 md:right-10 z-20 text-white/50 hover:text-white transition-colors p-3 md:p-4 border border-white/10 rounded-full bg-black/20 backdrop-blur-sm"
                     >
-                        <source src={videoSource} type="video/mp4" />
-                    </motion.video>
+                        {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                    </motion.button>
                 </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-transparent to-black/40" />
-
-                {/* Hero Sound Toggle */}
-                <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 2 }}
-                    onClick={toggleMute}
-                    className="absolute bottom-24 right-6 md:bottom-10 md:right-10 z-20 text-white/50 hover:text-white transition-colors p-3 md:p-4 border border-white/10 rounded-full bg-black/20 backdrop-blur-sm"
-                >
-                    {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-                </motion.button>
-            </div>
-
-            {/* Floating Video Widget */}
-            <AnimatePresence>
-                {showFloating && (
-                    <>
+                {/* Floating Video Widget - Rendered via Portal to escape parent transforms */}
+                {showFloating && createPortal(
+                    <AnimatePresence>
                         {/* Backdrop for Expanded Mode */}
                         {isExpanded && (
                             <motion.div
@@ -120,11 +136,12 @@ const Story = () => {
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 onClick={() => setIsExpanded(false)}
-                                className="fixed inset-0 bg-black/90 z-40 backdrop-blur-md"
+                                className="fixed inset-0 bg-black/90 z-[9999] backdrop-blur-md"
                             />
                         )}
 
                         <motion.div
+                            ref={widgetRef}
                             layout
                             initial={{ opacity: 0, y: 100, scale: 0.8 }}
                             animate={isExpanded ? {
@@ -156,10 +173,9 @@ const Story = () => {
                             exit={{ opacity: 0, y: 100, scale: 0.8 }}
                             transition={{ type: "spring", damping: 25, stiffness: 120 }}
                             onClick={() => setIsExpanded(!isExpanded)}
-                            className={`fixed z-50 bg-black border border-gold/30 shadow-2xl overflow-hidden cursor-pointer ${!isExpanded ? 'hover:scale-105 hover:border-gold transition-all' : ''}`}
+                            className={`fixed z-[10000] bg-black border border-gold/30 shadow-2xl overflow-hidden cursor-pointer ${!isExpanded ? 'hover:scale-105 hover:border-gold transition-all' : ''}`}
                             style={{
                                 aspectRatio: isExpanded ? '16/9' : '9/16',
-                                // Keep ensure transform is applied correctly by framer-motion 'animate' prop, but fallback here
                                 transform: isExpanded ? 'translate(-50%, -50%)' : 'none'
                             }}
                         >
@@ -191,58 +207,58 @@ const Story = () => {
                                 )}
                             </div>
                         </motion.div>
-                    </>
+                    </AnimatePresence>,
+                    document.body // Portal Target
                 )}
-            </AnimatePresence>
 
-            <div className="max-w-4xl mx-auto px-6 py-24 md:py-32">
-                {/* Poetic Text */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    className="text-center font-serif text-lg md:text-2xl leading-loose font-light space-y-12 text-gray-300"
-                >
-                    <p>
-                        What began as a spark grew slowly and patiently,<br />
-                        like wine, deepening with time. Through seasons painted in red—<br />
-                        passion, laughter, sacrifice, and fire—<br />
-                        they learned that love isn’t rushed.
-                    </p>
-                    <p className="text-gold text-3xl md:text-4xl italic">
-                        It’s chosen.<br />
-                        Tended.<br />
-                        Poured out, again and again.
-                    </p>
-                    <p>
-                        What started young became divine—<br />
-                        a love refined by years,<br />
-                        strengthened renewed by grace,<br />
-                        a sealed by commitment.
-                    </p>
-                    <p>
-                        Twenty years later, their story is full-bodied and bold.<br />
-                        Still rich.<br />
-                        Still rare.<br />
-                        Still worth raising a glass to.
-                    </p>
-                </motion.div>
+                <div className="max-w-4xl mx-auto px-6 py-24 md:py-32">
+                    {/* Poetic Text */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        className="text-center font-serif text-lg md:text-2xl leading-loose font-light space-y-12 text-gray-300"
+                    >
+                        <p>
+                            What began as a spark grew slowly and patiently,<br />
+                            like wine, deepening with time. Through seasons painted in red—<br />
+                            passion, laughter, sacrifice, and fire—<br />
+                            they learned that love isn’t rushed.
+                        </p>
+                        <p className="text-gold text-3xl md:text-4xl italic">
+                            It’s chosen.<br />
+                            Tended.<br />
+                            Poured out, again and again.
+                        </p>
+                        <p>
+                            What started young became divine—<br />
+                            a love refined by years,<br />
+                            strengthened renewed by grace,<br />
+                            a sealed by commitment.
+                        </p>
+                        <p>
+                            Twenty years later, their story is full-bodied and bold.<br />
+                            Still rich.<br />
+                            Still rare.<br />
+                            Still worth raising a glass to.
+                        </p>
+                    </motion.div>
 
-                {/* Watermark Section Example */}
-                <div className="mt-32 relative h-96 flex items-center justify-center">
-                    <img src={iconCouples} className="h-full w-auto max-w-full opacity-25 absolute pointer-events-none mix-blend-screen object-contain" />
-                    <p className="relative z-10 text-center text-gold font-script text-4xl max-w-2xl px-4">
-                        "Two souls, one heart, a journey forever unfolding."
-                    </p>
-                </div>
+                    {/* Watermark Section Example */}
+                    <div className="mt-32 relative h-96 flex items-center justify-center">
+                        <img src={iconCouples} className="h-full w-auto max-w-full opacity-25 absolute pointer-events-none mix-blend-screen object-contain" />
+                        <p className="relative z-10 text-center text-gold font-script text-4xl max-w-2xl px-4">
+                            "Two souls, one heart, a journey forever unfolding."
+                        </p>
+                    </div>
 
-                {/* Decorative End */}
-                <div className="mt-32 flex justify-center opacity-30">
-                    <div className="w-1 h-24 bg-gradient-to-b from-gold to-transparent" />
+                    {/* Decorative End */}
+                    <div className="mt-32 flex justify-center opacity-30">
+                        <div className="w-1 h-24 bg-gradient-to-b from-gold to-transparent" />
+                    </div>
                 </div>
             </div>
-        </div>
-    );
-};
+        );
+    };
 
-export default Story;
+    export default Story;

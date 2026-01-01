@@ -18,7 +18,8 @@ const ScrollNavigator = () => {
             if (currentIndex === -1) return; // Not on a navigational route (e.g., auth, rsvp)
 
             const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-            const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 2;
+            // Looser tolerance for "bottom" on mobile
+            const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 10;
             const isAtTop = scrollTop === 0;
 
             // Scroll Down (Next Route)
@@ -27,7 +28,7 @@ const ScrollNavigator = () => {
                     setIsNavigating(true);
                     lastScrollTime.current = Date.now();
                     navigate(ROUTES[currentIndex + 1]);
-                    setTimeout(() => setIsNavigating(false), 1000); // Debounce duration matched to transition
+                    setTimeout(() => setIsNavigating(false), 1000);
                 }
             }
 
@@ -42,8 +43,55 @@ const ScrollNavigator = () => {
             }
         };
 
+        let touchStartY = 0;
+
+        const handleTouchStart = (e) => {
+            touchStartY = e.touches[0].clientY;
+        };
+
+        const handleTouchEnd = (e) => {
+            if (isNavigating || Date.now() - lastScrollTime.current < 1000) return;
+
+            const touchEndY = e.changedTouches[0].clientY;
+            const deltaY = touchStartY - touchEndY; // Positive = Dragging Up (Scrolling Down)
+
+            const currentIndex = ROUTES.indexOf(location.pathname);
+            if (currentIndex === -1) return;
+
+            const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+            const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 50; // Generous hit area
+            const isAtTop = scrollTop <= 0;
+
+            // Swipe Up (Go Next)
+            if (deltaY > 50 && isAtBottom) { // 50px threshold
+                if (currentIndex < ROUTES.length - 1) {
+                    setIsNavigating(true);
+                    lastScrollTime.current = Date.now();
+                    navigate(ROUTES[currentIndex + 1]);
+                    setTimeout(() => setIsNavigating(false), 1000);
+                }
+            }
+            // Swipe Down (Go Prev)
+            else if (deltaY < -50 && isAtTop) {
+                if (currentIndex > 0) {
+                    setIsNavigating(true);
+                    lastScrollTime.current = Date.now();
+                    navigate(ROUTES[currentIndex - 1]);
+                    setTimeout(() => setIsNavigating(false), 1000);
+                }
+            }
+        };
+
         window.addEventListener('wheel', handleWheel, { passive: false });
-        return () => window.removeEventListener('wheel', handleWheel);
+        // Use passive: false if we ever want to preventDefault, but for now strict listening is okay
+        window.addEventListener('touchstart', handleTouchStart, { passive: true });
+        window.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+        return () => {
+            window.removeEventListener('wheel', handleWheel);
+            window.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchend', handleTouchEnd);
+        };
     }, [location.pathname, navigate, isNavigating]);
 
     return null; // This component handles logic only

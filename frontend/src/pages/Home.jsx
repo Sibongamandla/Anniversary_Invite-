@@ -168,14 +168,11 @@ const Home = () => {
                                         <h3 className="text-2xl font-serif text-gold mb-6 text-center">Unseal the Invitation</h3>
                                         <form onSubmit={(e) => {
                                             e.preventDefault();
-                                            if (code.toLowerCase() === 'vows2026') {
-                                                // We need a proper context method to set guest, but for now we simulate it or redirect
-                                                // Assuming we have a way to 'login' via URL or we just mock it here if possible.
-                                                // Since we don't have login function exposed here easily without context refactor,
-                                                // We will redirect to the join route which handles logic
-                                                navigate(`/join/${code}`);
+                                            // Allow any code format, let the Join route handle validation
+                                            if (code.trim().length > 0) {
+                                                navigate(`/join/${code.toUpperCase()}`);
                                             } else {
-                                                setError('Incorrect code. Please check your invitation.');
+                                                setError('Please enter a code.');
                                             }
                                         }}>
                                             <div className="space-y-4">
