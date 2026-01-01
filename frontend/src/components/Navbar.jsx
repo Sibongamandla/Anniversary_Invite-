@@ -42,9 +42,9 @@ const Navbar = () => {
     });
 
     return (
-        <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out ${scrolled ? 'bg-white bg-opacity-90 backdrop-blur-md py-4 border-b border-charcoal border-opacity-5 shadow-sm' : 'bg-transparent py-8'}`}>
+        <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ease-out ${scrolled ? 'bg-white/95 backdrop-blur-md py-4 border-b border-charcoal/5 shadow-sm' : 'bg-transparent py-4 md:py-8'}`}>
             <div className="container mx-auto px-6 flex justify-between items-center">
-                <Link to="/" className={`text-2xl font-serif font-bold tracking-widest hover:opacity-80 transition-opacity ${scrolled ? 'text-charcoal' : 'text-white mix-blend-difference'}`}>
+                <Link to="/" className={`text-xl md:text-2xl font-serif font-bold tracking-widest hover:opacity-80 transition-opacity z-50 ${isOpen ? 'text-charcoal' : (scrolled ? 'text-charcoal' : 'text-white mix-blend-difference')}`}>
                     ANNIVERSARY
                 </Link>
 
@@ -62,25 +62,26 @@ const Navbar = () => {
                 </div>
 
                 {/* Mobile Toggle */}
-                <button className={`md:hidden hover:text-gold transition-colors ${scrolled ? 'text-charcoal' : 'text-white mix-blend-difference'}`} onClick={() => setIsOpen(!isOpen)}>
+                <button
+                    className={`md:hidden z-50 hover:text-gold transition-colors ${isOpen ? 'text-charcoal' : (scrolled ? 'text-charcoal' : 'text-white mix-blend-difference')}`}
+                    onClick={() => setIsOpen(!isOpen)}
+                >
                     {isOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
 
                 {/* Mobile Menu */}
-                {isOpen && (
-                    <div className="absolute top-full left-0 w-full h-screen bg-white flex flex-col items-center justify-center gap-8 md:hidden z-40">
-                        {visibleLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                to={link.path}
-                                onClick={() => setIsOpen(false)}
-                                className={`text-2xl font-serif ${location.pathname === link.path ? 'text-gold' : 'text-charcoal'}`}
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
-                    </div>
-                )}
+                <div className={`fixed inset-0 bg-white z-40 flex flex-col items-center justify-center gap-8 md:hidden transition-transform duration-500 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                    {visibleLinks.map((link) => (
+                        <Link
+                            key={link.name}
+                            to={link.path}
+                            onClick={() => setIsOpen(false)}
+                            className={`text-2xl font-serif ${location.pathname === link.path ? 'text-gold' : 'text-charcoal'}`}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                </div>
             </div>
         </nav>
     );

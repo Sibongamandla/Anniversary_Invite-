@@ -88,7 +88,7 @@ const Home = () => {
                         initial={{ opacity: 0, rotate: -5, x: -100 }}
                         animate={{ opacity: 0.4, rotate: 15, x: 0 }}
                         transition={{ duration: 2, delay: 0.5 }}
-                        className="absolute -bottom-32 -left-32 w-[700px] h-[700px] pointer-events-none z-10 mix-blend-screen opacity-40"
+                        className="absolute -bottom-16 -left-16 md:-bottom-32 md:-left-32 w-[300px] h-[300px] md:w-[700px] md:h-[700px] pointer-events-none z-10 mix-blend-screen opacity-30 md:opacity-40"
                     >
                         <img src={iconBouquet} className="w-full h-full object-contain" />
                     </motion.div>
@@ -97,7 +97,7 @@ const Home = () => {
                         initial={{ opacity: 0, rotate: 5, x: 100 }}
                         animate={{ opacity: 0.4, rotate: -15, x: 0 }}
                         transition={{ duration: 2, delay: 0.7 }}
-                        className="absolute -bottom-32 -right-32 w-[700px] h-[700px] pointer-events-none z-10 mix-blend-screen opacity-40"
+                        className="absolute -bottom-16 -right-16 md:-bottom-32 md:-right-32 w-[300px] h-[300px] md:w-[700px] md:h-[700px] pointer-events-none z-10 mix-blend-screen opacity-30 md:opacity-40"
                     >
                         <img src={iconBouquet} className="w-full h-full object-contain transform scale-x-[-1]" />
                     </motion.div>
@@ -107,14 +107,14 @@ const Home = () => {
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ duration: 1.5, type: "spring" }}
-                            className="w-[500px] h-[500px] absolute bg-red-900/20 blur-[120px] rounded-full pointer-events-none -z-10"
+                            className="w-[300px] h-[300px] md:w-[500px] md:h-[500px] absolute bg-red-900/20 blur-[80px] md:blur-[120px] rounded-full pointer-events-none -z-10"
                         />
 
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
-                            className="text-gold font-script text-3xl md:text-5xl mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+                            className="text-gold font-script text-3xl md:text-5xl mb-4 md:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
                         >
                             Nineteen Years
                         </motion.p>
@@ -122,7 +122,7 @@ const Home = () => {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 1 }}
-                            className="text-6xl md:text-8xl lg:text-9xl font-serif text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-gray-400 mb-8 leading-none tracking-tight drop-shadow-2xl"
+                            className="text-5xl md:text-8xl lg:text-9xl font-serif text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-gray-400 mb-6 md:mb-8 leading-none tracking-tight drop-shadow-2xl"
                         >
                             Vows & Vines
                         </motion.h1>
@@ -130,32 +130,88 @@ const Home = () => {
                             initial={{ width: 0 }}
                             animate={{ width: "160px" }}
                             transition={{ delay: 1, duration: 1 }}
-                            className="h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent mb-8"
+                            className="h-[1px] md:h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent mb-6 md:mb-8"
                         />
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 1.5 }}
-                            className="text-sm md:text-lg uppercase tracking-[0.4em] text-gold/80 font-light"
+                            className="text-xs md:text-lg uppercase tracking-[0.3em] md:tracking-[0.4em] text-gold/80 font-light flex flex-col md:flex-row items-center gap-2 md:gap-0"
                         >
-                            A Covenant Renewed <span className="text-white/30 px-4">•</span> Destiny Fulfilled
+                            <span>A Covenant Renewed</span>
+                            <span className="hidden md:inline text-white/30 px-4">•</span>
+                            <span>Destiny Fulfilled</span>
                         </motion.p>
+
+
+                        <AnimatePresence>
+                            {/* Code Entry Modal */}
+                            {searchParams.get('action') === 'enter_code' && (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+                                >
+                                    <motion.div
+                                        initial={{ scale: 0.9, y: 20 }}
+                                        animate={{ scale: 1, y: 0 }}
+                                        exit={{ scale: 0.9, y: 20 }}
+                                        className="bg-rich-black border border-gold/30 p-8 rounded-lg max-w-md w-full relative shadow-2xl"
+                                    >
+                                        <button
+                                            onClick={() => navigate('/')}
+                                            className="absolute top-4 right-4 text-white/50 hover:text-white"
+                                        >
+                                            ✕
+                                        </button>
+                                        <h3 className="text-2xl font-serif text-gold mb-6 text-center">Unseal the Invitation</h3>
+                                        <form onSubmit={(e) => {
+                                            e.preventDefault();
+                                            if (code.toLowerCase() === 'vows2026') {
+                                                // We need a proper context method to set guest, but for now we simulate it or redirect
+                                                // Assuming we have a way to 'login' via URL or we just mock it here if possible.
+                                                // Since we don't have login function exposed here easily without context refactor,
+                                                // We will redirect to the join route which handles logic
+                                                navigate(`/join/${code}`);
+                                            } else {
+                                                setError('Incorrect code. Please check your invitation.');
+                                            }
+                                        }}>
+                                            <div className="space-y-4">
+                                                <input
+                                                    type="text"
+                                                    value={code}
+                                                    onChange={(e) => { setCode(e.target.value); setError(''); }}
+                                                    placeholder="Enter Guest Code"
+                                                    className="w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-white placeholder:text-white/30 focus:border-gold outline-none transition-colors text-center uppercase tracking-widest"
+                                                    autoFocus
+                                                />
+                                                {error && <p className="text-red-400 text-xs text-center">{error}</p>}
+                                                <button
+                                                    type="submit"
+                                                    className="w-full bg-gold text-rich-black font-bold uppercase tracking-widest py-3 rounded hover:bg-white transition-colors"
+                                                >
+                                                    Reveal
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </motion.div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
 
                         <motion.button
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 2 }}
-                            // Logic: 
-                            // 1. !guestCode -> Show "Access Invite"
-                            // 2. guestCode && !hasRSVP -> Show "RSVP Now"
-                            // 3. guestCode && hasRSVP -> Hide button
+                            // 3. guestCode && hasRSVP -> Hide button or change text logic
+                            // If hasRSVP, we want to hide it as per user request
                             style={{ display: (guestCode && hasRSVP) ? 'none' : 'block' }}
                             onClick={() => {
                                 if (!guestCode) {
-                                    // If no code, maybe redirect to a code entry page or just allow them to try navigating (which presumably handles it)
-                                    // For now, we will guide them to the join route if they have a code in mind, or just standard rsvp
-                                    // asking user for code is tricky without a UI, assuming standard flow
-                                    navigate('/join/enter');
+                                    // Open Modal via URL state to keep history clean/shareable
+                                    navigate('?action=enter_code');
                                 } else {
                                     navigate(`/join/${guestCode}`);
                                 }

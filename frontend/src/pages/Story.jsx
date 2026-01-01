@@ -1,29 +1,33 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 
-import { Volume2, VolumeX } from 'lucide-react';
+import { Volume2, VolumeX, X } from 'lucide-react';
 import iconCouples from '../assets/couple_gold.svg';
-import iconRosemary from '../assets/rosemary_gold.svg';
 import videoSource from '../assets/our_story.mp4';
 
 const Story = () => {
-    const [isMuted, setIsMuted] = useState(true); // Muted by default for auto-play
+    // Audio ON by default (note: browsers may still block this, requires interaction usually)
+    const [isMuted, setIsMuted] = useState(false);
     const [showFloating, setShowFloating] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false); // New state for expansion
     const [hasCompletedOnce, setHasCompletedOnce] = useState(false);
+
     const videoRef = useRef(null);
     const floatingVideoRef = useRef(null);
 
-    const toggleMute = () => {
-        setIsMuted(!isMuted);
+    const toggleMute = (e) => {
+        if (e) e.stopPropagation();
+        setIsMuted(prev => !prev);
     };
 
     useEffect(() => {
         const handleScroll = () => {
-            const heroHeight = window.innerHeight; // Assuming hero is 100dvh
+            const heroHeight = window.innerHeight * 0.8; // Trigger bit earlier
             if (window.scrollY > heroHeight && !hasCompletedOnce) {
                 setShowFloating(true);
             } else {
                 setShowFloating(false);
+                setIsExpanded(false);
             }
         };
 
@@ -31,19 +35,42 @@ const Story = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [hasCompletedOnce]);
 
-    // Sync floating video time with main video
+    // SMART SWITCHING & SYNC LOGIC
     useEffect(() => {
-        if (showFloating && videoRef.current && floatingVideoRef.current) {
-            floatingVideoRef.current.currentTime = videoRef.current.currentTime;
-            floatingVideoRef.current.play().catch(e => console.log("Floating play prevented", e));
-        } else if (!showFloating && floatingVideoRef.current) {
-            floatingVideoRef.current.pause();
+        // Sync muted state
+        if (videoRef.current) videoRef.current.muted = isMuted;
+        if (floatingVideoRef.current) floatingVideoRef.current.muted = isMuted;
+
+        if (showFloating) {
+            // Pause Main, Play Floating
+            if (videoRef.current) videoRef.current.pause();
+
+            if (floatingVideoRef.current) {
+                // Sync time if drifting
+                if (videoRef.current && Math.abs(floatingVideoRef.current.currentTime - videoRef.current.currentTime) > 0.5) {
+                    floatingVideoRef.current.currentTime = videoRef.current.currentTime;
+                }
+                const playPromise = floatingVideoRef.current.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(e => console.log("Floating play prevented (autoplay policy):", e));
+                }
+            }
+        } else {
+            // Pause Floating, Play Main
+            if (floatingVideoRef.current) floatingVideoRef.current.pause();
+
+            if (videoRef.current && !hasCompletedOnce) {
+                if (videoRef.current.paused) {
+                    videoRef.current.play().catch(e => console.log("Hero play prevented:", e));
+                }
+            }
         }
-    }, [showFloating]);
+    }, [showFloating, isMuted, hasCompletedOnce]);
 
     const handleVideoEnded = () => {
         setHasCompletedOnce(true);
         setShowFloating(false);
+        setIsExpanded(false);
     };
 
     return (
@@ -51,16 +78,15 @@ const Story = () => {
             {/* Hero Section with Video */}
             <div className="relative h-[100dvh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-black">
-                    {/* Romantic Couple Video */}
                     <motion.video
                         ref={videoRef}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 0.6 }}
                         transition={{ duration: 2 }}
                         autoPlay
-                        loop={false} // Don't loop if we want to track 'ended' for the requirement
+                        loop={false}
                         onEnded={handleVideoEnded}
-                        muted={isMuted}
+                        muted={isMuted} // Controlled by state
                         playsInline
                         className="w-full h-full object-contain object-center opacity-80"
                     >
@@ -70,17 +96,13 @@ const Story = () => {
 
                 <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-transparent to-black/40" />
 
-                <div className="relative z-10 text-center px-4">
-                    {/* Title Removed */}
-                </div>
-
-                {/* Sound Toggle */}
+                {/* Hero Sound Toggle */}
                 <motion.button
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 2 }}
                     onClick={toggleMute}
-                    className="absolute bottom-10 right-10 z-20 text-white/50 hover:text-white transition-colors p-4 border border-white/10 rounded-full bg-black/20 backdrop-blur-sm"
+                    className="absolute bottom-24 right-6 md:bottom-10 md:right-10 z-20 text-white/50 hover:text-white transition-colors p-3 md:p-4 border border-white/10 rounded-full bg-black/20 backdrop-blur-sm"
                 >
                     {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
                 </motion.button>
@@ -89,34 +111,81 @@ const Story = () => {
             {/* Floating Video Widget */}
             <AnimatePresence>
                 {showFloating && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 100, scale: 0.8 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 100, scale: 0.8 }}
-                        className="fixed bottom-6 right-6 z-50 w-64 h-36 bg-black border border-gold/30 rounded-lg shadow-2xl overflow-hidden"
-                    >
-                        <video
-                            ref={floatingVideoRef}
-                            className="w-full h-full object-cover"
-                            autoPlay
-                            playsInline
-                            muted={isMuted} // Sync with main state
-                            onEnded={handleVideoEnded}
+                    <>
+                        {/* Backdrop for Expanded Mode */}
+                        {isExpanded && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setIsExpanded(false)}
+                                className="fixed inset-0 bg-black/90 z-40 backdrop-blur-md"
+                            />
+                        )}
+
+                        <motion.div
+                            layout
+                            initial={{ opacity: 0, y: 100, scale: 0.8 }}
+                            animate={isExpanded ? {
+                                opacity: 1,
+                                y: 0,
+                                scale: 1,
+                                width: "95%",
+                                height: "auto",
+                                left: "2.5%",
+                                right: "2.5%",
+                                top: "10%",
+                                bottom: "auto",
+                                borderRadius: "16px"
+                            } : {
+                                opacity: 1,
+                                y: 0,
+                                scale: 1,
+                                width: "140px",
+                                height: "200px",
+                                left: "auto",
+                                right: "1rem",
+                                top: "auto",
+                                bottom: "2rem",
+                                borderRadius: "12px"
+                            }}
+                            exit={{ opacity: 0, y: 100, scale: 0.8 }}
+                            transition={{ type: "spring", damping: 25, stiffness: 120 }}
+                            onClick={() => setIsExpanded(!isExpanded)}
+                            className={`fixed z-50 bg-black border border-gold/30 shadow-2xl overflow-hidden cursor-pointer ${!isExpanded ? 'hover:scale-105 hover:border-gold transition-all' : ''}`}
+                            style={{
+                                aspectRatio: isExpanded ? 'video' : '9/16'
+                            }}
                         >
-                            <source src={videoSource} type="video/mp4" />
-                        </video>
-                        <div className="absolute top-2 right-2 flex gap-2">
-                            {/* Sound Toggle */}
-                            <button
-                                onClick={toggleMute}
-                                className="text-white/70 hover:text-white bg-black/50 rounded-full p-1 transition-colors"
+                            <video
+                                ref={floatingVideoRef}
+                                className="w-full h-full object-cover"
+                                playsInline
+                                muted={isMuted}
+                                onEnded={handleVideoEnded}
                             >
-                                {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-                            </button>
-                            {/* Close Button (optional, maybe keep it simple or remove if user implies just sound control. Sticking to sound + close for UX) */}
-                            {/* Actually, user didn't ask to remove close, but 'visa versa' implies sound control. Let's keep close but make it clear it's close. */}
-                        </div>
-                    </motion.div>
+                                <source src={videoSource} type="video/mp4" />
+                            </video>
+
+                            {/* Widget Controls */}
+                            <div className="absolute top-2 right-2 flex gap-2 z-10">
+                                <button
+                                    onClick={toggleMute}
+                                    className="text-white hover:text-gold bg-black/40 backdrop-blur-sm rounded-full p-2 transition-colors border border-white/10"
+                                >
+                                    {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+                                </button>
+                                {isExpanded && (
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setIsExpanded(false); }}
+                                        className="text-white hover:text-red-500 bg-black/40 backdrop-blur-sm rounded-full p-2 transition-colors border border-white/10"
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                )}
+                            </div>
+                        </motion.div>
+                    </>
                 )}
             </AnimatePresence>
 

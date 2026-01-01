@@ -16,15 +16,19 @@ const RSVP = () => {
     const [name, setName] = useState('');
     const [status, setStatus] = useState('attending');
     const [plusOneName, setPlusOneName] = useState('');
-    const [songRequest, setSongRequest] = useState('');
+    const [dietary, setDietary] = useState(''); // New Field
+    const [questions, setQuestions] = useState(''); // New Field
+
+    // Derived state for validation
+    const isAttending = status === 'attending';
 
     useEffect(() => {
         const fetchGuest = async () => {
             try {
                 const response = await api.get(`/rsvp/${code}`);
                 setName(response.data.name || '');
-                // Pre-fill status if available
                 if (response.data.rsvp_status) setStatus(response.data.rsvp_status);
+                // We might pre-fill notes if parsed, but for now we leave blank/custom
             } catch (err) {
                 setError('Invalid invitation code.');
             } finally {
@@ -40,8 +44,13 @@ const RSVP = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Construct notes from specific fields
-            const compiledNotes = `Plus One: ${plusOneName} | Song Request: ${songRequest}`;
+            // Construct detailed notes string
+            const notesParts = [];
+            if (plusOneName) notesParts.push(`Plus One: ${plusOneName}`);
+            if (dietary) notesParts.push(`Dietary: ${dietary}`);
+            if (questions) notesParts.push(`Q: ${questions}`);
+
+            const compiledNotes = notesParts.join(' | ');
 
             await api.post(`/rsvp/${code}`, {
                 rsvp_status: status,
@@ -50,157 +59,171 @@ const RSVP = () => {
                 plus_one_count: plusOneName ? 1 : 0
             });
 
-            // Unlock the site for this guest
             unlock(code);
-
-            setSuccessMsg('Thank you! Your response has been recorded.');
+            setSuccessMsg('Kindly delivered. We eagerly await our celebration.');
 
             setTimeout(() => {
                 navigate('/story');
-            }, 2000);
+            }, 3000);
 
         } catch (err) {
-            setError('Failed to submit. Please try again.');
+            setError('The courier stumbled. Please try sending again.');
         }
     };
 
-    if (loading) return <div className="flex justify-center items-center h-screen bg-rich-black text-gold">Loading...</div>;
-    if (error) return <div className="flex justify-center items-center h-screen bg-rich-black text-red-500 font-serif text-xl">{error}</div>;
+    if (loading) return <div className="flex justify-center items-center h-screen bg-rich-black text-gold font-serif italic">Checking Guest List...</div>;
+    if (error) return <div className="flex justify-center items-center h-screen bg-rich-black text-red-400 font-serif text-xl">{error}</div>;
 
     return (
-        <div className="min-h-screen bg-rich-black flex items-center justify-center p-4 text-white relative">
-            <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center items-center">
+        <div className="min-h-screen bg-rich-black flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
 
-                {/* Rings Watermark */}
-                <motion.img
-                    src={iconRings}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 0.3, scale: 1 }}
-                    transition={{ duration: 1.5 }}
-                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] pointer-events-none mix-blend-overlay"
-                />
+            {/* Background Texture/Effects */}
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none" />
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.1 }}
+                className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-red-900/10 pointer-events-none"
+            />
 
+            <div className="relative z-10 w-full max-w-2xl">
+
+                {/* The Physical Card Container */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="max-w-xl w-full"
+                    initial={{ y: 50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.8, type: "spring" }}
+                    className="bg-[#faf9f6] text-gray-800 p-8 md:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden"
+                    style={{
+                        boxShadow: "0 0 0 1px #e5e5e5, 0 20px 40px -10px rgba(0,0,0,0.4)",
+                        borderRadius: "2px" // Sharp paper corners
+                    }}
                 >
-                    <div className="text-center mb-12">
-                        <p className="text-sm font-bold tracking-[0.3em] text-gold uppercase mb-4">The Question</p>
-                        <h1 className="text-5xl md:text-6xl font-serif text-white">R.S.V.P</h1>
-                    </div>
+                    {/* Gold Foil Border Effect inside Card */}
+                    <div className="absolute inset-3 border-2 border-gold/40 pointer-events-none" />
+                    <div className="absolute inset-4 border border-gold/20 pointer-events-none" />
 
-                    {successMsg ? (
-                        <div className="bg-gold/10 border border-gold/30 p-8 rounded-sm text-center">
-                            <h3 className="text-3xl font-serif text-gold mb-4">Destiny Awaits</h3>
-                            <p className="text-white/80">{successMsg}</p>
+                    <div className="relative z-10 text-center space-y-8">
+
+                        {/* Header */}
+                        <div className="space-y-4">
+                            <p className="font-serif italic text-gold text-lg">Répondez s'il vous plaît</p>
+                            <h1 className="font-serif text-4xl md:text-5xl tracking-wide text-gray-900">
+                                The Pleasure of Your Reply
+                            </h1>
+                            <div className="h-px w-24 bg-gold mx-auto" />
+                            <p className="font-serif text-gray-500 text-sm tracking-widest uppercase">Is Requested By August 1st</p>
                         </div>
-                    ) : (
-                        <form onSubmit={handleSubmit} className="space-y-12">
 
-                            {/* Question 1: Who */}
-                            <div className="space-y-4">
-                                <label className="block text-gold font-script text-3xl">1. Name & Surname</label>
-                                <input
-                                    type="text"
-                                    className="w-full bg-transparent border-b border-gold/30 py-2 text-white placeholder-gray-600 focus:border-red-500 focus:outline-none transition-colors text-xl font-serif"
-                                    placeholder="Your full name"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    required
-                                />
-                            </div>
+                        {successMsg ? (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="py-12 space-y-6"
+                            >
+                                <div className="text-gold text-5xl">❦</div>
+                                <p className="font-serif text-2xl text-gray-800 italic">{successMsg}</p>
+                            </motion.div>
+                        ) : (
+                            <form onSubmit={handleSubmit} className="space-y-10 text-left mt-8 max-w-lg mx-auto">
 
-                            {/* Question 2: Status */}
-                            <div className="space-y-6">
-                                <label className="block text-gold font-script text-3xl">2. Will you join us?</label>
-                                <div className="flex gap-8">
-                                    <label className="flex items-center gap-3 cursor-pointer group">
-                                        <div className={`w-6 h-6 border rounded-full flex items-center justify-center transition-colors ${status === 'attending' ? 'border-gold' : 'border-white/30 group-hover:border-gold'}`}>
-                                            {status === 'attending' && <div className="w-3 h-3 bg-gold rounded-full" />}
-                                        </div>
-                                        <input
-                                            type="radio"
-                                            name="status"
-                                            value="attending"
-                                            checked={status === 'attending'}
-                                            onChange={() => setStatus('attending')}
-                                            className="hidden"
-                                        />
-                                        <span className={`uppercase tracking-widest text-sm ${status === 'attending' ? 'text-white' : 'text-gray-500 group-hover:text-white'}`}>Gladly, Yes</span>
-                                    </label>
-
-                                    <label className="flex items-center gap-3 cursor-pointer group">
-                                        <div className={`w-6 h-6 border rounded-full flex items-center justify-center transition-colors ${status === 'declined' ? 'border-red-500' : 'border-white/30 group-hover:border-red-500'}`}>
-                                            {status === 'declined' && <div className="w-3 h-3 bg-red-500 rounded-full" />}
-                                        </div>
-                                        <input
-                                            type="radio"
-                                            name="status"
-                                            value="declined"
-                                            checked={status === 'declined'}
-                                            onChange={() => setStatus('declined')}
-                                            className="hidden"
-                                        />
-                                        <span className={`uppercase tracking-widest text-sm ${status === 'declined' ? 'text-white' : 'text-gray-500 group-hover:text-white'}`}>Sadly, No</span>
-                                    </label>
+                                {/* 1. Name */}
+                                <div className="group">
+                                    <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Guest Name(s)</label>
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="w-full bg-transparent border-b border-gray-300 py-2 font-serif text-2xl text-gray-900 placeholder:text-gray-300 focus:outline-none focus:border-gold transition-colors text-center"
+                                        placeholder="M."
+                                        required
+                                    />
                                 </div>
-                            </div>
 
-                            {/* Conditional Questions */}
-                            {status === 'attending' && (
-                                <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: 1, height: 'auto' }}
-                                    className="space-y-12"
-                                >
-                                    {/* Question 3: Plus One */}
-                                    <div className="space-y-4">
-                                        <label className="block text-gold font-script text-3xl">3. Name & Surname of plus one</label>
-                                        <input
-                                            type="text"
-                                            className="w-full bg-transparent border-b border-gold/30 py-2 text-white placeholder-gray-600 focus:border-red-500 focus:outline-none transition-colors text-xl font-serif"
-                                            placeholder="Leave blank if attending solo"
-                                            value={plusOneName}
-                                            onChange={(e) => setPlusOneName(e.target.value)}
-                                        />
+                                {/* 2. Attendance */}
+                                <div className="text-center space-y-6">
+                                    <p className="font-serif text-xl italic text-gray-600">Will you be celebrating with us?</p>
+                                    <div className="flex justify-center gap-8 md:gap-16">
+                                        <label className="cursor-pointer group flex flex-col items-center gap-2">
+                                            <div className={`w-6 h-6 border-2 rounded-full flex items-center justify-center transition-all ${status === 'attending' ? 'border-gold bg-gold' : 'border-gray-300 group-hover:border-gold'}`}>
+                                                {status === 'attending' && <span className="text-white text-xs">✓</span>}
+                                            </div>
+                                            <span className={`font-serif text-lg ${status === 'attending' ? 'text-gray-900 font-bold' : 'text-gray-500'}`}>Accepts with Pleasure</span>
+                                            <input type="radio" name="status" value="attending" checked={status === 'attending'} onChange={() => setStatus('attending')} className="hidden" />
+                                        </label>
+
+                                        <label className="cursor-pointer group flex flex-col items-center gap-2">
+                                            <div className={`w-6 h-6 border-2 rounded-full flex items-center justify-center transition-all ${status === 'declined' ? 'border-gray-800 bg-gray-800' : 'border-gray-300 group-hover:border-gray-500'}`}>
+                                            </div>
+                                            <span className={`font-serif text-lg ${status === 'declined' ? 'text-gray-900 font-bold' : 'text-gray-500'}`}>Declines with Regret</span>
+                                            <input type="radio" name="status" value="declined" checked={status === 'declined'} onChange={() => setStatus('declined')} className="hidden" />
+                                        </label>
                                     </div>
+                                </div>
 
-                                    {/* Question 4: Music */}
-                                    <div className="space-y-4">
-                                        <label className="block text-gold font-script text-3xl">4. You’ll find me on the dance floor when they play?</label>
-                                        <input
-                                            type="text"
-                                            className="w-full bg-transparent border-b border-gold/30 py-2 text-white placeholder-gray-600 focus:border-red-500 focus:outline-none transition-colors text-xl font-serif"
-                                            placeholder="Song title / Artist"
-                                            value={songRequest}
-                                            onChange={(e) => setSongRequest(e.target.value)}
-                                        />
-                                    </div>
-                                </motion.div>
-                            )}
+                                {/* Conditional Fields for Attendees */}
+                                <AnimatePresence>
+                                    {isAttending && (
+                                        <motion.div
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: 'auto' }}
+                                            exit={{ opacity: 0, height: 0 }}
+                                            className="space-y-8 overflow-hidden"
+                                        >
+                                            <div className="h-px w-full bg-gray-100" />
 
-                            <div className="pt-8">
-                                <button
-                                    type="submit"
-                                    className="w-full py-4 bg-gradient-to-r from-red-900 to-black border border-gold/50 hover:bg-red-800 hover:border-gold hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] text-gold uppercase tracking-[0.2em] transition-all duration-300 rounded-sm font-bold"
-                                >
-                                    Submit Response
-                                </button>
-                            </div>
+                                            {/* Plus One */}
+                                            <div className="group">
+                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Name of Plus One (Optional)</label>
+                                                <input
+                                                    type="text"
+                                                    value={plusOneName}
+                                                    onChange={(e) => setPlusOneName(e.target.value)}
+                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors"
+                                                    placeholder="Full Name"
+                                                />
+                                            </div>
 
-                        </form>
-                    )}
+                                            {/* Dietary */}
+                                            <div className="group">
+                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Dietary Requirements</label>
+                                                <input
+                                                    type="text"
+                                                    value={dietary}
+                                                    onChange={(e) => setDietary(e.target.value)}
+                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors"
+                                                    placeholder="Allergies, Vegetarian, etc."
+                                                />
+                                            </div>
+
+                                            {/* Questions */}
+                                            <div className="group">
+                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Questions or Messages</label>
+                                                <textarea
+                                                    value={questions}
+                                                    onChange={(e) => setQuestions(e.target.value)}
+                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors resize-none"
+                                                    placeholder="Any questions for the couple?"
+                                                    rows={1}
+                                                />
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+
+                                {/* Submit Button */}
+                                <div className="pt-8 text-center">
+                                    <button
+                                        type="submit"
+                                        className="bg-rich-black text-white font-serif italic text-xl px-12 py-3 hover:bg-gold hover:text-white transition-colors duration-500 shadow-lg"
+                                    >
+                                        Deliver Response
+                                    </button>
+                                </div>
+
+                            </form>
+                        )}
+                    </div>
                 </motion.div>
-
-                {/* Floral Corner Accent */}
-                <motion.img
-                    src={iconBouquet}
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 0.25, x: 0 }}
-                    transition={{ duration: 2, delay: 0.5 }}
-                    className="absolute -bottom-20 -right-20 w-[400px] h-[400px] pointer-events-none mix-blend-overlay rotate-12"
-                />
             </div>
         </div>
     );
