@@ -82,9 +82,10 @@ const Story = () => {
                         ref={videoRef}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 0.6 }}
-                        transition={{ duration: 2 }}
+                        transition={{ duration: 0.8 }} // Faster fade-in
                         autoPlay
                         loop={false}
+                        preload="auto" // Preload for faster start
                         onEnded={handleVideoEnded}
                         muted={isMuted} // Controlled by state
                         playsInline
@@ -130,13 +131,15 @@ const Story = () => {
                                 opacity: 1,
                                 y: 0,
                                 scale: 1,
-                                width: "95%",
+                                width: "90%",
+                                maxWidth: "800px",
                                 height: "auto",
-                                left: "2.5%",
-                                right: "2.5%",
-                                top: "10%",
+                                left: "50%",
+                                x: "-50%",
+                                top: "50%",
+                                y: "-50%",
                                 bottom: "auto",
-                                borderRadius: "16px"
+                                borderRadius: "4px"
                             } : {
                                 opacity: 1,
                                 y: 0,
@@ -144,6 +147,7 @@ const Story = () => {
                                 width: "140px",
                                 height: "200px",
                                 left: "auto",
+                                x: "0%",
                                 right: "1rem",
                                 top: "auto",
                                 bottom: "2rem",
@@ -154,12 +158,14 @@ const Story = () => {
                             onClick={() => setIsExpanded(!isExpanded)}
                             className={`fixed z-50 bg-black border border-gold/30 shadow-2xl overflow-hidden cursor-pointer ${!isExpanded ? 'hover:scale-105 hover:border-gold transition-all' : ''}`}
                             style={{
-                                aspectRatio: isExpanded ? 'video' : '9/16'
+                                aspectRatio: isExpanded ? '16/9' : '9/16',
+                                // Keep ensure transform is applied correctly by framer-motion 'animate' prop, but fallback here
+                                transform: isExpanded ? 'translate(-50%, -50%)' : 'none'
                             }}
                         >
                             <video
                                 ref={floatingVideoRef}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-contain bg-black"
                                 playsInline
                                 muted={isMuted}
                                 onEnded={handleVideoEnded}

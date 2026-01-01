@@ -195,9 +195,9 @@ const Guide = () => {
                             <div>
                                 <h2 className="text-4xl font-serif text-gold mb-4">Accommodation Areas</h2>
                                 <p className="text-gray-400 font-light mb-12 max-w-2xl">{sections.Abode.intro}</p>
-                                <div className="grid md:grid-cols-2 gap-8">
+                                <div className="flex overflow-x-auto gap-8 pb-8 -mx-4 px-4 snap-x hide-scrollbar">
                                     {sections.Abode.items.map((item, idx) => (
-                                        <div key={idx} className="group relative h-80 overflow-hidden rounded-sm border border-white/10">
+                                        <div key={idx} className="group relative min-w-[300px] w-[85vw] md:w-[400px] h-[400px] flex-shrink-0 overflow-hidden rounded-sm border border-white/10 snap-center">
                                             <img src={item.image} alt={item.title} className="w-full h-full object-cover opacity-60 transition-transform duration-700 group-hover:scale-110" />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent p-8 flex flex-col justify-end">
                                                 <h3 className="text-2xl font-serif text-white mb-1">{item.title}</h3>
@@ -232,7 +232,7 @@ const Guide = () => {
                                             <Sparkles size={16} />
                                             Mood Boards
                                         </h3>
-                                        <div className="grid md:grid-cols-2 gap-6 relative z-10">
+                                        <div className="grid grid-cols-2 gap-4 md:gap-6 relative z-10">
                                             <div className="space-y-2 group">
                                                 <div className="relative p-2 border border-gold/40">
                                                     <div className="absolute inset-0 border-[3px] border-gold/10 m-1 pointer-events-none" />

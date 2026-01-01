@@ -81,10 +81,10 @@ const AdminDashboard = () => {
     if (loading && guests.length === 0) return <div className="min-h-screen flex items-center justify-center"><Loader className="animate-spin text-champagne" size={48} /></div>;
 
     return (
-        <div className="min-h-screen p-4 md:p-8 pt-24 bg-rich-black text-white">
+        <div className="min-h-screen p-4 md:p-8 pt-24 bg-gray-50 text-gray-900">
             <div className="flex justify-between items-center mb-8">
-                <h1 className="text-3xl md:text-4xl font-serif text-gold">Admin Dashboard</h1>
-                <button onClick={handleLogout} className="flex items-center gap-2 text-white/60 hover:text-white transition-colors">
+                <h1 className="text-3xl md:text-4xl font-serif text-gray-900">Admin Dashboard</h1>
+                <button onClick={handleLogout} className="flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors">
                     <LogOut size={20} />
                     <span className="hidden md:inline">Logout</span>
                 </button>
@@ -100,16 +100,16 @@ const AdminDashboard = () => {
             <div className="grid lg:grid-cols-3 gap-8">
                 {/* Main Guest List - Takes up 2 columns on large screens */}
                 <div className="lg:col-span-2">
-                    <GlassCard className="h-full border border-gold/10">
+                    <div className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm h-full">
                         <div className="flex flex-col md:flex-row gap-4 mb-6 justify-between items-start md:items-center">
-                            <h2 className="text-xl font-bold text-white">Guest List</h2>
+                            <h2 className="text-xl font-bold text-gray-900">Guest List</h2>
                             <div className="flex gap-4">
-                                <label className="glass-btn cursor-pointer flex items-center gap-2 text-sm px-4 border border-gold/20 hover:border-gold">
+                                <label className="cursor-pointer flex items-center gap-2 text-sm px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 transition-colors">
                                     <Upload size={16} />
                                     <span className="hidden md:inline">Bulk CSV</span>
                                     <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} />
                                 </label>
-                                <button onClick={() => setShowModal(true)} className="glass-btn flex items-center gap-2 text-sm px-4 border border-gold/20 hover:border-gold">
+                                <button onClick={() => setShowModal(true)} className="flex items-center gap-2 text-sm px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-gray-700 transition-colors">
                                     <Plus size={16} />
                                     Quick Invite
                                 </button>
@@ -117,21 +117,21 @@ const AdminDashboard = () => {
                         </div>
 
                         <GuestTable guests={guests} />
-                    </GlassCard>
+                    </div>
                 </div>
 
                 {/* Side Panel - Requests & Notes */}
                 <div className="lg:col-span-1 space-y-8">
                     <BulkMessage />
 
-                    <GlassCard className="border border-gold/10">
-                        <h3 className="text-lg font-bold mb-4 text-gold">Guest Notes & Requests</h3>
-                        <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+                    <div className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
+                        <h3 className="text-lg font-bold mb-4 text-gray-900">Guest Notes & Requests</h3>
+                        <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar-light">
                             {guests.filter(g => g.notes).length > 0 ? (
                                 guests.filter(g => g.notes).map(g => (
-                                    <div key={g.id} className="border-b border-white/10 pb-4 last:border-0">
-                                        <p className="text-sm text-gold font-bold mb-1">{g.name}</p>
-                                        <div className="text-xs text-white/80 italic space-y-1">
+                                    <div key={g.id} className="border-b border-gray-100 pb-4 last:border-0">
+                                        <p className="text-sm text-gray-900 font-bold mb-1">{g.name}</p>
+                                        <div className="text-xs text-gray-600 italic space-y-1">
                                             {/* We simply display the notes, as they are saved as a string like "Plus One: X | Song: Y" */}
                                             {g.notes.split('|').map((part, i) => (
                                                 <p key={i}>{part.trim()}</p>
@@ -140,10 +140,10 @@ const AdminDashboard = () => {
                                     </div>
                                 ))
                             ) : (
-                                <p className="text-white/30 italic text-sm">No notes left by guests yet.</p>
+                                <p className="text-gray-400 italic text-sm">No notes left by guests yet.</p>
                             )}
                         </div>
-                    </GlassCard>
+                    </div>
                 </div>
             </div>
 
