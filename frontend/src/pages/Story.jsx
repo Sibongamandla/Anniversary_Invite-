@@ -137,6 +137,7 @@ const Story = () => {
                     {/* Backdrop for Expanded Mode */}
                     {isExpanded && (
                         <motion.div
+                            key="backdrop"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
@@ -146,6 +147,7 @@ const Story = () => {
                     )}
 
                     <motion.div
+                        key="floating-widget"
                         ref={widgetRef}
                         layout
                         initial={{ opacity: 0, y: 100, scale: 0.8 }}
