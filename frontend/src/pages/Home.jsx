@@ -148,6 +148,7 @@ const Home = () => {
                             {/* Code Entry Modal */}
                             {searchParams.get('action') === 'enter_code' && (
                                 <motion.div
+                                    key="code-modal"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}

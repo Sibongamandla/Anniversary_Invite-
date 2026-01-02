@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { Volume2, VolumeX, X } from 'lucide-react';
 import iconCouples from '../assets/couple_gold.svg';
 import videoSource from '../assets/our_story.mp4';
-import posterImage from '../assets/couple_formal_red.jpg';
+import posterImage from '../assets/couple_standing_red.jpg';
 
 const Story = () => {
     // Audio ON by default (note: browsers may still block this, requires interaction usually)
@@ -44,6 +44,19 @@ const Story = () => {
         if (videoRef.current) videoRef.current.muted = isMuted;
         if (floatingVideoRef.current) floatingVideoRef.current.muted = isMuted;
 
+        const safePlay = async (videoEl) => {
+            try {
+                if (videoEl && videoEl.paused) {
+                    await videoEl.play();
+                }
+            } catch (e) {
+                // Ignore AbortError and NotAllowedError (autoplay)
+                if (e.name !== 'AbortError' && e.name !== 'NotAllowedError') {
+                    console.log("Video Play Error:", e);
+                }
+            }
+        };
+
         if (showFloating) {
             // Pause Main, Play Floating
             if (videoRef.current) videoRef.current.pause();
@@ -53,19 +66,14 @@ const Story = () => {
                 if (videoRef.current && Math.abs(floatingVideoRef.current.currentTime - videoRef.current.currentTime) > 0.5) {
                     floatingVideoRef.current.currentTime = videoRef.current.currentTime;
                 }
-                const playPromise = floatingVideoRef.current.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(e => console.log("Floating play prevented (autoplay policy):", e));
-                }
+                safePlay(floatingVideoRef.current);
             }
         } else {
             // Pause Floating, Play Main
             if (floatingVideoRef.current) floatingVideoRef.current.pause();
 
             if (videoRef.current && !hasCompletedOnce) {
-                if (videoRef.current.paused) {
-                    videoRef.current.play().catch(e => console.log("Hero play prevented:", e));
-                }
+                safePlay(videoRef.current);
             }
         }
     }, [showFloating, isMuted, hasCompletedOnce]);
