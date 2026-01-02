@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Envelope from '../components/Envelope';
 import { useGuest } from '../context/GuestContext';
-import heroImage from '../assets/couple_formal_red.jpg';
-import iconBouquet from '../assets/bouquet_white.svg';
+import heroImage from '../assets/couple_formal_red_opt.jpg';
+import iconBouquet from '../assets/bouquet_white_opt.png';
 import iconOlive from '../assets/olive_gold.svg';
 
 const Home = () => {
@@ -88,7 +88,7 @@ const Home = () => {
                         initial={{ opacity: 0, rotate: -5, x: -100 }}
                         animate={{ opacity: 0.4, rotate: 15, x: 0 }}
                         transition={{ duration: 2, delay: 0.5 }}
-                        className="absolute -bottom-16 -left-16 md:-bottom-32 md:-left-32 w-[300px] h-[300px] md:w-[700px] md:h-[700px] pointer-events-none z-10 mix-blend-screen opacity-30 md:opacity-40"
+                        className="absolute -bottom-12 -left-12 md:-bottom-32 md:-left-32 w-[180px] h-[180px] md:w-[700px] md:h-[700px] pointer-events-none z-10 mix-blend-screen opacity-25 md:opacity-40"
                     >
                         <img src={iconBouquet} className="w-full h-full object-contain" />
                     </motion.div>
@@ -97,7 +97,7 @@ const Home = () => {
                         initial={{ opacity: 0, rotate: 5, x: 100 }}
                         animate={{ opacity: 0.4, rotate: -15, x: 0 }}
                         transition={{ duration: 2, delay: 0.7 }}
-                        className="absolute -bottom-16 -right-16 md:-bottom-32 md:-right-32 w-[300px] h-[300px] md:w-[700px] md:h-[700px] pointer-events-none z-10 mix-blend-screen opacity-30 md:opacity-40"
+                        className="absolute -bottom-12 -right-12 md:-bottom-32 md:-right-32 w-[180px] h-[180px] md:w-[700px] md:h-[700px] pointer-events-none z-10 mix-blend-screen opacity-25 md:opacity-40"
                     >
                         <img src={iconBouquet} className="w-full h-full object-contain transform scale-x-[-1]" />
                     </motion.div>
@@ -107,14 +107,14 @@ const Home = () => {
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ duration: 1.5, type: "spring" }}
-                            className="w-[300px] h-[300px] md:w-[500px] md:h-[500px] absolute bg-red-900/20 blur-[40px] md:blur-[120px] rounded-full pointer-events-none -z-10"
+                            className="w-[250px] h-[250px] md:w-[500px] md:h-[500px] absolute bg-red-900/20 blur-[40px] md:blur-[120px] rounded-full pointer-events-none -z-10"
                         />
 
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
-                            className="text-gold font-script text-3xl md:text-5xl mb-4 md:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+                            className="text-gold-gradient font-script text-2xl md:text-5xl mb-4 md:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
                         >
                             Nineteen Years
                         </motion.p>
@@ -122,7 +122,7 @@ const Home = () => {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 1 }}
-                            className="text-5xl md:text-8xl lg:text-9xl font-serif text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-gray-400 mb-6 md:mb-8 leading-none tracking-tight drop-shadow-2xl"
+                            className="text-4xl sm:text-5xl md:text-8xl lg:text-9xl font-serif text-gold-gradient mb-6 md:mb-8 leading-none tracking-tight drop-shadow-2xl"
                         >
                             Vows & Vines
                         </motion.h1>

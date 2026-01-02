@@ -6,12 +6,14 @@ import heroImage from '../assets/hero_couple_romantic.png';
 // Icons
 import iconRosemary from '../assets/rosemary_white.svg';
 import iconGrapes from '../assets/grapes_white.svg';
-import iconBouquet from '../assets/bouquet_white.svg';
+import iconBouquet from '../assets/bouquet_white_opt.png';
 import imgMen from '../assets/dress_code_men.png';
 import imgWomen from '../assets/dress_code_women.png';
 
 const Guide = () => {
-    const [activeTab, setActiveTab] = useState('Abode');
+    const [activeTab, setActiveTab] = useState('Sojourn'); // Default to Sojourn (Journey)
+
+
 
     const sections = {
         Sojourn: {
@@ -116,7 +118,7 @@ const Guide = () => {
                 </div>
 
                 {/* Navigation */}
-                <div className="flex gap-8 md:gap-12 mb-20 text-sm uppercase tracking-[0.2em] justify-center md:justify-start overflow-x-auto pb-4">
+                <div className="flex gap-8 md:gap-12 mb-20 text-sm uppercase tracking-[0.2em] justify-start md:justify-start overflow-x-auto pb-4 hide-scrollbar px-4">
                     {tabs.map((tab) => (
                         <button
                             key={tab}
@@ -126,6 +128,13 @@ const Guide = () => {
                             {tab}
                         </button>
                     ))}
+                </div>
+
+                {/* Mobile Tab Scroll Hint */}
+                <div className="md:hidden flex justify-center -mt-16 mb-12 opacity-50 animate-pulse">
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-gold flex items-center gap-2">
+                        ← Swipe to Explore →
+                    </p>
                 </div>
 
                 <AnimatePresence mode="wait">
@@ -194,7 +203,14 @@ const Guide = () => {
                         {activeTab === 'Abode' && (
                             <div>
                                 <h2 className="text-4xl font-serif text-gold mb-4">Accommodation Areas</h2>
-                                <p className="text-gray-400 font-light mb-12 max-w-2xl">{sections.Abode.intro}</p>
+                                <p className="text-gray-400 font-light mb-8 max-w-2xl">{sections.Abode.intro}</p>
+
+                                {/* Scroll Hint */}
+                                <div className="flex items-center gap-2 mb-4 opacity-60">
+                                    <div className="w-8 h-[1px] bg-gold" />
+                                    <p className="text-[10px] uppercase tracking-widest text-gold whitespace-nowrap">Swipe to View Areas</p>
+                                </div>
+
                                 <div className="flex overflow-x-auto gap-8 pb-8 -mx-4 px-4 snap-x hide-scrollbar">
                                     {sections.Abode.items.map((item, idx) => (
                                         <div key={idx} className="group relative min-w-[300px] w-[85vw] md:w-[400px] h-[400px] flex-shrink-0 overflow-hidden rounded-sm border border-white/10 snap-center">

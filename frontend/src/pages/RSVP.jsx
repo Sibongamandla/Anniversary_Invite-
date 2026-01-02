@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useGuest } from '../context/GuestContext';
 import api from '../api';
 import iconRings from '../assets/rings_white.svg';
-import iconBouquet from '../assets/bouquet_white.svg';
+import iconBouquet from '../assets/bouquet_white_opt.png';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const RSVP = () => {

@@ -4,8 +4,8 @@ import { createPortal } from 'react-dom';
 
 import { Volume2, VolumeX, X } from 'lucide-react';
 import iconCouples from '../assets/couple_gold.svg';
-import videoSource from '../assets/our_story.mp4';
-import posterImage from '../assets/couple_standing_red.jpg';
+const videoSource = '/assets/our_story.mp4';
+import posterImage from '../assets/couple_standing_red_opt.jpg';
 
 const Story = () => {
     // Audio ON by default (note: browsers may still block this, requires interaction usually)
@@ -13,6 +13,7 @@ const Story = () => {
     const [showFloating, setShowFloating] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false); // New state for expansion
     const [hasCompletedOnce, setHasCompletedOnce] = useState(false);
+    const [isLoading, setIsLoading] = useState(true); // Track video buffering
 
     const videoRef = useRef(null);
     const floatingVideoRef = useRef(null);
@@ -22,6 +23,9 @@ const Story = () => {
         if (e) e.stopPropagation();
         setIsMuted(prev => !prev);
     };
+
+    const handleVideoWaiting = () => setIsLoading(true);
+    const handleVideoPlaying = () => setIsLoading(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -106,15 +110,25 @@ const Story = () => {
                         transition={{ duration: 0.8 }} // Faster fade-in
                         autoPlay
                         loop={false}
-                        preload="auto" // Keep auto for hero feel, but poster helps empty state
+                        preload="metadata" // Changed from auto to prevent 96MB payload hit on load
                         poster={posterImage}
                         onEnded={handleVideoEnded}
+                        onWaiting={handleVideoWaiting}
+                        onPlaying={handleVideoPlaying}
+                        onCanPlay={handleVideoPlaying}
                         muted={isMuted} // Controlled by state
                         playsInline
                         className="w-full h-full object-contain object-center opacity-80"
                     >
                         <source src={videoSource} type="video/mp4" />
                     </motion.video>
+
+                    {/* Loading Indicator */}
+                    {isLoading && (
+                        <div className="absolute inset-0 flex items-center justify-center z-10">
+                            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold"></div>
+                        </div>
+                    )}
                 </div>
 
                 <div className="absolute inset-0 bg-gradient-to-t from-rich-black via-transparent to-black/40" />
@@ -125,10 +139,22 @@ const Story = () => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 2 }}
                     onClick={toggleMute}
-                    className="absolute bottom-24 right-6 md:bottom-10 md:right-10 z-20 text-white/50 hover:text-white transition-colors p-3 md:p-4 border border-white/10 rounded-full bg-black/20 backdrop-blur-sm"
+                    className="absolute bottom-32 right-6 md:bottom-20 md:right-10 z-20 text-white hover:text-gold transition-colors flex items-center gap-3 bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10"
                 >
+                    <span className="text-xs uppercase tracking-widest hidden md:block">{isMuted ? "Unmute" : "Mute Sound"}</span>
                     {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
                 </motion.button>
+
+                {/* Scroll Hint */}
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 3, duration: 1, repeat: Infinity, repeatType: "reverse" }}
+                    className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none"
+                >
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-white/50">Scroll to Explore</p>
+                    <div className="w-[1px] h-8 bg-gradient-to-b from-gold to-transparent" />
+                </motion.div>
             </div>
 
             {/* Floating Video Widget - Rendered via Portal to escape parent transforms */}
@@ -150,44 +176,27 @@ const Story = () => {
                         key="floating-widget"
                         ref={widgetRef}
                         layout
-                        initial={{ opacity: 0, y: 100, scale: 0.8 }}
-                        animate={isExpanded ? {
-                            opacity: 1,
-                            scale: 1,
-                            width: "90%",
-                            maxWidth: "800px",
-                            height: "auto",
-                            left: "50%",
-                            x: "-50%",
-                            top: "50%",
-                            y: "-50%",
-                            bottom: "auto",
-                            borderRadius: "4px"
-                        } : {
-                            opacity: 1,
-                            y: 0,
-                            scale: 1,
-                            width: "140px",
-                            height: "200px",
-                            left: "auto",
-                            x: "0%",
-                            right: "1rem",
-                            top: "auto",
-                            bottom: "2rem",
-                            borderRadius: "12px"
-                        }}
-                        exit={{ opacity: 0, y: 100, scale: 0.8 }}
+                        initial={{ opacity: 0, scale: 0.8, y: 100 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.8, y: 100 }}
                         transition={{ type: "spring", damping: 25, stiffness: 120 }}
                         onClick={() => setIsExpanded(!isExpanded)}
-                        className={`fixed z-[10000] bg-black border border-gold/30 shadow-2xl overflow-hidden cursor-pointer ${!isExpanded ? 'hover:scale-105 hover:border-gold transition-all' : ''}`}
+                        className={`fixed z-[10000] bg-black border border-gold/30 overflow-hidden cursor-pointer
+                            ${isExpanded
+                                ? 'w-[90vw] max-w-[800px] h-auto left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[4px]'
+                                : 'w-[140px] h-[200px] right-4 bottom-8 rounded-xl hover:scale-105'
+                            }
+                            ${!isExpanded && 'safe-area-bottom'}
+                        `}
+                        // Note: safe-area-bottom class needs to be defined or handled via inline style if using complex calc
                         style={{
-                            aspectRatio: isExpanded ? '16/9' : '9/16',
-                            transform: isExpanded ? 'translate(-50%, -50%)' : 'none'
+                            bottom: !isExpanded ? 'max(2rem, env(safe-area-inset-bottom))' : 'auto',
+                            aspectRatio: isExpanded ? '16/9' : '9/16'
                         }}
                     >
                         <video
                             ref={floatingVideoRef}
-                            className="w-full h-full object-contain bg-black"
+                            className="w-full h-full object-contain bg-black pointer-events-none" // Pass clicks to container
                             playsInline
                             muted={isMuted}
                             onEnded={handleVideoEnded}

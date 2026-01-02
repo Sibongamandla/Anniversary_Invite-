@@ -26,13 +26,17 @@ const ScrollNavigator = () => {
             if (e.deltaY > 0 && isAtBottom) {
                 if (currentIndex < ROUTES.length - 1) {
                     setIsNavigating(true);
+                    // Stop momentum scrolling immediately
+                    if (window.lenis) window.lenis.stop();
+
                     lastScrollTime.current = Date.now();
                     navigate(ROUTES[currentIndex + 1]);
                     setTimeout(() => setIsNavigating(false), 1000);
                 }
             }
 
-            // Scroll Up (Previous Route)
+            // Scroll Up (Previous Route) - DISABLED per user request for better UX
+            /*
             else if (e.deltaY < 0 && isAtTop) {
                 if (currentIndex > 0) {
                     setIsNavigating(true);
@@ -41,6 +45,7 @@ const ScrollNavigator = () => {
                     setTimeout(() => setIsNavigating(false), 1000);
                 }
             }
+            */
         };
 
         let touchStartY = 0;
@@ -66,12 +71,16 @@ const ScrollNavigator = () => {
             if (deltaY > 50 && isAtBottom) { // 50px threshold
                 if (currentIndex < ROUTES.length - 1) {
                     setIsNavigating(true);
+                    // Stop momentum scrolling immediately
+                    if (window.lenis) window.lenis.stop();
+
                     lastScrollTime.current = Date.now();
                     navigate(ROUTES[currentIndex + 1]);
                     setTimeout(() => setIsNavigating(false), 1000);
                 }
             }
-            // Swipe Down (Go Prev)
+            // Swipe Down (Go Prev) - DISABLED
+            /*
             else if (deltaY < -50 && isAtTop) {
                 if (currentIndex > 0) {
                     setIsNavigating(true);
@@ -80,6 +89,7 @@ const ScrollNavigator = () => {
                     setTimeout(() => setIsNavigating(false), 1000);
                 }
             }
+            */
         };
 
         window.addEventListener('wheel', handleWheel, { passive: false });

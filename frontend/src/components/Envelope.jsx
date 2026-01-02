@@ -2,15 +2,16 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Envelope = ({ onOpen }) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [step, setStep] = useState('closed'); // closed, opening, letter-out
 
     const handleOpen = () => {
-        if (!isOpen) {
-            setIsOpen(true);
-            // Delay calling the parent onOpen handler to allow animation to play
+        if (step === 'closed') {
+            setStep('opening');
+            // Sequence: Open flap (0.6s) -> Pull letter (0.8s) -> Finish
+            setTimeout(() => setStep('letter-out'), 600);
             setTimeout(() => {
                 onOpen && onOpen();
-            }, 1000);
+            }, 2000);
         }
     };
 
@@ -23,23 +24,41 @@ const Envelope = ({ onOpen }) => {
                 className="relative perspective-1000 group cursor-pointer"
                 onClick={handleOpen}
             >
-                <div className={`relative w-[300px] h-[200px] transition-transform duration-1000 preserve-3d ${isOpen ? 'translate-y-[100px]' : ''}`}>
+                <div className="relative w-[300px] h-[200px] preserve-3d">
 
                     {/* Envelope Body (Back) */}
                     <div className="absolute inset-0 bg-[#1a1a1a] border border-gold/30 rounded-sm shadow-2xl" />
 
                     {/* The Letter (Invitation) */}
-                    <div className={`absolute left-2 right-2 top-2 bottom-2 bg-[#fdfcf8] p-4 flex flex-col items-center justify-center text-center shadow-inner transition-transform duration-700 ease-out origin-bottom ${isOpen ? '-translate-y-[120px] z-20' : 'z-10'}`}>
+                    <motion.div
+                        initial={{ y: 0, zIndex: 10 }}
+                        animate={step === 'letter-out' ? { y: -120, zIndex: 20 } : { y: 0, zIndex: 10 }}
+                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                        className="absolute left-2 right-2 top-2 bottom-2 bg-[#fdfcf8] p-4 flex flex-col items-center justify-center text-center shadow-inner origin-bottom"
+                    >
                         <p className="font-script text-gold text-2xl mb-1">Boitumelo & Comfort</p>
                         <p className="font-serif text-charcoal text-xs uppercase tracking-widest mt-2">Vows & Vines</p>
                         <p className="font-sans text-[10px] text-gray-400 mt-4">Tap to begin</p>
-                    </div>
+                    </motion.div>
 
                     {/* Envelope Flap (Front - Top) */}
-                    <div
-                        className={`absolute top-0 left-0 w-full h-1/2 bg-[#2a2a2a] origin-top transition-transform duration-700 ease-in-out border-t border-gold/20 z-30 ${isOpen ? 'rotate-x-180 -z-10 bg-[#222]' : ''}`}
-                        style={{ clipPath: 'polygon(0 0, 50% 100%, 100% 0)' }}
+                    <motion.div
+                        initial={{ rotateX: 0, zIndex: 30 }}
+                        animate={step !== 'closed' ? { rotateX: 180, zIndex: 0 } : { rotateX: 0, zIndex: 30 }}
+                        transition={{ duration: 0.6, ease: "easeInOut" }}
+                        className="absolute top-0 left-0 w-full h-1/2 bg-[#2a2a2a] origin-top border-t border-gold/20"
+                        style={{ clipPath: 'polygon(0 0, 50% 100%, 100% 0)', backfaceVisibility: 'hidden' }}
                     />
+
+                    {/* Flap Inner (Visible when open) */}
+                    <motion.div
+                        initial={{ rotateX: 180, opacity: 0 }} // Start flipped "up" effectively
+                        animate={step !== 'closed' ? { rotateX: 0, opacity: 1 } : { rotateX: 180, opacity: 0 }}
+                        transition={{ duration: 0.6, ease: "easeInOut" }}
+                        className="absolute top-[-1px] left-0 w-full h-1/2 bg-[#222] origin-bottom border-t border-gold/20 -z-10" // Appears behind after rotation
+                        style={{ top: 0, transformOrigin: "top", clipPath: 'polygon(0 0, 50% 100%, 100% 0)' }}
+                    />
+
 
                     {/* Envelope Body (Front - Bottom) */}
                     <div className="absolute bottom-0 left-0 w-full h-full bg-[#222] border-t border-gold/10 z-20 pointer-events-none"
@@ -52,8 +71,8 @@ const Envelope = ({ onOpen }) => {
                         style={{ clipPath: 'polygon(100% 0, 100% 100%, 50% 50%)' }}
                     />
 
-                    {/* Start Button Overlay (Only visible before open) */}
-                    {!isOpen && (
+                    {/* Start Button Overlay */}
+                    {step === 'closed' && (
                         <div className="absolute inset-0 flex items-center justify-center z-40">
                             <motion.div
                                 animate={{ scale: [1, 1.1, 1] }}
@@ -67,7 +86,7 @@ const Envelope = ({ onOpen }) => {
 
                 </div>
 
-                {!isOpen && (
+                {step === 'closed' && (
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

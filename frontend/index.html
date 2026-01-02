@@ -1,13 +1,96 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vows & Vines</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vows & Vines</title>
+
+  <!-- Preconnect to Font Origins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Great+Vibes&family=Lato:wght@300;400;700&display=block"
+    rel="stylesheet">
+
+  <style>
+    /* Critical CSS for Static Preloader */
+    #static-preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      pointer-events: none;
+    }
+
+    .curtain-top,
+    .curtain-bottom {
+      width: 100%;
+      height: 50vh;
+      background-color: #0d0d0d;
+      /* rich-black */
+      display: flex;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .curtain-top {
+      align-items: flex-end;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      /* gold/20 */
+    }
+
+    .curtain-bottom {
+      align-items: flex-start;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .static-title {
+      color: #D4AF37;
+      /* gold */
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 6rem;
+      transform: translateY(0);
+      margin-bottom: 1rem;
+    }
+
+    .static-subtitle {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4em;
+      margin-top: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .static-title {
+        font-size: 8rem;
+        margin-bottom: 2rem;
+      }
+
+      .static-subtitle {
+        margin-top: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Static Preloader Markup -->
+  <div id="static-preloader">
+    <div class="curtain-top">
+      <h1 class="static-title">B & C</h1>
+    </div>
+    <div class="curtain-bottom">
+      <p class="static-subtitle">Stellenbosch • 2026</p>
+    </div>
+  </div>
+
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>
