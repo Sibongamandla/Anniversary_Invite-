@@ -4,7 +4,7 @@ import { useGuest } from '../context/GuestContext';
 import api from '../api';
 import iconRings from '../assets/rings_white.svg';
 import iconBouquet from '../assets/bouquet_white.svg';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const RSVP = () => {
     const { code } = useParams();

@@ -107,7 +107,7 @@ const Home = () => {
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
                             transition={{ duration: 1.5, type: "spring" }}
-                            className="w-[300px] h-[300px] md:w-[500px] md:h-[500px] absolute bg-red-900/20 blur-[80px] md:blur-[120px] rounded-full pointer-events-none -z-10"
+                            className="w-[300px] h-[300px] md:w-[500px] md:h-[500px] absolute bg-red-900/20 blur-[40px] md:blur-[120px] rounded-full pointer-events-none -z-10"
                         />
 
                         <motion.p

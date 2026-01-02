@@ -18,9 +18,9 @@ const ScrollNavigator = () => {
             if (currentIndex === -1) return; // Not on a navigational route (e.g., auth, rsvp)
 
             const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-            // Looser tolerance for "bottom" on mobile
-            const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 10;
-            const isAtTop = scrollTop === 0;
+            // Looser tolerance for "bottom" on mobile and parallax pages
+            const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 50;
+            const isAtTop = scrollTop <= 10;
 
             // Scroll Down (Next Route)
             if (e.deltaY > 0 && isAtBottom) {

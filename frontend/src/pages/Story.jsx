@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { Volume2, VolumeX, X } from 'lucide-react';
 import iconCouples from '../assets/couple_gold.svg';
 import videoSource from '../assets/our_story.mp4';
+import posterImage from '../assets/couple_formal_red.jpg';
 
 const Story = () => {
     // Audio ON by default (note: browsers may still block this, requires interaction usually)
@@ -97,7 +98,8 @@ const Story = () => {
                         transition={{ duration: 0.8 }} // Faster fade-in
                         autoPlay
                         loop={false}
-                        preload="auto" // Preload for faster start
+                        preload="auto" // Keep auto for hero feel, but poster helps empty state
+                        poster={posterImage}
                         onEnded={handleVideoEnded}
                         muted={isMuted} // Controlled by state
                         playsInline
@@ -141,7 +143,6 @@ const Story = () => {
                         initial={{ opacity: 0, y: 100, scale: 0.8 }}
                         animate={isExpanded ? {
                             opacity: 1,
-                            y: 0,
                             scale: 1,
                             width: "90%",
                             maxWidth: "800px",
