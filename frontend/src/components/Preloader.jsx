@@ -1,28 +1,52 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import heroImg from '../assets/couple_formal_red.jpg';
+import posterImg from '../assets/couple_standing_red.jpg';
+import bouquetImg from '../assets/bouquet_white.svg';
+import oliveImg from '../assets/olive_gold.svg';
 
 const Preloader = ({ onComplete }) => {
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setProgress((prev) => {
-                if (prev >= 100) {
-                    clearInterval(timer);
-                    return 100;
-                }
-                return prev + 1;
+        const assetsToPreload = [
+            heroImg,
+            posterImg,
+            bouquetImg,
+            oliveImg
+        ];
+
+        let loadedCount = 0;
+        const totalAssets = assetsToPreload.length;
+
+        const preloadImage = (src) => {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.src = src;
+                img.onload = resolve;
+                img.onerror = resolve; // Continue even if error
             });
-        }, 30); // 3 seconds total
-
-        const completeTimer = setTimeout(() => {
-            onComplete();
-        }, 3500);
-
-        return () => {
-            clearInterval(timer);
-            clearTimeout(completeTimer);
         };
+
+        const loadAll = async () => {
+            // Start progress simulation
+            const timer = setInterval(() => {
+                setProgress(prev => Math.min(prev + 2, 90)); // Cap at 90 until real load done
+            }, 50);
+
+            // Actually load images
+            await Promise.all(assetsToPreload.map(preloadImage));
+
+            clearInterval(timer);
+            setProgress(100);
+
+            setTimeout(() => {
+                onComplete();
+            }, 800);
+        };
+
+        loadAll();
+
     }, [onComplete]);
 
     return (

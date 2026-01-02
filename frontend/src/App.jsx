@@ -1,21 +1,23 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, lazy, Suspense } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Lenis from '@studio-freight/lenis';
 import Navbar from './components/Navbar';
 import Preloader from './components/Preloader';
-import Home from './pages/Home';
-import RSVP from './pages/RSVP';
-import AdminLogin from './pages/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard';
-import Story from './pages/Story';
-import Venue from './pages/Venue';
-import Program from './pages/Program';
-import Guide from './pages/Guide';
 import VisualEffects from './components/VisualEffects';
 import ScrollNavigator from './components/ScrollNavigator';
 import ScrollToTop from './components/ScrollToTop';
 import { GuestProvider, useGuest } from './context/GuestContext';
+
+// Lazy Load Pages
+const Home = lazy(() => import('./pages/Home'));
+const RSVP = lazy(() => import('./pages/RSVP'));
+const AdminLogin = lazy(() => import('./pages/AdminLogin'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const Story = lazy(() => import('./pages/Story'));
+const Venue = lazy(() => import('./pages/Venue'));
+const Program = lazy(() => import('./pages/Program'));
+const Guide = lazy(() => import('./pages/Guide'));
 
 const ProtectedRoute = ({ children }) => {
   const { guestCode } = useGuest();
@@ -46,19 +48,20 @@ const AnimatedRoutes = () => {
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><Home /></PageTransition>} />
-        <Route path="/join/:code" element={<RSVP />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+      <Suspense fallback={<div className="h-screen w-screen bg-rich-black" />}>
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+          <Route path="/join/:code" element={<RSVP />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
-        {/* Seamless Story Routes */}
-        <Route path="/story" element={<ProtectedRoute><PageTransition><Story /></PageTransition></ProtectedRoute>} />
-        <Route path="/venue" element={<ProtectedRoute><PageTransition><Venue /></PageTransition></ProtectedRoute>} />
-        <Route path="/program" element={<ProtectedRoute><PageTransition><Program /></PageTransition></ProtectedRoute>} />
-        <Route path="/guide" element={<ProtectedRoute><PageTransition><Guide /></PageTransition></ProtectedRoute>} />
-        <Route path="/guide" element={<ProtectedRoute><PageTransition><Guide /></PageTransition></ProtectedRoute>} />
-      </Routes>
+          {/* Seamless Story Routes */}
+          <Route path="/story" element={<ProtectedRoute><PageTransition><Story /></PageTransition></ProtectedRoute>} />
+          <Route path="/venue" element={<ProtectedRoute><PageTransition><Venue /></PageTransition></ProtectedRoute>} />
+          <Route path="/program" element={<ProtectedRoute><PageTransition><Program /></PageTransition></ProtectedRoute>} />
+          <Route path="/guide" element={<ProtectedRoute><PageTransition><Guide /></PageTransition></ProtectedRoute>} />
+        </Routes>
+      </Suspense>
     </AnimatePresence>
   );
 }
