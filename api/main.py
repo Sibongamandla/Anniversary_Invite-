@@ -90,6 +90,20 @@ def read_guests(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), 
     guests = crud.get_guests(db, skip=skip, limit=limit)
     return guests
 
+@app.post("/guests/{unique_code}/mark-sent", response_model=schemas.Guest)
+def mark_guest_invite_sent(unique_code: str, db: Session = Depends(get_db), current_user: models.Admin = Depends(get_current_user)):
+    guest = crud.get_guest_by_code(db, unique_code)
+    if not guest:
+        raise HTTPException(status_code=404, detail="Guest not found")
+    # Toggle or set to true. Let's toggle for now to allow undo, or just set true.
+    # User said "It should show that I sent an invite". Toggle is safer UX if they misclick.
+    # But for a simple "Invite" button, usually it sets to True.
+    # Let's check current status and flip it, or just set True?
+    # I'll implement "Toggle" logic on the frontend if needed, here I'll just accept a query param or toggle?
+    # Let's keep it simple: Make it a toggle.
+    new_status = not guest.invite_sent
+    return crud.mark_invite_sent(db, unique_code, new_status)
+
 @app.post("/guests/upload-csv")
 async def upload_guests_csv(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: models.Admin = Depends(get_current_user)):
     contents = await file.read()
@@ -113,6 +127,26 @@ def check_code(unique_code: str, db: Session = Depends(get_db)):
     if not guest:
         raise HTTPException(status_code=404, detail="Invalid invitation code")
     return guest
+
+@app.post("/rsvp/claim/{unique_code}", response_model=schemas.Guest)
+def claim_rsvp_code(unique_code: str, claim: schemas.DeviceClaim, db: Session = Depends(get_db)):
+    # 1. First check if guest exists
+    guest = crud.get_guest_by_code(db, unique_code=unique_code)
+    if not guest:
+        raise HTTPException(status_code=404, detail="Invalid invitation code")
+
+    # 2. Try to claim (or get existing claim)
+    updated_guest = crud.claim_guest_device(db, unique_code, claim.device_id)
+    
+    # 3. Validation: Is this the correct device?
+    if updated_guest.device_id != claim.device_id:
+        # Determine 403
+        raise HTTPException(
+            status_code=403, 
+            detail="This invitation code has already been used on another device. Access is restricted to one device."
+        )
+
+    return updated_guest
 
 @app.post("/rsvp/{unique_code}", response_model=schemas.Guest)
 def submit_rsvp(unique_code: str, rsvp: schemas.GuestRSVPUpdate, db: Session = Depends(get_db)): # Fixed Schema name typo

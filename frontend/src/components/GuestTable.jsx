@@ -1,3 +1,4 @@
+import React from 'react';
 import { MessageCircle, StickyNote } from 'lucide-react';
 
 const GuestTable = ({ guests }) => {
@@ -20,6 +21,22 @@ Your unique code is: *${guest.unique_code}*`;
         }
 
         return `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
+    };
+
+    const [localSentIds, setLocalSentIds] = React.useState([]);
+
+    const handleInviteClick = async (guest) => {
+        // 1. Open WhatsApp
+        const link = generateWhatsAppLink(guest);
+        window.open(link, '_blank');
+
+        // 2. Call API to mark as sent
+        try {
+            await import('../api').then(module => module.default.post(`/guests/${guest.unique_code}/mark-sent`));
+            setLocalSentIds(prev => [...prev, guest.id]);
+        } catch (err) {
+            console.error("Failed to mark invite as sent", err);
+        }
     };
 
     return (
@@ -132,15 +149,18 @@ Your unique code is: *${guest.unique_code}*`;
                                     )}
                                 </td>
                                 <td className="p-3">
-                                    <a
-                                        href={generateWhatsAppLink(guest)}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center gap-2 text-green-700 hover:text-green-900 transition-colors border border-green-200 px-3 py-1 rounded-full bg-green-50"
+                                    <button
+                                        onClick={() => handleInviteClick(guest)}
+                                        className={`flex items-center gap-2 border px-3 py-1 rounded-full transition-colors ${(guest.invite_sent || localSentIds.includes(guest.id))
+                                                ? 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'
+                                                : 'bg-white text-gray-600 border-gray-300 hover:bg-green-50 hover:text-green-700 hover:border-green-300'
+                                            }`}
                                     >
-                                        <MessageCircle size={14} />
-                                        <span className="hidden md:inline text-xs uppercase tracking-wider">Invite</span>
-                                    </a>
+                                        <MessageCircle size={14} className={(guest.invite_sent || localSentIds.includes(guest.id)) ? "fill-current" : ""} />
+                                        <span className="hidden md:inline text-xs uppercase tracking-wider font-semibold">
+                                            {(guest.invite_sent || localSentIds.includes(guest.id)) ? 'Sent' : 'Invite'}
+                                        </span>
+                                    </button>
                                 </td>
                             </tr>
                         ))}

@@ -174,7 +174,7 @@ const Venue = () => {
             </div>
 
             {/* Nearby Attractions */}
-            <div className="py-24 px-4 md:px-12 bg-rich-black border-t border-white/5">
+            <div className="pt-24 pb-64 px-4 md:px-12 bg-rich-black border-t border-white/5">
                 <motion.h2
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}

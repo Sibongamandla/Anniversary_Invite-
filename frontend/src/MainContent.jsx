@@ -40,8 +40,36 @@ const PageTransition = ({ children }) => {
     );
 };
 
+const PREFETCH_MAP = {
+    '/': () => import('./pages/Home'),
+    '/story': () => import('./pages/Story'),
+    '/venue': () => import('./pages/Venue'),
+    '/program': () => import('./pages/Program'),
+    '/guide': () => import('./pages/Guide'),
+    '/rsvp': () => import('./pages/RSVP'),
+};
+
 const AnimatedRoutes = () => {
     const location = useLocation();
+
+    // Prefetch Next Route Logic
+    useEffect(() => {
+        const ROUTES = ['/', '/story', '/venue', '/program', '/guide', '/rsvp'];
+        const currentIndex = ROUTES.indexOf(location.pathname);
+
+        if (currentIndex !== -1 && currentIndex < ROUTES.length - 1) {
+            const nextRoute = ROUTES[currentIndex + 1];
+            const prefetcher = PREFETCH_MAP[nextRoute];
+            if (prefetcher) {
+                // Low priority prefetch
+                setTimeout(() => {
+                    prefetcher()
+                        .then(() => console.log(`Prefetched: ${nextRoute}`))
+                        .catch(err => console.error("Prefetch error:", err));
+                }, 1000); // Wait 1s after load to start prefetching
+            }
+        }
+    }, [location.pathname]);
 
     return (
         <Suspense fallback={<div className="h-screen w-screen bg-rich-black" />}>
@@ -57,6 +85,7 @@ const AnimatedRoutes = () => {
                     <Route path="/venue" element={<ProtectedRoute><PageTransition><Venue /></PageTransition></ProtectedRoute>} />
                     <Route path="/program" element={<ProtectedRoute><PageTransition><Program /></PageTransition></ProtectedRoute>} />
                     <Route path="/guide" element={<ProtectedRoute><PageTransition><Guide /></PageTransition></ProtectedRoute>} />
+                    <Route path="/rsvp" element={<ProtectedRoute><PageTransition><RSVP /></PageTransition></ProtectedRoute>} />
                 </Routes>
             </AnimatePresence>
         </Suspense>

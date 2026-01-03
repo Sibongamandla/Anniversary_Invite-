@@ -56,6 +56,14 @@ def update_guest_rsvp(db: Session, unique_code: str, rsvp_status: str, notes: st
         db.refresh(db_guest)
     return db_guest
 
+def mark_invite_sent(db: Session, unique_code: str, sent: bool = True):
+    db_guest = get_guest_by_code(db, unique_code)
+    if db_guest:
+        db_guest.invite_sent = sent
+        db.commit()
+        db.refresh(db_guest)
+    return db_guest
+
 def create_admin(db: Session, admin: schemas.AdminCreate):
     hashed_password = get_password_hash(admin.password)
     db_admin = models.Admin(username=admin.username, hashed_password=hashed_password)
@@ -63,6 +71,17 @@ def create_admin(db: Session, admin: schemas.AdminCreate):
     db.commit()
     db.refresh(db_admin)
     return db_admin
+
+def claim_guest_device(db: Session, unique_code: str, device_id: str):
+    db_guest = get_guest_by_code(db, unique_code)
+    if db_guest:
+        # If no device is claimed, claim it
+        if not db_guest.device_id:
+            db_guest.device_id = device_id
+            db.commit()
+            db.refresh(db_guest)
+        # Return the guest regardless so controller can check if device_id matches
+    return db_guest
 
 def get_admin_by_username(db: Session, username: str):
     return db.query(models.Admin).filter(models.Admin.username == username).first()

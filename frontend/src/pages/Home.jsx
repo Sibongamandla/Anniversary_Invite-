@@ -122,7 +122,7 @@ const Home = () => {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 1 }}
-                            className="text-4xl sm:text-5xl md:text-8xl lg:text-9xl font-serif text-gold-gradient mb-6 md:mb-8 leading-none tracking-tight drop-shadow-2xl"
+                            className="text-4xl sm:text-5xl md:text-8xl lg:text-9xl font-serif text-white mb-6 md:mb-8 leading-none tracking-tight drop-shadow-2xl"
                         >
                             Vows & Vines
                         </motion.h1>
@@ -166,7 +166,10 @@ const Home = () => {
                                         >
                                             ✕
                                         </button>
-                                        <h3 className="text-2xl font-serif text-gold mb-6 text-center">Unseal the Invitation</h3>
+                                        <h3 className="text-2xl font-serif text-gold mb-2 text-center">Unseal the Invitation</h3>
+                                        <p className="text-gray-400 text-xs text-center mb-6 max-w-xs mx-auto leading-relaxed">
+                                            <span className="text-red-400 font-bold">Important:</span> This code can only be used <strong>once</strong>. Access will be permanently locked to this device.
+                                        </p>
                                         <form onSubmit={(e) => {
                                             e.preventDefault();
                                             // Allow any code format, let the Join route handle validation
@@ -199,25 +202,10 @@ const Home = () => {
                             )}
                         </AnimatePresence>
 
-                        <motion.button
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 2 }}
-                            // 3. guestCode && hasRSVP -> Hide button or change text logic
-                            // If hasRSVP, we want to hide it as per user request
-                            style={{ display: (guestCode && hasRSVP) ? 'none' : 'block' }}
-                            onClick={() => {
-                                if (!guestCode) {
-                                    // Open Modal via URL state to keep history clean/shareable
-                                    navigate('?action=enter_code');
-                                } else {
-                                    navigate(`/join/${guestCode}`);
-                                }
-                            }}
-                            className="mt-12 glass-btn text-xs md:text-sm"
-                        >
-                            {guestCode ? "RSVP Now" : "Access Invite"}
-                        </motion.button>
+                        {/* CTA Button Removed per request */}
+                        {/* 
+                         <motion.button ... > ... </motion.button>
+                        */}
                     </div>
 
                     {/* Scroll Indicator */}

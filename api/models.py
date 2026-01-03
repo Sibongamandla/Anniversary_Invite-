@@ -31,6 +31,8 @@ class Guest(Base):
     plus_one_count = Column(Integer, default=0)
     dietary_restrictions = Column(String, nullable=True)
     notes = Column(String, nullable=True)
+    device_id = Column(String, nullable=True)
+    invite_sent = Column(Boolean, default=False) # Tracks the device that claimed this code
 
     @staticmethod
     def generate_unique_code():

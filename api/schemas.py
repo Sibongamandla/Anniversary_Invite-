@@ -23,6 +23,8 @@ class Guest(GuestBase):
     is_family: bool = False
     plus_one_count: int = 0
     dietary_restrictions: Optional[str] = None
+    device_id: Optional[str] = None
+    invite_sent: bool = False
 
     class Config:
         from_attributes = True
@@ -34,6 +36,7 @@ class GuestRSVPUpdate(BaseModel):
     is_family: bool = False
     plus_one_count: int = 0
     dietary_restrictions: Optional[str] = None
+    device_id: Optional[str] = None
 
 class AdminBase(BaseModel):
     username: str
@@ -47,3 +50,6 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+
+class DeviceClaim(BaseModel):
+    device_id: str

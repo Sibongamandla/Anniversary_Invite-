@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useGuest } from '../context/GuestContext';
 import api from '../api';
-import iconRings from '../assets/rings_white.svg';
-import iconBouquet from '../assets/bouquet_white_opt.png';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const RSVP = () => {
-    const { code } = useParams();
+    const { code } = useParams(); // URL param from /join/:code
+    const { guestCode, unlock } = useGuest(); // Context state
+    const navigate = useNavigate();
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
@@ -16,35 +17,74 @@ const RSVP = () => {
     const [name, setName] = useState('');
     const [status, setStatus] = useState('attending');
     const [plusOneName, setPlusOneName] = useState('');
-    const [dietary, setDietary] = useState(''); // New Field
-    const [questions, setQuestions] = useState(''); // New Field
+    const [dietary, setDietary] = useState('');
+    const [questions, setQuestions] = useState('');
 
-    // Derived state for validation
+    const activeCode = code || guestCode;
     const isAttending = status === 'attending';
 
+    const getDeviceId = () => {
+        let deviceId = localStorage.getItem('device_id');
+        if (!deviceId) {
+            deviceId = crypto.randomUUID();
+            localStorage.setItem('device_id', deviceId);
+        }
+        return deviceId;
+    };
+
     useEffect(() => {
-        const fetchGuest = async () => {
+        const init = async () => {
+            if (!activeCode) {
+                // Should not happen due to ProtectedRoute, but safeguard
+                navigate('/');
+                return;
+            }
+
+            // Mode 1: Authentication Entry (/join/:code)
+            if (code) {
+                try {
+                    const deviceId = getDeviceId();
+                    // Attempt to claim this code for this device
+                    await api.post(`/rsvp/claim/${code}`, { device_id: deviceId });
+
+                    unlock(code); // Authenticate globally
+                    navigate('/', { replace: true }); // Redirect to Home immediately
+                    return;
+                } catch (err) {
+                    if (err.response && err.response.status === 403) {
+                        setError('Access Denied: This invitation is locked to another device.');
+                    } else if (err.response && err.response.status === 404) {
+                        setError('Invalid invitation code.');
+                    } else {
+                        setError('Unable to verify invitation. Please try again.');
+                    }
+                    setLoading(false);
+                    return;
+                }
+            }
+
+            // Mode 2: RSVP Page (/rsvp) - User is already authenticated
             try {
-                const response = await api.get(`/rsvp/${code}`);
+                // Ideally this GET should also validate device_id, but for now we trust the session 
+                // or we could update the GET endpoint to accept device_id query param for strictness.
+                // Sticking to "Claim" enforcement for Entry.
+                const response = await api.get(`/rsvp/${activeCode}`);
                 setName(response.data.name || '');
                 if (response.data.rsvp_status) setStatus(response.data.rsvp_status);
-                // We might pre-fill notes if parsed, but for now we leave blank/custom
             } catch (err) {
-                setError('Invalid invitation code.');
+                console.error("Failed to fetch guest info", err);
+                setError("Unable to load invitation.");
             } finally {
                 setLoading(false);
             }
         };
-        fetchGuest();
-    }, [code]);
 
-    const { unlock } = useGuest();
-    const navigate = useNavigate();
+        init();
+    }, [code, activeCode, navigate, unlock]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Construct detailed notes string
             const notesParts = [];
             if (plusOneName) notesParts.push(`Plus One: ${plusOneName}`);
             if (dietary) notesParts.push(`Dietary: ${dietary}`);
@@ -52,20 +92,15 @@ const RSVP = () => {
 
             const compiledNotes = notesParts.join(' | ');
 
-            await api.post(`/rsvp/${code}`, {
+            await api.post(`/rsvp/${activeCode}`, {
                 rsvp_status: status,
                 notes: compiledNotes,
                 name: name,
                 plus_one_count: plusOneName ? 1 : 0
             });
 
-            unlock(code);
             setSuccessMsg('Kindly delivered. We eagerly await our celebration.');
-
-            setTimeout(() => {
-                navigate('/story');
-            }, 3000);
-
+            // No auto-redirect needed since this is the last page, but we can perhaps scroll to top or show a nice thank you state
         } catch (err) {
             setError('The courier stumbled. Please try sending again.');
         }
@@ -74,8 +109,9 @@ const RSVP = () => {
     if (loading) return <div className="flex justify-center items-center h-screen bg-rich-black text-gold font-serif italic">Checking Guest List...</div>;
     if (error) return <div className="flex justify-center items-center h-screen bg-rich-black text-red-400 font-serif text-xl">{error}</div>;
 
+    // Standard Render for Mode 2 (Form)
     return (
-        <div className="min-h-screen bg-rich-black flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
+        <div className="min-h-screen bg-rich-black flex items-center justify-center p-4 md:p-8 relative overflow-hidden pb-32">
 
             {/* Background Texture/Effects */}
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none" />
@@ -85,7 +121,7 @@ const RSVP = () => {
                 className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-red-900/10 pointer-events-none"
             />
 
-            <div className="relative z-10 w-full max-w-2xl">
+            <div className="relative z-10 w-full max-w-2xl mt-24">
 
                 {/* The Physical Card Container */}
                 <motion.div

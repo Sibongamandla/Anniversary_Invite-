@@ -42,6 +42,7 @@ const Navbar = () => {
         { name: 'The Venue', path: '/venue' },
         { name: 'Program', path: '/program' },
         { name: 'Guide', path: '/guide' },
+        { name: 'RSVP', path: '/rsvp' },
         { name: 'Admin', path: '/admin/login' }, // Added Admin
     ];
 

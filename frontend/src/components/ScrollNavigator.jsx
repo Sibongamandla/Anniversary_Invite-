@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-
-const ROUTES = ['/', '/story', '/venue', '/program', '/guide'];
+import { ROUTES } from '../constants/routes';
 
 const ScrollNavigator = () => {
     const navigate = useNavigate();
