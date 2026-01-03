@@ -11,7 +11,7 @@ const Home = () => {
     // const { guest, logout } = useGuest(); // Removed incorrect destructuring
     const [code, setCode] = useState('');
     const [error, setError] = useState('');
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const [hasRSVP, setHasRSVP] = useState(false);
     const { guestCode } = useGuest();
@@ -79,7 +79,7 @@ const Home = () => {
                         transition={{ duration: 10, repeat: Infinity, repeatType: "mirror" }}
                     >
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-rich-black/10 to-rich-black" />
-                        <img src={heroImage} alt="Couple" className="w-full h-full object-cover" />
+                        <img src={heroImage} alt="Couple" className="w-full h-full object-cover object-[50%_25%]" />
                     </motion.div>
 
                     {/* White Bouquet Watermark */}
@@ -102,7 +102,7 @@ const Home = () => {
                         <img src={iconBouquet} className="w-full h-full object-contain transform scale-x-[-1]" />
                     </motion.div>
 
-                    <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center">
+                    <div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-center items-center text-center pt-24 pb-20 md:pt-32 md:pb-32">
                         <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
@@ -114,7 +114,7 @@ const Home = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.5 }}
-                            className="text-gold-gradient font-script text-2xl md:text-5xl mb-4 md:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+                            className="text-gold-gradient font-script text-2xl md:text-5xl mb-4 md:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-relaxed py-2"
                         >
                             Nineteen Years
                         </motion.p>
@@ -202,10 +202,17 @@ const Home = () => {
                             )}
                         </AnimatePresence>
 
-                        {/* CTA Button Removed per request */}
-                        {/* 
-                         <motion.button ... > ... </motion.button>
-                        */}
+                        {!guestCode && (
+                            <motion.button
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 1.8 }}
+                                onClick={() => setSearchParams({ action: 'enter_code' })}
+                                className="mt-12 px-8 py-3 bg-transparent border border-gold/50 text-gold font-serif italic text-lg hover:bg-gold hover:text-rich-black transition-all duration-500 uppercase tracking-widest backdrop-blur-sm"
+                            >
+                                Unseal Invitation
+                            </motion.button>
+                        )}
                     </div>
 
                     {/* Scroll Indicator */}

@@ -10,7 +10,8 @@ const RSVP = () => {
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const [pageError, setPageError] = useState(null);
+    const [submitError, setSubmitError] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
 
     // Form Fields
@@ -52,11 +53,23 @@ const RSVP = () => {
                     return;
                 } catch (err) {
                     if (err.response && err.response.status === 403) {
-                        setError('Access Denied: This invitation is locked to another device.');
+                        setPageError({
+                            title: "Access Restricted",
+                            message: "This invitation code is already linked to another device.",
+                            suggestion: "For security, invitations are locked to the first device used. Please use your original device."
+                        });
                     } else if (err.response && err.response.status === 404) {
-                        setError('Invalid invitation code.');
+                        setPageError({
+                            title: "Invitation Not Found",
+                            message: "We couldn't seem to find an invitation with that code.",
+                            suggestion: "It might be a simple typo. Please double-check the code, or contact the hosts if you continue to have trouble."
+                        });
                     } else {
-                        setError('Unable to verify invitation. Please try again.');
+                        setPageError({
+                            title: "Connection Issue",
+                            message: "We were unable to verify your invitation at this moment.",
+                            suggestion: "Please check your internet connection and try again."
+                        });
                     }
                     setLoading(false);
                     return;
@@ -73,7 +86,11 @@ const RSVP = () => {
                 if (response.data.rsvp_status) setStatus(response.data.rsvp_status);
             } catch (err) {
                 console.error("Failed to fetch guest info", err);
-                setError("Unable to load invitation.");
+                setPageError({
+                    title: "Load Error",
+                    message: "Unable to load invitation details.",
+                    suggestion: "Please refresh the page or try again later."
+                });
             } finally {
                 setLoading(false);
             }
@@ -84,6 +101,7 @@ const RSVP = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setSubmitError('');
         try {
             const notesParts = [];
             if (plusOneName) notesParts.push(`Plus One: ${plusOneName}`);
@@ -102,12 +120,28 @@ const RSVP = () => {
             setSuccessMsg('Kindly delivered. We eagerly await our celebration.');
             // No auto-redirect needed since this is the last page, but we can perhaps scroll to top or show a nice thank you state
         } catch (err) {
-            setError('The courier stumbled. Please try sending again.');
+            setSubmitError('The courier stumbled. Please try sending again.');
         }
     };
 
     if (loading) return <div className="flex justify-center items-center h-screen bg-rich-black text-gold font-serif italic">Checking Guest List...</div>;
-    if (error) return <div className="flex justify-center items-center h-screen bg-rich-black text-red-400 font-serif text-xl">{error}</div>;
+
+    if (pageError) return (
+        <div className="min-h-screen bg-rich-black flex items-center justify-center p-4">
+            <div className="max-w-md w-full bg-[#faf9f6]/95 backdrop-blur-sm p-8 rounded shadow-[0_0_50px_rgba(255,215,0,0.1)] text-center border border-gold/30">
+                <div className="text-red-900 text-5xl mb-4">❦</div>
+                <h2 className="font-serif text-3xl text-red-900 mb-4">{pageError.title}</h2>
+                <p className="font-serif text-gray-800 text-lg mb-4">{pageError.message}</p>
+                <p className="font-sans text-gray-500 text-sm mb-8 leading-relaxed max-w-xs mx-auto">{pageError.suggestion}</p>
+                <button
+                    onClick={() => navigate('/')}
+                    className="bg-rich-black text-gold px-8 py-3 font-serif uppercase tracking-widest hover:bg-gold hover:text-rich-black transition-all duration-300 rounded-sm border border-gold/50"
+                >
+                    Try Again
+                </button>
+            </div>
+        </div>
+    );
 
     // Standard Render for Mode 2 (Form)
     return (
@@ -249,6 +283,7 @@ const RSVP = () => {
 
                                 {/* Submit Button */}
                                 <div className="pt-8 text-center">
+                                    {submitError && <p className="text-red-500 font-serif italic mb-4">{submitError}</p>}
                                     <button
                                         type="submit"
                                         className="bg-rich-black text-white font-serif italic text-xl px-12 py-3 hover:bg-gold hover:text-white transition-colors duration-500 shadow-lg"
