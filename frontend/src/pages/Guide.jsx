@@ -90,7 +90,7 @@ const Guide = () => {
             subtitle: "Attire & Beauty",
             content: {
                 theme: "A Red Affair | Black Tie Elegance",
-                desc: "We request the pleasure of your company in your finest formal attire. Think rich reds, classic blacks, and touches of gold.",
+                desc: "We request the pleasure of your company in your finest formal attire. Embrace high-fashion glamour and bold avant-garde elegance. Think structured silhouettes, vibrant reds, classic blacks, and distinct touches of gold.",
                 makeup: [
                     { name: "@Makeup_by_Hedwin", handle: "Makeup_by_Hedwin", link: "https://www.instagram.com/Makeup_by_Hedwin" },
                     { name: "@SnehhOnlineBeauty_studio", handle: "SnehhOnlineBeauty_studio", link: "https://www.instagram.com/SnehhOnlineBeauty_studio" }
@@ -132,8 +132,8 @@ const Guide = () => {
 
                 {/* Mobile Tab Scroll Hint */}
                 <div className="md:hidden flex justify-center -mt-16 mb-12 opacity-50 animate-pulse">
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-gold flex items-center gap-2">
-                        ← Swipe to Explore →
+                    <p className="text-xs uppercase tracking-[0.2em] text-gold flex items-center gap-2">
+                        ← Explore the Other Tabs →
                     </p>
                 </div>
 
@@ -208,7 +208,9 @@ const Guide = () => {
                                 {/* Scroll Hint */}
                                 <div className="flex items-center gap-2 mb-4 opacity-60">
                                     <div className="w-8 h-[1px] bg-gold" />
-                                    <p className="text-[10px] uppercase tracking-widest text-gold whitespace-nowrap">Swipe to View Areas</p>
+                                    <p className="text-xs uppercase tracking-widest text-gold whitespace-nowrap flex items-center gap-2">
+                                        Swipe to View Areas <span className="text-lg">→</span>
+                                    </p>
                                 </div>
 
                                 <div className="flex overflow-x-auto gap-8 pb-8 -mx-4 px-4 snap-x hide-scrollbar">
@@ -299,6 +301,17 @@ const Guide = () => {
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* RSVP CTA */}
+                                <div className="col-span-1 lg:col-span-2 flex justify-center mt-16 w-full">
+                                    <button
+                                        onClick={() => window.location.href = '/rsvp'}
+                                        className="bg-gold text-rich-black px-12 py-4 text-lg font-serif italic hover:bg-white transition-colors duration-500 uppercase tracking-widest"
+                                    >
+                                        RSVP for the Celebration
+                                    </button>
+                                </div>
+
                             </div>
                         )}
 

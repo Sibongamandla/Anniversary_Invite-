@@ -1,15 +1,44 @@
+
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import iconCouples from '../assets/couple_gold.svg';
-const videoSource = '/assets/our_story.mp4';
+const videoSource = '/assets/our_story_2.mp4';
+const audioSource = '/assets/instrumental.mp3';
 import posterImage from '../assets/couple_standing_red_opt.jpg';
+import { useRef, useEffect } from 'react';
 
 const Story = () => {
     const [isLoading, setIsLoading] = useState(true);
+    const videoRef = useRef(null);
+    const audioRef = useRef(null);
 
     const handleVideoWaiting = () => setIsLoading(true);
-    const handleVideoPlaying = () => setIsLoading(false);
+    const handleVideoPlaying = () => {
+        setIsLoading(false);
+        if (audioRef.current && videoRef.current) {
+            audioRef.current.play().catch(e => console.log("Audio play failed", e));
+        }
+    };
+    const handleVideoPause = () => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+        }
+    };
+    const handleVideoSeek = () => {
+        if (audioRef.current && videoRef.current) {
+            audioRef.current.currentTime = videoRef.current.currentTime;
+        }
+    };
     const handleCanPlay = () => setIsLoading(false);
+
+    // Sync volume (scaled down for background effect)
+    const handleVolumeChange = () => {
+        if (audioRef.current && videoRef.current) {
+            // Keep instrumental at 40% of the video's volume to prevent overpowering
+            audioRef.current.volume = videoRef.current.volume * 0.4;
+            audioRef.current.muted = videoRef.current.muted;
+        }
+    };
 
     return (
         <div className="bg-rich-black min-h-screen text-white pt-24 pb-24">
@@ -24,7 +53,7 @@ const Story = () => {
                 >
                     Our Story
                 </motion.h1>
-                <div className="w-24 h-[1px] bg-gold mx-auto mb-8 opacity-50" />
+
                 <p className="text-gray-400 font-light max-w-xl mx-auto leading-relaxed">
                     A visual journey through twenty years of love, laughter, and building a life together.
                 </p>
@@ -45,14 +74,20 @@ const Story = () => {
                         </div>
                     )}
 
+                    <audio ref={audioRef} src={audioSource} preload="auto" />
+
                     <video
+                        ref={videoRef}
                         className="w-full h-full object-contain"
                         controls
                         playsInline
                         poster={posterImage}
                         onWaiting={handleVideoWaiting}
                         onPlaying={handleVideoPlaying}
+                        onPause={handleVideoPause}
+                        onSeeked={handleVideoSeek}
                         onCanPlay={handleCanPlay}
+                        onVolumeChange={handleVolumeChange}
                     >
                         <source src={videoSource} type="video/mp4" />
                         Your browser does not support the video tag.

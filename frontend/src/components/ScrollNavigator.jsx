@@ -23,6 +23,9 @@ const ScrollNavigator = () => {
 
             // Scroll Down (Next Route)
             if (e.deltaY > 0 && isAtBottom) {
+                // DISABLED: Auto-scroll from Guide to RSVP (User Request)
+                if (ROUTES[currentIndex] === '/guide') return;
+
                 if (currentIndex < ROUTES.length - 1) {
                     setIsNavigating(true);
                     // Stop momentum scrolling immediately
