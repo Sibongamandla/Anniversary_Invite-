@@ -14,6 +14,9 @@ def get_guest(db: Session, guest_id: int):
     return db.query(models.Guest).filter(models.Guest.id == guest_id).first()
 
 def get_guest_by_code(db: Session, unique_code: str):
+    # Robust lookup: Remove whitespace and ensure uppercase
+    if unique_code:
+        unique_code = unique_code.strip().upper()
     return db.query(models.Guest).filter(models.Guest.unique_code == unique_code).first()
 
 def get_guests(db: Session, skip: int = 0, limit: int = 100):

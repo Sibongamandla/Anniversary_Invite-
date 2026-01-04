@@ -74,6 +74,11 @@ const Story = () => {
                         </div>
                     )}
 
+                    {/* Error Message Link (Only visible if native controls fail to show error clearly) */}
+                    <div id="video-error-fallback" className="hidden absolute inset-0 flex items-center justify-center bg-black/80 z-20 text-center p-4">
+                        <p className="text-red-500 font-serif">Unable to play video.</p>
+                    </div>
+
                     <audio ref={audioRef} src={audioSource} preload="auto" />
 
                     <video
@@ -81,6 +86,7 @@ const Story = () => {
                         className="w-full h-full object-contain"
                         controls
                         playsInline
+                        preload="auto"
                         poster={posterImage}
                         onWaiting={handleVideoWaiting}
                         onPlaying={handleVideoPlaying}
@@ -88,9 +94,19 @@ const Story = () => {
                         onSeeked={handleVideoSeek}
                         onCanPlay={handleCanPlay}
                         onVolumeChange={handleVolumeChange}
+                        onError={(e) => {
+                            console.error("Video Playback Error", e);
+                            setIsLoading(false);
+                            // Simple fallback UI trigger
+                            const el = document.getElementById('video-error-fallback');
+                            if (el) el.classList.remove('hidden');
+                        }}
                     >
                         <source src={videoSource} type="video/mp4" />
-                        Your browser does not support the video tag.
+                        <p className="text-white text-center py-20">
+                            Your browser does not support the video tag.
+                            <a href={videoSource} className="underline text-gold" download>Download Video</a>
+                        </p>
                     </video>
                 </motion.div>
             </div>

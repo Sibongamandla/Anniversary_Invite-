@@ -36,5 +36,6 @@ class Guest(Base):
 
     @staticmethod
     def generate_unique_code():
-        chars = string.ascii_uppercase + string.digits
+        # Exclude ambiguous characters: I, 1, l, O, 0
+        chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
         return ''.join(random.choice(chars) for _ in range(6))

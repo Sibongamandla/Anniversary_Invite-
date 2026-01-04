@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useGuest } from '../context/GuestContext';
 import { ROUTES } from '../constants/routes';
 
 const ScrollNavigator = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { guestCode } = useGuest();
     const [isNavigating, setIsNavigating] = useState(false);
     const lastScrollTime = useRef(Date.now());
 
@@ -25,6 +27,9 @@ const ScrollNavigator = () => {
             if (e.deltaY > 0 && isAtBottom) {
                 // DISABLED: Auto-scroll from Guide to RSVP (User Request)
                 if (ROUTES[currentIndex] === '/guide') return;
+
+                // PREVENT: Auto-scroll from Home if locked
+                if (ROUTES[currentIndex] === '/' && !guestCode) return;
 
                 if (currentIndex < ROUTES.length - 1) {
                     setIsNavigating(true);
@@ -71,6 +76,8 @@ const ScrollNavigator = () => {
 
             // Swipe Up (Go Next)
             if (deltaY > 50 && isAtBottom) { // 50px threshold
+                // PREVENT: Swipe from Home if locked
+                if (ROUTES[currentIndex] === '/' && !guestCode) return;
                 if (currentIndex < ROUTES.length - 1) {
                     setIsNavigating(true);
                     // Stop momentum scrolling immediately
