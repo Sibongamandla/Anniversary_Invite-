@@ -1,0 +1,58 @@
+name: Deploy to Hetzner Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H 46.224.40.5 >> ~/.ssh/known_hosts
+
+      - name: Deploy backend
+        run: |
+          rsync -avz --delete \
+            --exclude '__pycache__' \
+            --exclude '*.pyc' \
+            --exclude 'venv' \
+            --exclude '.env' \
+            --exclude 'wedding.db' \
+            api/ sibonga@46.224.40.5:/var/www/tumi-backend/api/
+
+      - name: Deploy frontend
+        run: |
+          rsync -avz --delete \
+            frontend/dist/ sibonga@46.224.40.5:/var/www/tumi-frontend/
+
+      - name: Restart backend service
+        run: |
+          ssh sibonga@46.224.40.5 "sudo systemctl restart tumi-backend || sudo supervisorctl restart tumi-backend || echo 'Manual restart may be needed'"
+
+      - name: Deployment complete
+        run: echo "Deployed successfully to production!"
