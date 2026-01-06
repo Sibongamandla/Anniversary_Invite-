@@ -55,7 +55,7 @@ const Story = () => {
                 </motion.h1>
 
                 <p className="text-gray-400 font-light max-w-xl mx-auto leading-relaxed">
-                    A visual journey through twenty years of love, laughter, and building a life together.
+                    A visual journey through almost two decades of love, laughter, and building a life together.
                 </p>
             </div>
 
@@ -137,7 +137,7 @@ const Story = () => {
                         a sealed by commitment.
                     </p>
                     <p>
-                        Twenty years later, their story is full-bodied and bold.<br />
+                        Almost two decades later, their story is full-bodied and bold.<br />
                         Still rich.<br />
                         Still rare.<br />
                         Still worth raising a glass to.

@@ -70,7 +70,7 @@ const Preloader = ({ onComplete }) => {
             >
                 <div className="absolute bottom-0 w-full flex justify-center pb-4 md:pb-8">
                     <h1 className={`text-gold font-script text-6xl md:text-8xl transition-all duration-1000 ${isExiting ? 'opacity-0 translate-y-5' : 'opacity-100 translate-y-0'} ${progress < 10 ? 'opacity-0 translate-y-5' : 'opacity-100 translate-y-0'}`}>
-                        B & C
+                        C & B
                     </h1>
                 </div>
             </div>

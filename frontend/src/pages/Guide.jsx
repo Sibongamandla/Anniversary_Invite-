@@ -8,7 +8,7 @@ import iconRosemary from '../assets/rosemary_white.svg';
 import iconGrapes from '../assets/grapes_white.svg';
 import iconBouquet from '../assets/bouquet_white_opt.png';
 import imgMen from '../assets/dress_code_men.png';
-import imgWomen from '../assets/dress_code_women.png';
+import imgWomen from '../assets/dress_code_women_v2.jpg';
 
 const Guide = () => {
     const [activeTab, setActiveTab] = useState('Sojourn'); // Default to Sojourn (Journey)
@@ -261,7 +261,7 @@ const Guide = () => {
                                                 </div>
                                                 <p className="text-xs text-gold uppercase tracking-widest text-center mt-3">Gentlemen</p>
                                             </div>
-                                            <div className="space-y-2 group">
+                                            <a href="https://pin.it/7qGSJLQZh" target="_blank" rel="noreferrer" className="space-y-2 group block">
                                                 <div className="relative p-2 border border-gold/40">
                                                     <div className="absolute inset-0 border-[3px] border-gold/10 m-1 pointer-events-none" />
                                                     <div className="aspect-[3/4] overflow-hidden bg-rich-black relative">
@@ -270,7 +270,7 @@ const Guide = () => {
                                                     </div>
                                                 </div>
                                                 <p className="text-xs text-gold uppercase tracking-widest text-center mt-3">Ladies</p>
-                                            </div>
+                                            </a>
                                         </div>
 
                                         <h3 className="text-gold font-bold uppercase tracking-widest text-sm flex items-center gap-2 mt-8">
