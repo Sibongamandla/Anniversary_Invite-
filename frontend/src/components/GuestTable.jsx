@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageCircle, StickyNote } from 'lucide-react';
+import { MessageCircle, StickyNote, Trash2 } from 'lucide-react';
 
 const GuestTable = ({ guests }) => {
     const generateWhatsAppLink = (guest) => {
@@ -36,6 +36,19 @@ Your unique code is: *${guest.unique_code}*`;
             setLocalSentIds(prev => [...prev, guest.id]);
         } catch (err) {
             console.error("Failed to mark invite as sent", err);
+        }
+    };
+
+    const handleDelete = async (guest) => {
+        if (!window.confirm(`Are you sure you want to remove ${guest.name}? This action cannot be undone.`)) return;
+
+        try {
+            await import('../api').then(module => module.default.delete(`/guests/${guest.unique_code}`));
+            // Reload to refresh the list since we don't have a callback ref here
+            window.location.reload();
+        } catch (err) {
+            console.error("Failed to delete guest", err);
+            alert("Failed to delete guest");
         }
     };
 
@@ -94,6 +107,12 @@ Your unique code is: *${guest.unique_code}*`;
                                 <MessageCircle size={16} />
                                 WA Invite
                             </a>
+                            <button
+                                onClick={() => handleDelete(guest)}
+                                className="px-4 py-2 bg-red-50 text-red-700 border border-red-200 rounded flex items-center justify-center gap-2 hover:bg-red-100 transition-colors"
+                            >
+                                <Trash2 size={16} />
+                            </button>
                         </div>
                     </div>
                 ))}
@@ -149,18 +168,27 @@ Your unique code is: *${guest.unique_code}*`;
                                     )}
                                 </td>
                                 <td className="p-3">
-                                    <button
-                                        onClick={() => handleInviteClick(guest)}
-                                        className={`flex items-center gap-2 border px-3 py-1 rounded-full transition-colors ${(guest.invite_sent || localSentIds.includes(guest.id))
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => handleInviteClick(guest)}
+                                            className={`flex items-center gap-2 border px-3 py-1 rounded-full transition-colors ${(guest.invite_sent || localSentIds.includes(guest.id))
                                                 ? 'bg-green-100 text-green-800 border-green-200 hover:bg-green-200'
                                                 : 'bg-white text-gray-600 border-gray-300 hover:bg-green-50 hover:text-green-700 hover:border-green-300'
-                                            }`}
-                                    >
-                                        <MessageCircle size={14} className={(guest.invite_sent || localSentIds.includes(guest.id)) ? "fill-current" : ""} />
-                                        <span className="hidden md:inline text-xs uppercase tracking-wider font-semibold">
-                                            {(guest.invite_sent || localSentIds.includes(guest.id)) ? 'Sent' : 'Invite'}
-                                        </span>
-                                    </button>
+                                                }`}
+                                        >
+                                            <MessageCircle size={14} className={(guest.invite_sent || localSentIds.includes(guest.id)) ? "fill-current" : ""} />
+                                            <span className="hidden md:inline text-xs uppercase tracking-wider font-semibold">
+                                                {(guest.invite_sent || localSentIds.includes(guest.id)) ? 'Sent' : 'Invite'}
+                                            </span>
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(guest)}
+                                            className="p-1.5 text-red-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                                            title="Remove Guest"
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

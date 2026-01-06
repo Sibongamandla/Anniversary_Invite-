@@ -19,6 +19,9 @@ def get_guest_by_code(db: Session, unique_code: str):
         unique_code = unique_code.strip().upper()
     return db.query(models.Guest).filter(models.Guest.unique_code == unique_code).first()
 
+def get_guest_by_device_id(db: Session, device_id: str):
+    return db.query(models.Guest).filter(models.Guest.device_id == device_id).first()
+
 def get_guests(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Guest).offset(skip).limit(limit).all()
 
@@ -57,7 +60,16 @@ def update_guest_rsvp(db: Session, unique_code: str, rsvp_status: str, notes: st
 
         db.commit()
         db.refresh(db_guest)
+        db.refresh(db_guest)
     return db_guest
+
+def delete_guest(db: Session, unique_code: str):
+    db_guest = get_guest_by_code(db, unique_code)
+    if db_guest:
+        db.delete(db_guest)
+        db.commit()
+        return True
+    return False
 
 def mark_invite_sent(db: Session, unique_code: str, sent: bool = True):
     db_guest = get_guest_by_code(db, unique_code)

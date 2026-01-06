@@ -83,7 +83,18 @@ const RSVP = () => {
                 // Sticking to "Claim" enforcement for Entry.
                 const response = await api.get(`/rsvp/${activeCode}`);
                 setName(response.data.name || '');
-                if (response.data.rsvp_status) setStatus(response.data.rsvp_status);
+
+                if (response.data.rsvp_status && response.data.rsvp_status !== 'pending') {
+                    setStatus(response.data.rsvp_status);
+                    // Set success message to bypass form and show "Already RSVP'd" state
+                    if (response.data.rsvp_status === 'attending') {
+                        setSuccessMsg("You have already accepted. We eagerly await our celebration.");
+                    } else if (response.data.rsvp_status === 'declined') {
+                        setSuccessMsg("You have already declined. You will be missed.");
+                    }
+                } else if (response.data.rsvp_status) {
+                    setStatus(response.data.rsvp_status);
+                }
             } catch (err) {
                 console.error("Failed to fetch guest info", err);
                 setPageError({

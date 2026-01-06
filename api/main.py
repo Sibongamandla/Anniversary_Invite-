@@ -148,6 +148,22 @@ def claim_rsvp_code(unique_code: str, claim: schemas.DeviceClaim, db: Session = 
 
     return updated_guest
 
+@app.get("/guests/validate-device/{device_id}", response_model=schemas.Guest)
+def validate_device_id(device_id: str, db: Session = Depends(get_db)):
+    guest = crud.get_guest_by_device_id(db, device_id)
+    if not guest:
+        # It's not an error to not be found, but for REST semantics 404 makes sense for specific resource lookup.
+        # However, for check-logic returning null or 404 is fine. Frontend handles 404 as "not logged in".
+        raise HTTPException(status_code=404, detail="Device not linked to any guest")
+    return guest
+
+@app.delete("/guests/{unique_code}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_guest(unique_code: str, db: Session = Depends(get_db), current_user: models.Admin = Depends(get_current_user)):
+    success = crud.delete_guest(db, unique_code)
+    if not success:
+        raise HTTPException(status_code=404, detail="Guest not found")
+    return None
+
 @app.post("/rsvp/{unique_code}", response_model=schemas.Guest)
 def submit_rsvp(unique_code: str, rsvp: schemas.GuestRSVPUpdate, db: Session = Depends(get_db)): # Fixed Schema name typo
     guest = crud.get_guest_by_code(db, unique_code=unique_code)
