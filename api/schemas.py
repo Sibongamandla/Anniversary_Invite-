@@ -24,6 +24,7 @@ class Guest(GuestBase):
     plus_one_count: int = 0
     dietary_restrictions: Optional[str] = None
     device_id: Optional[str] = None
+    device_id_2: Optional[str] = None
     invite_sent: bool = False
 
     class Config:
