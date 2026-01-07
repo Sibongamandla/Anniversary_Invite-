@@ -20,7 +20,8 @@ def get_guest_by_code(db: Session, unique_code: str):
     return db.query(models.Guest).filter(models.Guest.unique_code == unique_code).first()
 
 def get_guest_by_device_id(db: Session, device_id: str):
-    return db.query(models.Guest).filter(models.Guest.device_id == device_id).first()
+    from sqlalchemy import or_
+    return db.query(models.Guest).filter(or_(models.Guest.device_id == device_id, models.Guest.device_id_2 == device_id)).first()
 
 def get_guests(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Guest).offset(skip).limit(limit).all()
@@ -90,12 +91,22 @@ def create_admin(db: Session, admin: schemas.AdminCreate):
 def claim_guest_device(db: Session, unique_code: str, device_id: str):
     db_guest = get_guest_by_code(db, unique_code)
     if db_guest:
-        # If no device is claimed, claim it
+        # Check matching
+        if db_guest.device_id == device_id or db_guest.device_id_2 == device_id:
+            return db_guest
+        
+        # If no device is claimed, claim slot 1
         if not db_guest.device_id:
             db_guest.device_id = device_id
             db.commit()
             db.refresh(db_guest)
-        # Return the guest regardless so controller can check if device_id matches
+        
+        # If slot 1 is taken (by someone else), try slot 2
+        elif not db_guest.device_id_2:
+            db_guest.device_id_2 = device_id
+            db.commit()
+            db.refresh(db_guest)
+
     return db_guest
 
 def get_admin_by_username(db: Session, username: str):

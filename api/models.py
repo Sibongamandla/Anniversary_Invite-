@@ -32,6 +32,7 @@ class Guest(Base):
     dietary_restrictions = Column(String, nullable=True)
     notes = Column(String, nullable=True)
     device_id = Column(String, nullable=True)
+    device_id_2 = Column(String, nullable=True)
     invite_sent = Column(Boolean, default=False) # Tracks the device that claimed this code
 
     @staticmethod

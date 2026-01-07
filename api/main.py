@@ -139,11 +139,12 @@ def claim_rsvp_code(unique_code: str, claim: schemas.DeviceClaim, db: Session = 
     updated_guest = crud.claim_guest_device(db, unique_code, claim.device_id)
     
     # 3. Validation: Is this the correct device?
-    if updated_guest.device_id != claim.device_id:
+    # 3. Validation: Is this the correct device?
+    if updated_guest.device_id != claim.device_id and updated_guest.device_id_2 != claim.device_id:
         # Determine 403
         raise HTTPException(
             status_code=403, 
-            detail="This invitation code has already been used on another device. Access is restricted to one device."
+            detail="This invitation code has already been used on two devices. Access is restricted."
         )
 
     return updated_guest
