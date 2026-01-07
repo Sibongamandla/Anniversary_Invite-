@@ -97,11 +97,19 @@ const RSVP = () => {
                 }
             } catch (err) {
                 console.error("Failed to fetch guest info", err);
-                setPageError({
-                    title: "Load Error",
-                    message: "Unable to load invitation details.",
-                    suggestion: "Please refresh the page or try again later."
-                });
+                if (err.response && err.response.status === 404) {
+                    setPageError({
+                        title: "Invitation Not Found",
+                        message: "This invitation code no longer exists or has been removed.",
+                        suggestion: "Please contact the hosts if you believe this is an error."
+                    });
+                } else {
+                    setPageError({
+                        title: "Connection Issue",
+                        message: "We were unable to verify your invitation at this moment.",
+                        suggestion: "Please check your internet connection and try again."
+                    });
+                }
             } finally {
                 setLoading(false);
             }
