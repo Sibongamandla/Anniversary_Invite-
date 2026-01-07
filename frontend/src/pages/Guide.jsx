@@ -319,6 +319,13 @@ const Guide = () => {
                 </AnimatePresence>
 
             </div>
+
+            {/* Footer Credit */}
+            <div className="py-8 text-center opacity-50">
+                <p className="text-white text-[10px] uppercase tracking-widest font-sans">
+                    Designed by <a href="https://www.isutech.co.za" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">iSuTech</a>
+                </p>
+            </div>
         </div >
     );
 };

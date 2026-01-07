@@ -316,6 +316,13 @@ const RSVP = () => {
                     </div>
                 </motion.div>
             </div>
+
+            {/* Footer Credit */}
+            <div className="absolute bottom-4 left-0 w-full text-center z-20 pointer-events-none">
+                <p className="text-white/20 text-[10px] uppercase tracking-widest font-sans pointer-events-auto">
+                    Designed by <a href="https://www.isutech.co.za" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">iSuTech</a>
+                </p>
+            </div>
         </div>
     );
 };
