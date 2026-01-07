@@ -36,8 +36,8 @@ const Story = () => {
     // Sync volume (scaled down for background effect)
     const handleVolumeChange = () => {
         if (audioRef.current && videoRef.current) {
-            // Keep instrumental at 15% of the video's volume to prevent overpowering
-            audioRef.current.volume = videoRef.current.volume * 0.15;
+            // Keep instrumental at 25% of the video's volume to prevent overpowering
+            audioRef.current.volume = videoRef.current.volume * 0.25;
             audioRef.current.muted = videoRef.current.muted;
         }
     };
