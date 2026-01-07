@@ -122,7 +122,7 @@ const AdminDashboard = () => {
 
                 {/* Side Panel - Requests & Notes */}
                 <div className="lg:col-span-1 space-y-8">
-                    <BulkMessage />
+                    <BulkMessage guests={guests} />
 
                     <div className="bg-white p-6 border border-gray-200 rounded-lg shadow-sm">
                         <h3 className="text-lg font-bold mb-4 text-gray-900">Guest Notes & Requests</h3>
