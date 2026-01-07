@@ -16,6 +16,8 @@ const Story = () => {
     const handleVideoPlaying = () => {
         setIsLoading(false);
         if (audioRef.current && videoRef.current) {
+            // Ensure volume is set correctly before playing
+            handleVolumeChange();
             audioRef.current.play().catch(e => console.log("Audio play failed", e));
         }
     };
@@ -34,8 +36,8 @@ const Story = () => {
     // Sync volume (scaled down for background effect)
     const handleVolumeChange = () => {
         if (audioRef.current && videoRef.current) {
-            // Keep instrumental at 40% of the video's volume to prevent overpowering
-            audioRef.current.volume = videoRef.current.volume * 0.4;
+            // Keep instrumental at 15% of the video's volume to prevent overpowering
+            audioRef.current.volume = videoRef.current.volume * 0.15;
             audioRef.current.muted = videoRef.current.muted;
         }
     };

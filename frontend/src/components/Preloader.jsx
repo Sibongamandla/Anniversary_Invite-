@@ -41,12 +41,7 @@ const Preloader = ({ onComplete }) => {
             }, 500);
         };
 
-        // Remove static preloader once React mounts and takes over
-        const staticPreloader = document.getElementById('static-preloader');
-        if (staticPreloader) {
-            staticPreloader.style.opacity = '0';
-            setTimeout(() => staticPreloader.remove(), 100);
-        }
+
 
         loadAll();
     }, []);
