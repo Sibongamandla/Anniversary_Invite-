@@ -10,14 +10,14 @@ import iconGrapes from '../assets/grapes_red.svg';
 const Program = () => {
     const schedule = [
         {
-            day: "Thursday, 05 February 2026",
+            day: "Thursday, 05 March 2026",
             title: "The Beginning",
             events: [
                 { time: "17:00", name: "Rehearsal Dinner", desc: "An intimate gathering to begin the festivities.", icon: iconGrapes },
             ]
         },
         {
-            day: "Friday, 06 February 2026",
+            day: "Friday, 06 March 2026",
             title: "The Covenant Renewed",
             events: [
                 { time: "15:00", name: "Ceremony", desc: "We gather to renew our vows and celebrate a love matured.", icon: iconRings },
@@ -25,7 +25,7 @@ const Program = () => {
             ]
         },
         {
-            day: "Saturday, 07 February 2026",
+            day: "Saturday, 07 March 2026",
             title: "Sunset Surprise",
             events: [
                 { time: "17:00", name: "Performance by The Bangers", desc: "A special sunset surprise to close our celebration.", icon: iconLemon }

@@ -200,7 +200,7 @@ const RSVP = () => {
                                 The Pleasure of Your Reply
                             </h1>
                             <div className="h-px w-24 bg-gold mx-auto" />
-                            <p className="font-serif text-gray-500 text-sm tracking-widest uppercase">Is Requested By August 1st</p>
+                            <p className="font-serif text-gray-500 text-sm tracking-widest uppercase">Is Requested By February 6th, 2026</p>
                         </div>
 
                         {successMsg ? (
