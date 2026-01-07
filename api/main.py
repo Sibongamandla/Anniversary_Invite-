@@ -119,6 +119,11 @@ async def upload_guests_csv(file: UploadFile = File(...), db: Session = Depends(
             
     return {"message": f"Successfully added {guests_added} guests"}
 
+@app.post("/guests/broadcast")
+async def broadcast_message(request: schemas.BroadcastRequest, db: Session = Depends(get_db), current_user: models.Admin = Depends(get_current_user)):
+    count = crud.broadcast_message(db, request.message)
+    return {"message": f"Message broadcasted to {count} guests"}
+
 # --- Public RSVP ---
 
 @app.get("/rsvp/{unique_code}", response_model=schemas.Guest)

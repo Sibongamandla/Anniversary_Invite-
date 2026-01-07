@@ -54,3 +54,6 @@ class TokenData(BaseModel):
 
 class DeviceClaim(BaseModel):
     device_id: str
+
+class BroadcastRequest(BaseModel):
+    message: str

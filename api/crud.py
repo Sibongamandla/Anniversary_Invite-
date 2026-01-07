@@ -111,3 +111,17 @@ def claim_guest_device(db: Session, unique_code: str, device_id: str):
 
 def get_admin_by_username(db: Session, username: str):
     return db.query(models.Admin).filter(models.Admin.username == username).first()
+
+def broadcast_message(db: Session, message: str):
+    guests = db.query(models.Guest).all()
+    count = 0
+    print(f"\n--- [BROADCAST SIMULATION START] ---")
+    print(f"Message: {message}\n")
+    
+    for guest in guests:
+        # Simulate sending
+        print(f"To: {guest.name} ({guest.phone_number}) >> SENT")
+        count += 1
+        
+    print(f"\n--- [BROADCAST SIMULATION END] ---\n")
+    return count

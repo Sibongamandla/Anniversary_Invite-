@@ -1,12 +1,24 @@
 import { useState } from 'react';
 import GlassCard from './GlassCard';
+import api from '../api';
 
 const BulkMessage = () => {
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleSend = () => {
-        alert("This is a mockup. Messages would be sent to WhatsApp/Email provider.");
-        setMessage('');
+    const handleSend = async () => {
+        if (!message.trim()) return;
+        setLoading(true);
+        try {
+            const res = await api.post('/guests/broadcast', { message });
+            alert(`Success: ${res.data.message}`);
+            setMessage('');
+        } catch (err) {
+            console.error("Broadcast failed", err);
+            alert("Failed to send broadcast");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -20,8 +32,12 @@ const BulkMessage = () => {
                 onChange={(e) => setMessage(e.target.value)}
             />
             <div className="flex justify-end">
-                <button onClick={handleSend} className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors shadow-sm">
-                    Send Update
+                <button
+                    onClick={handleSend}
+                    disabled={loading}
+                    className={`px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 transition-colors shadow-sm ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                    {loading ? 'Sending...' : 'Send Update'}
                 </button>
             </div>
         </div>
