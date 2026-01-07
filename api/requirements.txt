@@ -9,3 +9,4 @@ python-jose[cryptography]
 python-dotenv
 aiosqlite
 psycopg2-binary
+requests

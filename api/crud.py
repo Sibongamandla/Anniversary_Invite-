@@ -1,6 +1,7 @@
-from sqlalchemy.orm import Session
-from . import models, schemas
+from . import models, schemas, whatsapp
 from passlib.context import CryptContext
+
+
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -115,13 +116,19 @@ def get_admin_by_username(db: Session, username: str):
 def broadcast_message(db: Session, message: str):
     guests = db.query(models.Guest).all()
     count = 0
-    print(f"\n--- [BROADCAST SIMULATION START] ---")
+    print(f"\n--- [WHATSAPP BROADCAST START] ---")
     print(f"Message: {message}\n")
     
     for guest in guests:
-        # Simulate sending
-        print(f"To: {guest.name} ({guest.phone_number}) >> SENT")
-        count += 1
+        if guest.phone_number:
+            # Simulate logging
+            print(f"To: {guest.name} ({guest.phone_number})...")
+            # Actual Send
+            success = whatsapp.send_text_message(guest.phone_number, message)
+            if success:
+                count += 1
+        else:
+            print(f"Skipping {guest.name} (No phone number)")
         
-    print(f"\n--- [BROADCAST SIMULATION END] ---\n")
+    print(f"\n--- [WHATSAPP BROADCAST END] ---\n")
     return count
