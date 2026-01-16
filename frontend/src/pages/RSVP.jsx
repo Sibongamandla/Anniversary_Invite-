@@ -164,7 +164,7 @@ const RSVP = () => {
 
     // Standard Render for Mode 2 (Form)
     return (
-        <div className="min-h-screen bg-rich-black flex items-center justify-center p-4 md:p-8 relative overflow-hidden pb-32">
+        <div className="min-h-screen bg-rich-black flex items-center justify-center p-4 md:p-8 relative pb-12 md:pb-32">
 
             {/* Background Texture/Effects */}
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 pointer-events-none" />
@@ -174,7 +174,7 @@ const RSVP = () => {
                 className="absolute inset-0 bg-gradient-to-br from-gold/10 via-transparent to-red-900/10 pointer-events-none"
             />
 
-            <div className="relative z-10 w-full max-w-2xl mt-24">
+            <div className="relative z-10 w-full max-w-2xl mt-12 md:mt-24">
 
                 {/* The Physical Card Container */}
                 <motion.div
