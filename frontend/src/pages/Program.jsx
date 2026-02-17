@@ -28,7 +28,7 @@ const Program = () => {
             day: "Saturday, 07 March 2026",
             title: "Sunset Surprise",
             events: [
-                { time: "17:00", name: "Performance by The Bangers", desc: "A special sunset surprise to close our celebration.", icon: iconLemon }
+                { time: "17:00", name: "Surprise by the Bangers", desc: "A special sunset surprise to close our celebration.", icon: iconLemon }
             ]
         }
     ];

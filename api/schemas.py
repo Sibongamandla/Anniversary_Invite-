@@ -26,6 +26,12 @@ class Guest(GuestBase):
     device_id: Optional[str] = None
     device_id_2: Optional[str] = None
     invite_sent: bool = False
+    starter_choice: Optional[str] = None
+    main_choice: Optional[str] = None
+    song_request: Optional[str] = None
+    shuttle_airport: bool = False
+    shuttle_venue: bool = False
+    preferred_names: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -38,6 +44,12 @@ class GuestRSVPUpdate(BaseModel):
     plus_one_count: int = 0
     dietary_restrictions: Optional[str] = None
     device_id: Optional[str] = None
+    starter_choice: Optional[str] = None
+    main_choice: Optional[str] = None
+    song_request: Optional[str] = None
+    shuttle_airport: bool = False
+    shuttle_venue: bool = False
+    preferred_names: Optional[str] = None
 
 class AdminBase(BaseModel):
     username: str
@@ -57,3 +69,4 @@ class DeviceClaim(BaseModel):
 
 class BroadcastRequest(BaseModel):
     message: str
+    filter_status: Optional[str] = "all"  # Options: "all", "attending", "pending"

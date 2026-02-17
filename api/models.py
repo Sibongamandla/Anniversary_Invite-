@@ -1,5 +1,9 @@
 from sqlalchemy import Column, Integer, String, Boolean, Enum
-from .database import Base
+try:
+    from .database import Base
+except ImportError:
+    from database import Base
+
 import enum
 import string
 import random
@@ -34,6 +38,15 @@ class Guest(Base):
     device_id = Column(String, nullable=True)
     device_id_2 = Column(String, nullable=True)
     invite_sent = Column(Boolean, default=False) # Tracks the device that claimed this code
+
+    # New RSVP Fields
+    starter_choice = Column(String, nullable=True)
+    main_choice = Column(String, nullable=True)
+    song_request = Column(String, nullable=True)
+    shuttle_airport = Column(Boolean, default=False)
+    shuttle_venue = Column(Boolean, default=False)
+    preferred_names = Column(String, nullable=True)
+
 
     @staticmethod
     def generate_unique_code():

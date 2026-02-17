@@ -21,6 +21,17 @@ const RSVP = () => {
     const [dietary, setDietary] = useState('');
     const [questions, setQuestions] = useState('');
 
+    // New Fields
+    const [preferredNames, setPreferredNames] = useState('');
+    const [starter, setStarter] = useState('');
+    const [main, setMain] = useState('');
+    const [song, setSong] = useState('');
+    const [shuttleAirport, setShuttleAirport] = useState(false);
+    const [shuttleVenue, setShuttleVenue] = useState(false);
+
+    // Edit Mode State
+    const [isEditing, setIsEditing] = useState(false);
+
     const activeCode = code || guestCode;
     const isAttending = status === 'attending';
 
@@ -54,7 +65,7 @@ const RSVP = () => {
                 } catch (err) {
                     if (err.response && err.response.status === 403) {
                         setPageError({
-                            title: "Access Restricted",
+                            title: "Access Restricted Link",
                             message: "This invitation code is already linked to another device.",
                             suggestion: "For security, invitations are locked to the first device used. Please use your original device."
                         });
@@ -95,6 +106,15 @@ const RSVP = () => {
                 } else if (response.data.rsvp_status) {
                     setStatus(response.data.rsvp_status);
                 }
+
+                // Pre-fill new fields if they exist
+                if (response.data.preferred_names) setPreferredNames(response.data.preferred_names);
+                if (response.data.starter_choice) setStarter(response.data.starter_choice);
+                if (response.data.main_choice) setMain(response.data.main_choice);
+                if (response.data.song_request) setSong(response.data.song_request);
+                if (response.data.shuttle_airport) setShuttleAirport(response.data.shuttle_airport);
+                if (response.data.shuttle_venue) setShuttleVenue(response.data.shuttle_venue);
+
             } catch (err) {
                 console.error("Failed to fetch guest info", err);
                 if (err.response && err.response.status === 404) {
@@ -133,7 +153,13 @@ const RSVP = () => {
                 rsvp_status: status,
                 notes: compiledNotes,
                 name: name,
-                plus_one_count: plusOneName ? 1 : 0
+                plus_one_count: plusOneName ? 1 : 0,
+                preferred_names: preferredNames,
+                starter_choice: starter,
+                main_choice: main,
+                song_request: song,
+                shuttle_airport: shuttleAirport,
+                shuttle_venue: shuttleVenue,
             });
 
             setSuccessMsg('Kindly delivered. We eagerly await our celebration.');
@@ -203,14 +229,31 @@ const RSVP = () => {
                             <p className="font-serif text-gray-500 text-sm tracking-widest uppercase">Is Requested By February 6th, 2026</p>
                         </div>
 
-                        {successMsg ? (
+                        {successMsg && !isEditing ? (
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 className="py-12 space-y-6"
                             >
                                 <div className="text-gold text-5xl">❦</div>
+                                <h2 className="text-4xl font-serif text-gold mb-4">Confirmed</h2>
                                 <p className="font-serif text-2xl text-gray-800 italic">{successMsg}</p>
+
+                                <div className="space-y-4 pt-8 max-w-xs mx-auto">
+                                    <button
+                                        onClick={() => setIsEditing(true)}
+                                        className="bg-transparent border border-gold text-gold px-8 py-3 w-full hover:bg-gold hover:text-rich-black transition-colors uppercase tracking-widest text-sm"
+                                    >
+                                        Update My Details
+                                    </button>
+
+                                    <a
+                                        href="/venue"
+                                        className="block text-center text-xs uppercase tracking-widest text-gray-500 hover:text-gold transition-colors underline decoration-gray-700 underline-offset-4"
+                                    >
+                                        View Accommodation Options
+                                    </a>
+                                </div>
                             </motion.div>
                         ) : (
                             <form onSubmit={handleSubmit} className="space-y-10 text-left mt-8 max-w-lg mx-auto">
@@ -260,6 +303,100 @@ const RSVP = () => {
                                             className="space-y-8 overflow-hidden"
                                         >
                                             <div className="h-px w-full bg-gray-100" />
+
+                                            {/* Preferred Names */}
+                                            <div className="group">
+                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Preferred Names of Attendees</label>
+                                                <input
+                                                    type="text"
+                                                    value={preferredNames}
+                                                    onChange={(e) => setPreferredNames(e.target.value)}
+                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors"
+                                                    placeholder="e.g. John & Jane Doe"
+                                                />
+                                            </div>
+
+                                            {/* Menu Choices */}
+                                            <div className="space-y-6">
+                                                <p className="font-serif text-lg text-gray-800 italic text-center">Menu Selection</p>
+
+                                                {/* Starter */}
+                                                <div className="group relative">
+                                                    <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2">Starter</label>
+                                                    <select
+                                                        value={starter}
+                                                        onChange={(e) => setStarter(e.target.value)}
+                                                        className="w-full bg-transparent border-b border-gray-300 py-2 font-serif text-xl text-gray-800 focus:outline-none focus:border-gold appearance-none cursor-pointer"
+                                                    >
+                                                        <option value="" disabled>Select a Starter</option>
+                                                        <option value="Salmon Gravlax">Salmon Gravlax</option>
+                                                        <option value="Duck Confit">Duck Confit</option>
+                                                        <option value="Beef Carpaccio">Beef Carpaccio</option>
+                                                    </select>
+                                                    <div className="absolute right-0 top-8 pointer-events-none text-gray-400">▼</div>
+                                                </div>
+
+                                                {/* Main */}
+                                                <div className="group relative">
+                                                    <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2">Main Course</label>
+                                                    <select
+                                                        value={main}
+                                                        onChange={(e) => setMain(e.target.value)}
+                                                        className="w-full bg-transparent border-b border-gray-300 py-2 font-serif text-xl text-gray-800 focus:outline-none focus:border-gold appearance-none cursor-pointer"
+                                                    >
+                                                        <option value="" disabled>Select a Main</option>
+                                                        <option value="Sea bass">Sea bass</option>
+                                                        <option value="Braised Lamb">Braised Lamb</option>
+                                                        <option value="Peri-peri chicken">Peri - peri chicken</option>
+                                                    </select>
+                                                    <div className="absolute right-0 top-8 pointer-events-none text-gray-400">▼</div>
+                                                </div>
+                                            </div>
+
+                                            {/* Shuttle Service */}
+                                            <div className="space-y-4">
+                                                <p className="font-serif text-lg text-gray-800 italic text-center">Shuttle Service</p>
+                                                <div className="flex flex-col gap-4">
+                                                    <label className="flex items-center gap-4 cursor-pointer group">
+                                                        <div className={`w-5 h-5 border flex items-center justify-center transition-colors ${shuttleAirport ? 'bg-gold border-gold' : 'border-gray-300 group-hover:border-gold'}`}>
+                                                            {shuttleAirport && <span className="text-white text-xs">✓</span>}
+                                                        </div>
+                                                        <span className="font-serif text-gray-700">Shuttle – From Airport to Accommodation</span>
+                                                        <input type="checkbox" checked={shuttleAirport} onChange={(e) => setShuttleAirport(e.target.checked)} className="hidden" />
+                                                    </label>
+
+                                                    <label className="flex items-center gap-4 cursor-pointer group">
+                                                        <div className={`w-5 h-5 border flex items-center justify-center transition-colors ${shuttleVenue ? 'bg-gold border-gold' : 'border-gray-300 group-hover:border-gold'}`}>
+                                                            {shuttleVenue && <span className="text-white text-xs">✓</span>}
+                                                        </div>
+                                                        <span className="font-serif text-gray-700">Shuttle – Accommodation to Venue</span>
+                                                        <input type="checkbox" checked={shuttleVenue} onChange={(e) => setShuttleVenue(e.target.checked)} className="hidden" />
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            {/* Song Choice */}
+                                            <div className="group">
+                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Song Request</label>
+                                                <input
+                                                    type="text"
+                                                    value={song}
+                                                    onChange={(e) => setSong(e.target.value)}
+                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors"
+                                                    placeholder="A song that gets you on the floor"
+                                                />
+                                            </div>
+
+                                            <div className="h-px w-full bg-gray-100" />
+
+                                            {/* Dress Code Info */}
+                                            <div className="text-center space-y-2 py-4 bg-gray-50/50 rounded p-4 border border-gray-100">
+                                                <p className="font-serif text-gold italic">Dress Code</p>
+                                                <p className="text-gray-600 font-serif">Surprise by the Bangers: <span className="text-gray-900">Linens of your choice</span></p>
+                                                <a href="/guide" target="_blank" className="block text-[10px] uppercase tracking-widest text-gold underline hover:text-gray-900 transition-colors pt-1">
+                                                    View Mood Board in Guest Guide
+                                                </a>
+                                            </div>
 
                                             {/* Plus One */}
                                             <div className="group">
@@ -312,18 +449,31 @@ const RSVP = () => {
                                 </div>
 
                             </form>
+
+                        )}
+
+                        {/* Accommodation Link Footer */}
+                        {!successMsg && (
+                            <div className="pt-8 border-t border-gray-200 mt-8">
+                                <p className="font-serif text-gray-800 italic text-center mb-4">Travel & Stay</p>
+                                <div className="flex justify-center flex-col items-center gap-2">
+                                    <a href="/venue" target="_blank" className="text-xs uppercase tracking-widest text-gold border-b border-gold pb-1 hover:text-rich-black hover:border-rich-black transition-colors">
+                                        View Accommodation Areas
+                                    </a>
+                                </div>
+                            </div>
                         )}
                     </div>
                 </motion.div>
-            </div>
+            </div >
 
             {/* Footer Credit */}
-            <div className="absolute bottom-4 left-0 w-full text-center z-20 pointer-events-none">
+            < div className="absolute bottom-4 left-0 w-full text-center z-20 pointer-events-none" >
                 <p className="text-white/20 text-[10px] uppercase tracking-widest font-sans pointer-events-auto">
                     Designed by <a href="https://www.isutech.co.za" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">iSuTech</a>
                 </p>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

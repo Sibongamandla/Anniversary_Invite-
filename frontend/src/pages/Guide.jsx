@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plane, Car, Map, Home, Palette as PaletteIcon, Sparkles, AlertCircle, Instagram } from 'lucide-react';
 import heroImage from '../assets/hero_couple_romantic.png';
+import linenMoodboard from '../assets/linen_moodboard.png';
+import linenMen from '../assets/linen_men.png';
+import linenWomen from '../assets/linen_women.png';
 
 // Icons
 import iconRosemary from '../assets/rosemary_white.svg';
@@ -96,10 +99,19 @@ const Guide = () => {
                     { name: "@SnehhOnlineBeauty_studio", handle: "SnehhOnlineBeauty_studio", link: "https://www.instagram.com/SnehhOnlineBeauty_studio" }
                 ]
             }
+        },
+        Surprise: {
+            title: "The Finale",
+            subtitle: "Surprise by the Bangers",
+            content: {
+                theme: "Linens of Your Choice",
+                desc: "For our final sunset surprise, we invite you to dress in linens of your choice. Think breezy, comfortable, yet stylish—perfect for a relaxed evening of celebration.",
+                moodboard_text: "Comfortable Elegance | Natural Textures | Sunset Vibes"
+            }
         }
     };
 
-    const tabs = ['Sojourn', 'Abode', 'Palette'];
+    const tabs = ['Sojourn', 'Abode', 'Palette', 'Surprise'];
 
     return (
         <div className="min-h-screen bg-rich-black pt-32 px-4 pb-20 border-t-8 border-gold text-white">
@@ -315,6 +327,73 @@ const Guide = () => {
                             </div>
                         )}
 
+
+                        {activeTab === 'Surprise' && (
+                            <div className="grid lg:grid-cols-2 gap-16 items-center">
+                                <div className="order-2 lg:order-1 relative">
+                                    <div className="absolute -inset-4 bg-gradient-to-r from-gold/20 to-transparent blur-xl opacity-50" />
+                                    <div className="grid grid-cols-2 gap-4 relative z-10">
+                                        <div className="space-y-2 group">
+                                            <div className="relative p-2 border border-white/10 rounded-sm bg-white/5">
+                                                <div className="aspect-[3/4] overflow-hidden rounded-sm relative">
+                                                    <img src={linenMen} alt="Gentlemen Linen" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                                                </div>
+                                            </div>
+                                            <p className="text-xs text-gold uppercase tracking-widest text-center mt-3">Gentlemen</p>
+                                        </div>
+
+                                        <div className="space-y-2 group">
+                                            <div className="relative p-2 border border-white/10 rounded-sm bg-white/5">
+                                                <div className="aspect-[3/4] overflow-hidden rounded-sm relative">
+                                                    <img src={linenWomen} alt="Ladies Linen" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                                                </div>
+                                            </div>
+                                            <p className="text-xs text-gold uppercase tracking-widest text-center mt-3">Ladies</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Decoration */}
+                                    <img src={iconGrapes} className="absolute -bottom-16 -left-16 w-48 h-48 opacity-30 rotate-12 mix-blend-screen pointer-events-none" />
+                                </div>
+
+                                <div className="order-1 lg:order-2">
+                                    <h2 className="text-5xl md:text-7xl font-serif text-white mb-6 leading-none">
+                                        Surprise <br />
+                                        <span className="text-gold italic text-4xl md:text-5xl">by the Bangers</span>
+                                    </h2>
+                                    <div className="w-24 h-1 bg-gradient-to-r from-gold to-transparent mb-8" />
+
+                                    <p className="text-xl text-gray-200 font-light leading-relaxed mb-8">
+                                        {sections.Surprise.content.desc}
+                                    </p>
+
+                                    <div className="bg-white/5 border border-white/10 p-8 rounded-sm relative overflow-hidden group">
+                                        <div className="absolute inset-0 bg-gold/5 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500" />
+                                        <h3 className="text-gold font-bold uppercase tracking-widest mb-4 relative z-10 flex items-center gap-3">
+                                            <Sparkles size={18} />
+                                            The Aesthetic
+                                        </h3>
+                                        <p className="text-3xl font-serif text-white relative z-10 italic">
+                                            "{sections.Surprise.content.theme}"
+                                        </p>
+                                        <p className="mt-4 text-xs text-gray-400 uppercase tracking-widest relative z-10 border-t border-white/10 pt-4">
+                                            {sections.Surprise.content.moodboard_text}
+                                        </p>
+                                    </div>
+
+                                    <div className="mt-12 flex gap-4">
+                                        <button
+                                            onClick={() => window.location.href = '/program'}
+                                            className="px-8 py-3 border border-gold text-gold hover:bg-gold hover:text-rich-black transition-all uppercase tracking-widest text-xs"
+                                        >
+                                            View Full Schedule
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </motion.div>
                 </AnimatePresence>
 

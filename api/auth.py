@@ -1,7 +1,11 @@
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
-from . import crud, database
+try:
+    from . import crud, database
+except ImportError:
+    import crud, database
+
 from sqlalchemy.orm import Session
 
 # SECRET_KEY should be in env vars, but for this demo I'll hardcode a random one

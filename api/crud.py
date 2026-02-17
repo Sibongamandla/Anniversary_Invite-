@@ -1,5 +1,9 @@
 from sqlalchemy.orm import Session
-from . import models, schemas, whatsapp
+try:
+    from . import models, schemas, whatsapp
+except ImportError:
+    import models, schemas, whatsapp
+
 from passlib.context import CryptContext
 
 
@@ -46,7 +50,7 @@ def create_guest(db: Session, guest: schemas.GuestCreate):
     return db_guest
 
 def update_guest_rsvp(db: Session, unique_code: str, rsvp_status: str, notes: str = None, 
-                      email: str = None, is_family: bool = False, plus_one_count: int = 0, dietary_restrictions: str = None):
+                      email: str = None, is_family: bool = False, plus_one_count: int = 0, dietary_restrictions: str = None, **kwargs):
     db_guest = get_guest_by_code(db, unique_code)
     if db_guest:
         db_guest.rsvp_status = rsvp_status
@@ -60,6 +64,20 @@ def update_guest_rsvp(db: Session, unique_code: str, rsvp_status: str, notes: st
             db_guest.plus_one_count = plus_one_count
         if dietary_restrictions is not None:
             db_guest.dietary_restrictions = dietary_restrictions
+        
+        # New Fields
+        if kwargs.get('starter_choice') is not None:
+            db_guest.starter_choice = kwargs.get('starter_choice')
+        if kwargs.get('main_choice') is not None:
+            db_guest.main_choice = kwargs.get('main_choice')
+        if kwargs.get('song_request') is not None:
+            db_guest.song_request = kwargs.get('song_request')
+        if kwargs.get('shuttle_airport') is not None:
+            db_guest.shuttle_airport = kwargs.get('shuttle_airport')
+        if kwargs.get('shuttle_venue') is not None:
+            db_guest.shuttle_venue = kwargs.get('shuttle_venue')
+        if kwargs.get('preferred_names') is not None:
+            db_guest.preferred_names = kwargs.get('preferred_names')
 
         db.commit()
         db.refresh(db_guest)
@@ -114,10 +132,17 @@ def claim_guest_device(db: Session, unique_code: str, device_id: str):
 def get_admin_by_username(db: Session, username: str):
     return db.query(models.Admin).filter(models.Admin.username == username).first()
 
-def broadcast_message(db: Session, message: str):
-    guests = db.query(models.Guest).all()
+def broadcast_message(db: Session, message: str, filter_status: str = "all"):
+    query = db.query(models.Guest)
+    
+    if filter_status and filter_status.lower() != "all":
+        # Check against valid RSVP statuses if needed, or just exact match
+        query = query.filter(models.Guest.rsvp_status == filter_status.lower())
+        
+    guests = query.all()
     count = 0
     print(f"\n--- [WHATSAPP BROADCAST START] ---")
+    print(f"Filter: {filter_status}")
     print(f"Message: {message}\n")
     
     for guest in guests:

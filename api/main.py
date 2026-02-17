@@ -8,8 +8,17 @@ import csv
 import io
 
 import os
-from . import crud, models, schemas, database, auth
-from .database import engine, get_db
+import sys
+
+# Ensure current directory is in path for absolute imports
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+try:
+    import crud, models, schemas, database, auth
+    from database import engine, get_db
+except ImportError:
+    from . import crud, models, schemas, database, auth
+    from .database import engine, get_db
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -121,8 +130,8 @@ async def upload_guests_csv(file: UploadFile = File(...), db: Session = Depends(
 
 @app.post("/guests/broadcast")
 async def broadcast_message(request: schemas.BroadcastRequest, db: Session = Depends(get_db), current_user: models.Admin = Depends(get_current_user)):
-    count = crud.broadcast_message(db, request.message)
-    return {"message": f"Message broadcasted to {count} guests"}
+    count = crud.broadcast_message(db, request.message, request.filter_status)
+    return {"message": f"Message broadcasted to {count} guests (Filter: {request.filter_status})"}
 
 # --- Public RSVP ---
 
@@ -183,8 +192,8 @@ def submit_rsvp(unique_code: str, rsvp: schemas.GuestRSVPUpdate, db: Session = D
          if guest.rsvp_status != "pending":
              raise HTTPException(status_code=400, detail="RSVP already submitted")
 
-    return crud.update_guest_rsvp(db, unique_code=unique_code, rsvp_status=rsvp.rsvp_status, notes=rsvp.notes,
-                                  email=rsvp.email, is_family=rsvp.is_family, plus_one_count=rsvp.plus_one_count, dietary_restrictions=rsvp.dietary_restrictions)
+    # Pass all fields from the schema to the CRUD function
+    return crud.update_guest_rsvp(db, unique_code=unique_code, **rsvp.dict(exclude_unset=True))
 
 # --- Admin Setup (Development convenience) ---
 @app.on_event("startup")

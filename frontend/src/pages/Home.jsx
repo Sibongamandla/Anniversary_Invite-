@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Countdown from '../components/Countdown';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Envelope from '../components/Envelope';
@@ -132,6 +133,7 @@ const Home = () => {
                             transition={{ delay: 1, duration: 1 }}
                             className="h-[1px] md:h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent mb-6 md:mb-8"
                         />
+                        {/* ... inside Home component render ... */}
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -142,6 +144,15 @@ const Home = () => {
                             <span className="hidden md:inline text-white/30 px-4">•</span>
                             <span>Destiny Fulfilled</span>
                         </motion.p>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 }}
+                            className="mt-8 md:mt-12"
+                        >
+                            <Countdown targetDate="2026-03-06T15:00:00+02:00" />
+                        </motion.div>
 
 
                         <AnimatePresence>
