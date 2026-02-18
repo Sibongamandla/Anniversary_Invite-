@@ -36,9 +36,9 @@ const Envelope = ({ onOpen }) => {
                         transition={{ duration: 0.8, ease: "easeInOut" }}
                         className="absolute left-2 right-2 top-2 bottom-2 bg-[#fdfcf8] p-4 flex flex-col items-center justify-center text-center shadow-inner origin-bottom"
                     >
-                        <p className="font-script text-gold text-2xl mb-1">Boitumelo & Comfort</p>
-                        <p className="font-serif text-charcoal text-xs uppercase tracking-widest mt-2">Vows & Vines</p>
-                        <p className="font-sans text-[10px] text-gray-400 mt-4">Tap to begin</p>
+                        <p className="font-script text-gray-900 text-3xl md:text-5xl mb-2 font-bold">Boitumelo & Comfort</p>
+                        <p className="font-serif text-black text-base md:text-lg uppercase tracking-[0.25em] mt-3 font-semibold">Vows & Vines</p>
+                        <p className="font-sans text-xs text-black/60 font-medium mt-8 uppercase tracking-widest animate-pulse">Tap to Open</p>
                     </motion.div>
 
                     {/* Envelope Flap (Front - Top) */}

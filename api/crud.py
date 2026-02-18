@@ -78,6 +78,8 @@ def update_guest_rsvp(db: Session, unique_code: str, rsvp_status: str, notes: st
             db_guest.shuttle_venue = kwargs.get('shuttle_venue')
         if kwargs.get('accommodation_needed') is not None:
             db_guest.accommodation_needed = kwargs.get('accommodation_needed')
+        if kwargs.get('sunset_surprise_attendance') is not None:
+            db_guest.sunset_surprise_attendance = kwargs.get('sunset_surprise_attendance')
         if kwargs.get('preferred_names') is not None:
             db_guest.preferred_names = kwargs.get('preferred_names')
 

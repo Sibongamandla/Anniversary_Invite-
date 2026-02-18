@@ -3,6 +3,7 @@ import heroImg from '../assets/couple_formal_red_opt.jpg';
 import posterImg from '../assets/couple_standing_red_opt.jpg';
 import bouquetImg from '../assets/bouquet_white_opt.png';
 import oliveImg from '../assets/olive_gold.svg';
+import Countdown from './Countdown';
 
 const Preloader = ({ onComplete }) => {
     const [progress, setProgress] = useState(0);
@@ -75,9 +76,9 @@ const Preloader = ({ onComplete }) => {
                 className={`w-full bg-rich-black relative border-t border-gold/20 flex items-start justify-center overflow-hidden transition-all duration-[1500ms] ease-[cubic-bezier(0.76,0,0.24,1)] ${isExiting ? 'h-0' : 'h-[50vh]'}`}
             >
                 <div className="absolute top-0 w-full flex flex-col items-center pt-4 md:pt-8 gap-4">
-                    <p className={`text-white/50 text-xs uppercase tracking-[0.4em] transition-opacity duration-500 delay-500 ${isExiting || progress < 20 ? 'opacity-0' : 'opacity-100'}`}>
-                        Stellenbosch • 2026
-                    </p>
+                    <div className={`transition-opacity duration-500 delay-500 ${isExiting || progress < 20 ? 'opacity-0' : 'opacity-100'}`}>
+                        <Countdown targetDate="2026-03-06T15:00:00+02:00" />
+                    </div>
 
                     {/* Progress Line */}
                     <div

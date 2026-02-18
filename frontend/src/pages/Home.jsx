@@ -117,7 +117,7 @@ const Home = () => {
                             transition={{ delay: 0.5 }}
                             className="text-gold-gradient font-script text-2xl md:text-5xl mb-4 md:mb-6 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] leading-relaxed py-2"
                         >
-                            Nineteen Years
+                            Vow Renewal
                         </motion.p>
                         <motion.h1
                             initial={{ opacity: 0, scale: 0.9 }}
@@ -151,7 +151,7 @@ const Home = () => {
                             transition={{ delay: 0.5 }}
                             className="mt-8 md:mt-12 flex flex-col items-center"
                         >
-                            <p className="font-serif text-xl md:text-2xl text-gold mb-4 tracking-widest uppercase">March 06, 2026</p>
+                            <p className="font-serif text-xl md:text-2xl text-gold mb-4 tracking-widest uppercase">6th of March, 2026</p>
                             <Countdown targetDate="2026-03-06T15:00:00+02:00" />
                         </motion.div>
 

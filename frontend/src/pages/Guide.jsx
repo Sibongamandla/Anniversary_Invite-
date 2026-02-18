@@ -102,10 +102,10 @@ const Guide = () => {
         },
         Surprise: {
             title: "The Finale",
-            subtitle: "Surprise by the Bangers",
+            subtitle: "Sunset Surprise with the Bangers",
             content: {
                 theme: "Linens of Your Choice",
-                desc: "For our final sunset surprise, we invite you to dress in linens of your choice. Think breezy, comfortable, yet stylish—perfect for a relaxed evening of celebration.",
+                desc: "For our final Sunset Surprise, we invite you to dress in linens of your choice. Think breezy, comfortable, yet stylish—perfect for a relaxed evening of celebration.",
                 moodboard_text: "Comfortable Elegance | Natural Textures | Sunset Vibes"
             }
         }
@@ -360,8 +360,8 @@ const Guide = () => {
 
                                 <div className="order-1 lg:order-2">
                                     <h2 className="text-5xl md:text-7xl font-serif text-white mb-6 leading-none">
-                                        Surprise <br />
-                                        <span className="text-gold italic text-4xl md:text-5xl">by the Bangers</span>
+                                        Sunset Surprise <br />
+                                        <span className="text-gold italic text-4xl md:text-5xl">with the Bangers</span>
                                     </h2>
                                     <div className="w-24 h-1 bg-gradient-to-r from-gold to-transparent mb-8" />
 

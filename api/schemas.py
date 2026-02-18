@@ -32,6 +32,7 @@ class Guest(GuestBase):
     shuttle_airport: bool = False
     shuttle_venue: bool = False
     accommodation_needed: bool = False
+    sunset_surprise_attendance: bool = False
     preferred_names: Optional[str] = None
 
     class Config:
@@ -51,6 +52,7 @@ class GuestRSVPUpdate(BaseModel):
     shuttle_airport: bool = False
     shuttle_venue: bool = False
     accommodation_needed: bool = False
+    sunset_surprise_attendance: bool = False
     preferred_names: Optional[str] = None
 
 class AdminBase(BaseModel):

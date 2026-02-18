@@ -66,6 +66,7 @@ html.lenis {
 body {
   @apply bg-rich-black text-white overflow-x-hidden font-sans;
   background-color: #0A0A0A;
+  font-size: 110%;
 }
 
 /* Film Grain Overlay */

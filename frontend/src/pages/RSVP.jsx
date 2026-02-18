@@ -29,6 +29,8 @@ const RSVP = () => {
     const [shuttleAirport, setShuttleAirport] = useState(false);
     const [shuttleVenue, setShuttleVenue] = useState(false);
     const [accommodationNeeded, setAccommodationNeeded] = useState(false);
+    const [sunsetAttendance, setSunsetAttendance] = useState(false);
+    const [showSunsetModal, setShowSunsetModal] = useState(false);
 
     // Edit Mode State
     const [isEditing, setIsEditing] = useState(false);
@@ -115,7 +117,9 @@ const RSVP = () => {
                 if (response.data.song_request) setSong(response.data.song_request);
                 if (response.data.shuttle_airport) setShuttleAirport(response.data.shuttle_airport);
                 if (response.data.shuttle_venue) setShuttleVenue(response.data.shuttle_venue);
+                if (response.data.shuttle_venue) setShuttleVenue(response.data.shuttle_venue);
                 if (response.data.accommodation_needed) setAccommodationNeeded(response.data.accommodation_needed);
+                if (response.data.sunset_surprise_attendance) setSunsetAttendance(response.data.sunset_surprise_attendance);
 
             } catch (err) {
                 console.error("Failed to fetch guest info", err);
@@ -140,9 +144,7 @@ const RSVP = () => {
         init();
     }, [code, activeCode, navigate, unlock]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setSubmitError('');
+    const submitRSVP = async (sunsetStatus) => {
         try {
             const notesParts = [];
             if (plusOneName) notesParts.push(`Plus One: ${plusOneName}`);
@@ -163,12 +165,26 @@ const RSVP = () => {
                 shuttle_airport: shuttleAirport,
                 shuttle_venue: shuttleVenue,
                 accommodation_needed: accommodationNeeded,
+                sunset_surprise_attendance: sunsetStatus
             });
 
             setSuccessMsg('Kindly delivered. We eagerly await our celebration.');
-            // No auto-redirect needed since this is the last page, but we can perhaps scroll to top or show a nice thank you state
+            setShowSunsetModal(false);
         } catch (err) {
             setSubmitError('The courier stumbled. Please try sending again.');
+            setShowSunsetModal(false);
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSubmitError('');
+
+        if (status === 'attending') {
+            setShowSunsetModal(true);
+        } else {
+            // If declined, just submit with sunset = false
+            submitRSVP(false);
         }
     };
 
@@ -229,7 +245,7 @@ const RSVP = () => {
                                 The Pleasure of Your Reply
                             </h1>
                             <div className="h-px w-24 bg-gold mx-auto" />
-                            <p className="font-serif text-gray-500 text-sm tracking-widest uppercase">Is Requested By February 6th, 2026</p>
+                            <p className="font-serif text-gray-500 text-sm tracking-widest uppercase">Is Requested By February 26th, 2026</p>
                         </div>
 
                         {successMsg && !isEditing ? (
@@ -263,12 +279,12 @@ const RSVP = () => {
 
                                 {/* 1. Name */}
                                 <div className="group">
-                                    <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Guest Name(s)</label>
+                                    <label className="block text-xs uppercase tracking-widest text-gray-600 mb-2 group-focus-within:text-gold transition-colors font-semibold">Guest Name(s)</label>
                                     <input
                                         type="text"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        className="w-full bg-transparent border-b border-gray-300 py-2 font-serif text-2xl text-gray-900 placeholder:text-gray-300 focus:outline-none focus:border-gold transition-colors text-center"
+                                        className="w-full bg-transparent border-b border-gray-400 py-2 font-serif text-2xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gold transition-colors text-center"
                                         placeholder="M."
                                         required
                                     />
@@ -309,27 +325,31 @@ const RSVP = () => {
 
                                             {/* Preferred Names */}
                                             <div className="group">
-                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Preferred Names of Attendees</label>
+                                                <label className="block text-xs uppercase tracking-widest text-gray-600 mb-2 group-focus-within:text-gold transition-colors font-semibold">Preferred Names of Attendees</label>
                                                 <input
                                                     type="text"
                                                     value={preferredNames}
                                                     onChange={(e) => setPreferredNames(e.target.value)}
-                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors"
+                                                    className="w-full bg-transparent border-b border-gray-400 py-1 font-serif text-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gold transition-colors"
                                                     placeholder="e.g. John & Jane Doe"
                                                 />
                                             </div>
 
                                             {/* Menu Choices */}
                                             <div className="space-y-6">
-                                                <p className="font-serif text-lg text-gray-800 italic text-center">Menu Selection</p>
+                                                <div className="flex items-center justify-center gap-4 mb-4">
+                                                    <div className="h-px w-8 bg-gold/50" />
+                                                    <p className="font-serif text-xl md:text-2xl text-gold uppercase tracking-widest font-bold">Menu Selection</p>
+                                                    <div className="h-px w-8 bg-gold/50" />
+                                                </div>
 
                                                 {/* Starter */}
                                                 <div className="group relative">
-                                                    <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2">Starter</label>
+                                                    <label className="block text-xs uppercase tracking-widest text-gray-600 mb-2 font-semibold">Starter</label>
                                                     <select
                                                         value={starter}
                                                         onChange={(e) => setStarter(e.target.value)}
-                                                        className="w-full bg-transparent border-b border-gray-300 py-2 font-serif text-xl text-gray-800 focus:outline-none focus:border-gold appearance-none cursor-pointer"
+                                                        className="w-full bg-transparent border-b border-gray-400 py-2 font-serif text-xl text-gray-900 focus:outline-none focus:border-gold appearance-none cursor-pointer"
                                                     >
                                                         <option value="" disabled>Select a Starter</option>
                                                         <option value="Salmon Gravlax">Salmon Gravlax</option>
@@ -341,11 +361,11 @@ const RSVP = () => {
 
                                                 {/* Main */}
                                                 <div className="group relative">
-                                                    <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2">Main Course</label>
+                                                    <label className="block text-xs uppercase tracking-widest text-gray-600 mb-2 font-semibold">Main Course</label>
                                                     <select
                                                         value={main}
                                                         onChange={(e) => setMain(e.target.value)}
-                                                        className="w-full bg-transparent border-b border-gray-300 py-2 font-serif text-xl text-gray-800 focus:outline-none focus:border-gold appearance-none cursor-pointer"
+                                                        className="w-full bg-transparent border-b border-gray-400 py-2 font-serif text-xl text-gray-900 focus:outline-none focus:border-gold appearance-none cursor-pointer"
                                                     >
                                                         <option value="" disabled>Select a Main</option>
                                                         <option value="Sea bass">Sea bass</option>
@@ -356,9 +376,30 @@ const RSVP = () => {
                                                 </div>
                                             </div>
 
+                                            {/* Dietary - Moved Here */}
+                                            <div className="group">
+                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Dietary Requirements</label>
+                                                <input
+                                                    type="text"
+                                                    value={dietary}
+                                                    onChange={(e) => setDietary(e.target.value)}
+                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors"
+                                                    placeholder="Allergies, Vegetarian, etc."
+                                                />
+                                            </div>
+
+                                            <p className="text-[10px] text-gray-400 italic text-center -mt-2">
+                                                If you want the full menu please request
+                                            </p>
+
+
                                             {/* Shuttle Service */}
-                                            <div className="space-y-4">
-                                                <p className="font-serif text-lg text-gray-800 italic text-center">Shuttle Service</p>
+                                            <div className="space-y-4 pt-8">
+                                                <div className="flex items-center justify-center gap-4 mb-4">
+                                                    <div className="h-px w-8 bg-gold/50" />
+                                                    <p className="font-serif text-xl md:text-2xl text-gold uppercase tracking-widest font-bold">Shuttle Service</p>
+                                                    <div className="h-px w-8 bg-gold/50" />
+                                                </div>
                                                 <div className="flex flex-col gap-4">
                                                     <label className="flex items-center gap-4 cursor-pointer group">
                                                         <div className={`w-5 h-5 border flex items-center justify-center transition-colors ${shuttleAirport ? 'bg-gold border-gold' : 'border-gray-300 group-hover:border-gold'}`}>
@@ -380,7 +421,7 @@ const RSVP = () => {
                                                         <div className={`w-5 h-5 border flex items-center justify-center transition-colors ${accommodationNeeded ? 'bg-gold border-gold' : 'border-gray-300 group-hover:border-gold'}`}>
                                                             {accommodationNeeded && <span className="text-white text-xs">✓</span>}
                                                         </div>
-                                                        <span className="font-serif text-gray-700">I require accommodation</span>
+                                                        <span className="font-serif text-gray-700">I require assistance to find accommodation</span>
                                                         <input type="checkbox" checked={accommodationNeeded} onChange={(e) => setAccommodationNeeded(e.target.checked)} className="hidden" />
                                                     </label>
                                                 </div>
@@ -388,13 +429,13 @@ const RSVP = () => {
 
                                             {/* Song Choice */}
                                             <div className="group">
-                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Song Request</label>
+                                                <label className="block text-xs uppercase tracking-widest text-gray-600 mb-2 group-focus-within:text-gold transition-colors font-semibold">A song that gets you on the dance floor</label>
                                                 <input
                                                     type="text"
                                                     value={song}
                                                     onChange={(e) => setSong(e.target.value)}
-                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors"
-                                                    placeholder="A song that gets you on the floor"
+                                                    className="w-full bg-transparent border-b border-gray-400 py-1 font-serif text-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gold transition-colors"
+                                                    placeholder="A song that gets you on the dance floor"
                                                 />
                                             </div>
 
@@ -411,35 +452,26 @@ const RSVP = () => {
 
                                             {/* Plus One */}
                                             <div className="group">
-                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Name of Plus One (Optional)</label>
+                                                <label className="block text-xs uppercase tracking-widest text-gray-600 mb-2 group-focus-within:text-gold transition-colors font-semibold">Name of Plus One (Optional)</label>
                                                 <input
                                                     type="text"
                                                     value={plusOneName}
                                                     onChange={(e) => setPlusOneName(e.target.value)}
-                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors"
+                                                    className="w-full bg-transparent border-b border-gray-400 py-1 font-serif text-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gold transition-colors"
                                                     placeholder="Full Name"
                                                 />
                                             </div>
 
                                             {/* Dietary */}
-                                            <div className="group">
-                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Dietary Requirements</label>
-                                                <input
-                                                    type="text"
-                                                    value={dietary}
-                                                    onChange={(e) => setDietary(e.target.value)}
-                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors"
-                                                    placeholder="Allergies, Vegetarian, etc."
-                                                />
-                                            </div>
+
 
                                             {/* Questions */}
                                             <div className="group">
-                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Questions or Messages</label>
+                                                <label className="block text-xs uppercase tracking-widest text-gray-600 mb-2 group-focus-within:text-gold transition-colors font-semibold">Questions or Messages</label>
                                                 <textarea
                                                     value={questions}
                                                     onChange={(e) => setQuestions(e.target.value)}
-                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors resize-none"
+                                                    className="w-full bg-transparent border-b border-gray-400 py-1 font-serif text-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gold transition-colors resize-none"
                                                     placeholder="Any questions for the couple?"
                                                     rows={1}
                                                 />
@@ -484,6 +516,48 @@ const RSVP = () => {
                     Designed by <a href="https://www.isutech.co.za" target="_blank" rel="noopener noreferrer" className="hover:text-gold transition-colors">iSuTech</a>
                 </p>
             </div >
+            {/* Sunset Surprise Modal */}
+            < AnimatePresence >
+                {showSunsetModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-rich-black/90 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            className="bg-[#faf9f6] text-rich-black p-8 md:p-12 max-w-lg w-full relative shadow-[0_0_50px_rgba(212,175,55,0.2)]"
+                            style={{ borderRadius: "2px" }}
+                        >
+                            <div className="absolute inset-2 border border-gold/40 pointer-events-none" />
+
+                            <div className="text-center space-y-6 relative z-10">
+                                <div className="text-gold text-4xl">❦</div>
+                                <h3 className="font-serif text-3xl text-gray-900">One Last Question...</h3>
+                                <p className="font-serif text-xl text-gray-700 leading-relaxed">
+                                    Do you want to come to the <span className="text-gold italic">Sunset Surprise</span> with the Bangers?
+                                </p>
+                                <p className="text-xs text-gray-500 uppercase tracking-widest">
+                                    March 6th • Post-Ceremony
+                                </p>
+
+                                <div className="grid grid-cols-1 gap-4 pt-4">
+                                    <button
+                                        onClick={() => submitRSVP(true)}
+                                        className="bg-gold text-rich-black px-8 py-4 font-serif italic text-xl hover:bg-rich-black hover:text-gold transition-all duration-300 border border-transparent hover:border-gold shadow-lg"
+                                    >
+                                        Yes, I'm In!
+                                    </button>
+                                    <button
+                                        onClick={() => submitRSVP(false)}
+                                        className="bg-transparent border border-gray-300 text-gray-500 px-8 py-3 font-serif hover:border-gold hover:text-gold transition-all duration-300 uppercase tracking-widest text-xs"
+                                    >
+                                        No, Thank You
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence >
         </div >
     );
 };

@@ -46,6 +46,7 @@ class Guest(Base):
     shuttle_airport = Column(Boolean, default=False)
     shuttle_venue = Column(Boolean, default=False)
     accommodation_needed = Column(Boolean, default=False)
+    sunset_surprise_attendance = Column(Boolean, default=False)
     preferred_names = Column(String, nullable=True)
 
 
