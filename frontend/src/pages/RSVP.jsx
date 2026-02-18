@@ -28,6 +28,7 @@ const RSVP = () => {
     const [song, setSong] = useState('');
     const [shuttleAirport, setShuttleAirport] = useState(false);
     const [shuttleVenue, setShuttleVenue] = useState(false);
+    const [accommodationNeeded, setAccommodationNeeded] = useState(false);
 
     // Edit Mode State
     const [isEditing, setIsEditing] = useState(false);
@@ -114,6 +115,7 @@ const RSVP = () => {
                 if (response.data.song_request) setSong(response.data.song_request);
                 if (response.data.shuttle_airport) setShuttleAirport(response.data.shuttle_airport);
                 if (response.data.shuttle_venue) setShuttleVenue(response.data.shuttle_venue);
+                if (response.data.accommodation_needed) setAccommodationNeeded(response.data.accommodation_needed);
 
             } catch (err) {
                 console.error("Failed to fetch guest info", err);
@@ -160,6 +162,7 @@ const RSVP = () => {
                 song_request: song,
                 shuttle_airport: shuttleAirport,
                 shuttle_venue: shuttleVenue,
+                accommodation_needed: accommodationNeeded,
             });
 
             setSuccessMsg('Kindly delivered. We eagerly await our celebration.');
@@ -371,6 +374,14 @@ const RSVP = () => {
                                                         </div>
                                                         <span className="font-serif text-gray-700">Shuttle – Accommodation to Venue</span>
                                                         <input type="checkbox" checked={shuttleVenue} onChange={(e) => setShuttleVenue(e.target.checked)} className="hidden" />
+                                                    </label>
+
+                                                    <label className="flex items-center gap-4 cursor-pointer group mt-2 pt-2 border-t border-gray-100">
+                                                        <div className={`w-5 h-5 border flex items-center justify-center transition-colors ${accommodationNeeded ? 'bg-gold border-gold' : 'border-gray-300 group-hover:border-gold'}`}>
+                                                            {accommodationNeeded && <span className="text-white text-xs">✓</span>}
+                                                        </div>
+                                                        <span className="font-serif text-gray-700">I require accommodation</span>
+                                                        <input type="checkbox" checked={accommodationNeeded} onChange={(e) => setAccommodationNeeded(e.target.checked)} className="hidden" />
                                                     </label>
                                                 </div>
                                             </div>

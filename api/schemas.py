@@ -31,6 +31,7 @@ class Guest(GuestBase):
     song_request: Optional[str] = None
     shuttle_airport: bool = False
     shuttle_venue: bool = False
+    accommodation_needed: bool = False
     preferred_names: Optional[str] = None
 
     class Config:
@@ -49,6 +50,7 @@ class GuestRSVPUpdate(BaseModel):
     song_request: Optional[str] = None
     shuttle_airport: bool = False
     shuttle_venue: bool = False
+    accommodation_needed: bool = False
     preferred_names: Optional[str] = None
 
 class AdminBase(BaseModel):

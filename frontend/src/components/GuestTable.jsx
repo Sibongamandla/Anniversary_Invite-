@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageCircle, StickyNote, Trash2 } from 'lucide-react';
+import { MessageCircle, StickyNote, Trash2, BedDouble } from 'lucide-react';
 
 const GuestTable = ({ guests }) => {
     const generateWhatsAppLink = (guest) => {
@@ -96,6 +96,12 @@ Your unique code is: *${guest.unique_code}*`;
                                         <p className="font-medium text-red-700">{guest.dietary_restrictions}</p>
                                     </div>
                                 )}
+                                {guest.accommodation_needed && (
+                                    <div className="flex gap-2 items-start">
+                                        <BedDouble size={14} className="mt-0.5 text-blue-600 shrink-0" />
+                                        <p className="font-medium text-blue-700">Requires Accommodation</p>
+                                    </div>
+                                )}
                             </div>
                         )}
 
@@ -163,6 +169,14 @@ Your unique code is: *${guest.unique_code}*`;
                                             <div className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center text-xs font-bold cursor-help border border-red-200">!</div>
                                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-white border border-gray-200 text-gray-800 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
                                                 Allergies: {guest.dietary_restrictions}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {guest.accommodation_needed && (
+                                        <div className="group relative">
+                                            <BedDouble size={18} className="text-blue-600 cursor-help" />
+                                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-white border border-gray-200 text-gray-800 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 shadow-lg">
+                                                Requires Accommodation
                                             </div>
                                         </div>
                                     )}
