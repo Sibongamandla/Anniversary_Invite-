@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useGuest } from '../context/GuestContext';
 import api from '../api';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -266,12 +266,13 @@ const RSVP = () => {
                                         Update My Details
                                     </button>
 
-                                    <a
-                                        href="/venue"
+                                    <Link
+                                        to="/venue"
+                                        target="_blank"
                                         className="block text-center text-xs uppercase tracking-widest text-gray-500 hover:text-gold transition-colors underline decoration-gray-700 underline-offset-4"
                                     >
                                         View Accommodation Options
-                                    </a>
+                                    </Link>
                                 </div>
                             </motion.div>
                         ) : (
@@ -445,9 +446,9 @@ const RSVP = () => {
                                             <div className="text-center space-y-2 py-4 bg-gray-50/50 rounded p-4 border border-gray-100">
                                                 <p className="font-serif text-gold italic">Dress Code</p>
                                                 <p className="text-gray-600 font-serif">Surprise by the Bangers: <span className="text-gray-900">Linens of your choice</span></p>
-                                                <a href="/guide" target="_blank" className="block text-[10px] uppercase tracking-widest text-gold underline hover:text-gray-900 transition-colors pt-1">
+                                                <Link to="/guide" target="_blank" className="block text-[10px] uppercase tracking-widest text-gold underline hover:text-gray-900 transition-colors pt-1">
                                                     View Mood Board in Guest Guide
-                                                </a>
+                                                </Link>
                                             </div>
 
                                             {/* Plus One */}
@@ -500,9 +501,9 @@ const RSVP = () => {
                             <div className="pt-8 border-t border-gray-200 mt-8">
                                 <p className="font-serif text-gray-800 italic text-center mb-4">Travel & Stay</p>
                                 <div className="flex justify-center flex-col items-center gap-2">
-                                    <a href="/venue" target="_blank" className="text-xs uppercase tracking-widest text-gold border-b border-gold pb-1 hover:text-rich-black hover:border-rich-black transition-colors">
+                                    <Link to="/venue" target="_blank" className="text-xs uppercase tracking-widest text-gold border-b border-gold pb-1 hover:text-rich-black hover:border-rich-black transition-colors">
                                         View Accommodation Areas
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         )}
