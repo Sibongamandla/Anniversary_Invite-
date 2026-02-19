@@ -15,9 +15,9 @@ const BulkMessage = ({ guests = [] }) => {
     const daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
 
     const templates = {
-        countdown: `⏳ *THE FINAL COUNTDOWN: ${daysRemaining} DAYS TO GO!* ⏳\n\nHello {{name}}! 🥂\n\nWe are now in the final stretch! We cannot wait to share this moment with you.\n\n📅 Date: Saturday, March 7th, 2026\n📍 Location: Stellenbosch\n\nPlease review the Guest Guide for expanding details and our 'Surprise' linen dress code:\n👉 ${baseUrl}/guide\n\nSee you soon!`,
-        venue: `Hi {{name}} 👋\n\n*${daysRemaining} DAYS UNTIL WE CELEBRATE!* 🍾\n\nA quick update regarding the venue.\n\n📍 Venue: [Venue Name/Link]\n⏰ Arrival Time: 3:00 PM for 3:30 PM Start\n\nGoogle Maps Link: [Insert Link]\n\nPlease drive safely!`,
-        rsvp: `Hello {{name}},\n\nWith only *${daysRemaining} days left*, we are finalizing our guest list!\n\nCould you please confirm your attendance by this Friday? We'd love to have you there! 🤍\n\nUpdate your RSVP here:\n👉 ${baseUrl}/rsvp`
+        countdown: `⏳ *THE FINAL COUNTDOWN: ${daysRemaining} DAYS TO GO!* ⏳\n\nHello {{name}}! 🥂\n\nWe are now in the final stretch leading up to our **Vows and Vines** renewal! We cannot wait to share this moment with you.\n\n📅 Date: Saturday, March 7th, 2026\n📍 Location: Stellenbosch\n\nPlease review the Guest Guide for expanding details, including the **Sunset Surprise** and our linen dress code:\n👉 ${baseUrl}/guide\n\nSee you soon!`,
+        venue: `Hi {{name}} 👋\n\n*${daysRemaining} DAYS UNTIL WE CELEBRATE!* 🍾\n\nA quick update regarding the venue for our **Vows and Vines** celebration.\n\n📍 Venue: [Venue Name/Link]\n⏰ Arrival Time: 3:00 PM for 3:30 PM Start\n\nGoogle Maps Link: [Insert Link]\n\nPlease drive safely!`,
+        rsvp: `Hello {{name}},\n\nWith only *${daysRemaining} days left* until **Vows and Vines**, we are finalizing our guest list!\n\nCould you please confirm your attendance by this Friday? We'd love to have you there! 🤍\n\nUpdate your RSVP here:\n👉 ${baseUrl}/rsvp`
     };
 
     const generateLink = (guest) => {
