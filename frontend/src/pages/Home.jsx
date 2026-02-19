@@ -38,6 +38,20 @@ const Home = () => {
 
     // 'normal', 'envelope'
     const [viewState, setViewState] = useState('normal');
+    const [showUpdateModal, setShowUpdateModal] = useState(false);
+
+    useEffect(() => {
+        // Check for update modal views
+        const views = parseInt(localStorage.getItem('update_modal_views') || '0', 10);
+        if (views < 2) {
+            // Show modal after a short delay
+            const timer = setTimeout(() => {
+                setShowUpdateModal(true);
+                localStorage.setItem('update_modal_views', (views + 1).toString());
+            }, 2000); // 2 seconds delay to let animations play
+            return () => clearTimeout(timer);
+        }
+    }, []);
 
     useEffect(() => {
         // Check if we returned from a successful RSVP
@@ -157,6 +171,54 @@ const Home = () => {
 
 
                         <AnimatePresence>
+                            {/* Update Modal */}
+                            {showUpdateModal && (
+                                <motion.div
+                                    key="update-modal"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                                >
+                                    <motion.div
+                                        initial={{ scale: 0.9, y: 20 }}
+                                        animate={{ scale: 1, y: 0 }}
+                                        exit={{ scale: 0.9, y: 20 }}
+                                        className="bg-[#faf9f6] text-rich-black p-8 md:p-12 max-w-md w-full relative shadow-[0_0_50px_rgba(212,175,55,0.4)] border border-gold/40 rounded-sm"
+                                    >
+                                        <div className="absolute top-4 right-4 text-gray-400 hover:text-gold cursor-pointer" onClick={() => setShowUpdateModal(false)}>
+                                            ✕
+                                        </div>
+                                        <div className="text-center space-y-6">
+                                            <div className="text-gold text-4xl">❦</div>
+                                            <h3 className="font-serif text-2xl md:text-3xl text-gray-900 border-b border-gold/30 pb-4">
+                                                Important Updates
+                                            </h3>
+                                            <div className="text-left space-y-4 font-serif text-gray-800">
+                                                <div className="flex gap-3">
+                                                    <span className="text-gold text-lg">›</span>
+                                                    <p><span className="font-bold text-gray-900">New Schedule:</span> Guest Arrival is now at <span className="text-gold font-bold">15:30</span>.</p>
+                                                </div>
+                                                <div className="flex gap-3">
+                                                    <span className="text-gold text-lg">›</span>
+                                                    <p><span className="font-bold text-gray-900">Meal Selection:</span> Please use the new link in the RSVP section.</p>
+                                                </div>
+                                                <div className="flex gap-3">
+                                                    <span className="text-gold text-lg">›</span>
+                                                    <p><span className="font-bold text-gray-900">Sunset Surprise:</span> RSVP is now open for the post-ceremony event.</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={() => setShowUpdateModal(false)}
+                                                className="mt-6 bg-rich-black text-gold px-8 py-3 font-serif uppercase tracking-widest hover:bg-gold hover:text-white transition-all duration-300 w-full"
+                                            >
+                                                Acknowledged
+                                            </button>
+                                        </div>
+                                    </motion.div>
+                                </motion.div>
+                            )}
+
                             {/* Code Entry Modal */}
                             {searchParams.get('action') === 'enter_code' && (
                                 <motion.div

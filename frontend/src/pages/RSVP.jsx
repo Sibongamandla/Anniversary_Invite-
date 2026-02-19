@@ -17,7 +17,6 @@ const RSVP = () => {
     // Form Fields
     const [name, setName] = useState('');
     const [status, setStatus] = useState('attending');
-    const [plusOneName, setPlusOneName] = useState('');
 
     const [questions, setQuestions] = useState('');
 
@@ -145,17 +144,13 @@ const RSVP = () => {
     const submitRSVP = async (sunsetStatus) => {
         try {
             const notesParts = [];
-            if (plusOneName) notesParts.push(`Plus One: ${plusOneName}`);
-
-            if (questions) notesParts.push(`Q: ${questions}`);
-
             const compiledNotes = notesParts.join(' | ');
 
             await api.post(`/rsvp/${activeCode}`, {
                 rsvp_status: status,
                 notes: compiledNotes,
                 name: name,
-                plus_one_count: plusOneName ? 1 : 0,
+                plus_one_count: 0,
                 preferred_names: preferredNames,
 
                 song_request: song,
@@ -268,7 +263,7 @@ const RSVP = () => {
                                     </button>
 
                                     <Link
-                                        to="/venue"
+                                        to="/guide?tab=Abode"
                                         target="_blank"
                                         className="block text-center text-xs uppercase tracking-widest text-gray-500 hover:text-gold transition-colors underline decoration-gray-700 underline-offset-4"
                                     >
@@ -411,17 +406,8 @@ const RSVP = () => {
                                             {/* Dress Code Info */}
 
 
-                                            {/* Plus One */}
-                                            <div className="group">
-                                                <label className="block text-xs uppercase tracking-widest text-gray-600 mb-2 group-focus-within:text-gold transition-colors font-semibold">Name of Plus One (Optional)</label>
-                                                <input
-                                                    type="text"
-                                                    value={plusOneName}
-                                                    onChange={(e) => setPlusOneName(e.target.value)}
-                                                    className="w-full bg-transparent border-b border-gray-400 py-1 font-serif text-xl text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gold transition-colors"
-                                                    placeholder="Full Name"
-                                                />
-                                            </div>
+
+
 
                                             {/* Dietary */}
 
@@ -461,7 +447,7 @@ const RSVP = () => {
                             <div className="pt-8 border-t border-gray-200 mt-8">
                                 <p className="font-serif text-gray-800 italic text-center mb-4">Travel & Stay</p>
                                 <div className="flex justify-center flex-col items-center gap-2">
-                                    <Link to="/venue" target="_blank" className="text-xs uppercase tracking-widest text-gold border-b border-gold pb-1 hover:text-rich-black hover:border-rich-black transition-colors">
+                                    <Link to="/guide?tab=Abode" target="_blank" className="text-xs uppercase tracking-widest text-gold border-b border-gold pb-1 hover:text-rich-black hover:border-rich-black transition-colors">
                                         View Accommodation Areas
                                     </Link>
                                 </div>
