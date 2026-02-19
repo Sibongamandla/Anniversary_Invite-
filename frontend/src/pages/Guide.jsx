@@ -95,8 +95,8 @@ const Guide = () => {
                 theme: "A Red Affair | Black Tie Elegance",
                 desc: "We request the pleasure of your company in your finest formal attire. Embrace high-fashion glamour and bold avant-garde elegance. Think structured silhouettes, vibrant reds, classic blacks, and distinct touches of gold.",
                 makeup: [
-                    { name: "@Makeup_by_Hedwin", handle: "Makeup_by_Hedwin", link: "https://www.instagram.com/Makeup_by_Hedwin" },
-                    { name: "@SnehhOnlineBeauty_studio", handle: "SnehhOnlineBeauty_studio", link: "https://www.instagram.com/SnehhOnlineBeauty_studio" }
+                    { name: "Make Up By ROPA", handle: "@makeupbyropa", link: "https://www.instagram.com/makeupbyropa?igsh=MW8yazM3NHV1bXkxMg==" },
+                    { name: "Pammy The MUA", handle: "@pammy_the_mua", link: "https://www.instagram.com/pammy_the_mua?igsh=MTJoYXV0ZXRwaWk0ZA==" }
                 ]
             }
         },
