@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plane, Car, Map, Home, Palette as PaletteIcon, Sparkles, AlertCircle, Instagram } from 'lucide-react';
 import heroImage from '../assets/hero_couple_romantic.png';
@@ -14,7 +15,16 @@ import imgMen from '../assets/dress_code_men.png';
 import imgWomen from '../assets/dress_code_women_v2.jpg';
 
 const Guide = () => {
-    const [activeTab, setActiveTab] = useState('Sojourn'); // Default to Sojourn (Journey)
+    const [searchParams] = useSearchParams();
+    const tabParam = searchParams.get('tab');
+    const validTabs = ['Sojourn', 'Abode', 'Palette', 'Surprise'];
+
+    const [activeTab, setActiveTab] = useState(() => {
+        if (tabParam && validTabs.includes(tabParam)) {
+            return tabParam;
+        }
+        return 'Sojourn';
+    });
 
 
 

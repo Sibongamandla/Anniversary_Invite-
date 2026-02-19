@@ -167,6 +167,10 @@ const RSVP = () => {
 
             setSuccessMsg('Kindly delivered. We eagerly await our celebration.');
             setShowSunsetModal(false);
+
+            if (sunsetStatus) {
+                navigate('/guide?tab=Surprise');
+            }
         } catch (err) {
             setSubmitError('The courier stumbled. Please try sending again.');
             setShowSunsetModal(false);
