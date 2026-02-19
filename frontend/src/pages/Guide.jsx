@@ -4,7 +4,7 @@ import { Plane, Car, Map, Home, Palette as PaletteIcon, Sparkles, AlertCircle, I
 import heroImage from '../assets/hero_couple_romantic.png';
 import linenMoodboard from '../assets/linen_moodboard.png';
 import linenMen from '../assets/linen_men.png';
-import linenWomen from '../assets/linen_women.png';
+import linenWomen from '../assets/linen_women_v2.png';
 
 // Icons
 import iconRosemary from '../assets/rosemary_white.svg';
