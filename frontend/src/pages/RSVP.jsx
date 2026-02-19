@@ -18,13 +18,12 @@ const RSVP = () => {
     const [name, setName] = useState('');
     const [status, setStatus] = useState('attending');
     const [plusOneName, setPlusOneName] = useState('');
-    const [dietary, setDietary] = useState('');
+
     const [questions, setQuestions] = useState('');
 
     // New Fields
     const [preferredNames, setPreferredNames] = useState('');
-    const [starter, setStarter] = useState('');
-    const [main, setMain] = useState('');
+
     const [song, setSong] = useState('');
     const [shuttleAirport, setShuttleAirport] = useState(false);
     const [shuttleVenue, setShuttleVenue] = useState(false);
@@ -112,8 +111,7 @@ const RSVP = () => {
 
                 // Pre-fill new fields if they exist
                 if (response.data.preferred_names) setPreferredNames(response.data.preferred_names);
-                if (response.data.starter_choice) setStarter(response.data.starter_choice);
-                if (response.data.main_choice) setMain(response.data.main_choice);
+
                 if (response.data.song_request) setSong(response.data.song_request);
                 if (response.data.shuttle_airport) setShuttleAirport(response.data.shuttle_airport);
                 if (response.data.shuttle_venue) setShuttleVenue(response.data.shuttle_venue);
@@ -148,7 +146,7 @@ const RSVP = () => {
         try {
             const notesParts = [];
             if (plusOneName) notesParts.push(`Plus One: ${plusOneName}`);
-            if (dietary) notesParts.push(`Dietary: ${dietary}`);
+
             if (questions) notesParts.push(`Q: ${questions}`);
 
             const compiledNotes = notesParts.join(' | ');
@@ -159,8 +157,7 @@ const RSVP = () => {
                 name: name,
                 plus_one_count: plusOneName ? 1 : 0,
                 preferred_names: preferredNames,
-                starter_choice: starter,
-                main_choice: main,
+
                 song_request: song,
                 shuttle_airport: shuttleAirport,
                 shuttle_venue: shuttleVenue,
@@ -336,62 +333,27 @@ const RSVP = () => {
                                                 />
                                             </div>
 
-                                            {/* Menu Choices */}
-                                            <div className="space-y-6">
+                                            {/* Menu Selection - External Link */}
+                                            <div className="space-y-6 text-center pt-8">
                                                 <div className="flex items-center justify-center gap-4 mb-4">
                                                     <div className="h-px w-8 bg-gold/50" />
                                                     <p className="font-serif text-xl md:text-2xl text-gold uppercase tracking-widest font-bold">Menu Selection</p>
                                                     <div className="h-px w-8 bg-gold/50" />
                                                 </div>
 
-                                                {/* Starter */}
-                                                <div className="group relative">
-                                                    <label className="block text-xs uppercase tracking-widest text-gray-600 mb-2 font-semibold">Starter</label>
-                                                    <select
-                                                        value={starter}
-                                                        onChange={(e) => setStarter(e.target.value)}
-                                                        className="w-full bg-transparent border-b border-gray-400 py-2 font-serif text-xl text-gray-900 focus:outline-none focus:border-gold appearance-none cursor-pointer"
-                                                    >
-                                                        <option value="" disabled>Select a Starter</option>
-                                                        <option value="Salmon Gravlax">Salmon Gravlax</option>
-                                                        <option value="Duck Confit">Duck Confit</option>
-                                                        <option value="Beef Carpaccio">Beef Carpaccio</option>
-                                                    </select>
-                                                    <div className="absolute right-0 top-8 pointer-events-none text-gray-400">▼</div>
-                                                </div>
+                                                <p className="text-gray-600 font-serif mb-4">
+                                                    Please kindly make your meal selection via the form below.
+                                                </p>
 
-                                                {/* Main */}
-                                                <div className="group relative">
-                                                    <label className="block text-xs uppercase tracking-widest text-gray-600 mb-2 font-semibold">Main Course</label>
-                                                    <select
-                                                        value={main}
-                                                        onChange={(e) => setMain(e.target.value)}
-                                                        className="w-full bg-transparent border-b border-gray-400 py-2 font-serif text-xl text-gray-900 focus:outline-none focus:border-gold appearance-none cursor-pointer"
-                                                    >
-                                                        <option value="" disabled>Select a Main</option>
-                                                        <option value="Sea bass">Sea bass</option>
-                                                        <option value="Braised Lamb">Braised Lamb</option>
-                                                        <option value="Peri-peri chicken">Peri - peri chicken</option>
-                                                    </select>
-                                                    <div className="absolute right-0 top-8 pointer-events-none text-gray-400">▼</div>
-                                                </div>
+                                                <a
+                                                    href="https://forms.gle/Uev6YgVWEzcwX3K79"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-block border border-gold text-gold px-6 py-2 text-xs uppercase tracking-widest hover:bg-gold hover:text-white transition-colors"
+                                                >
+                                                    Select Your Meal
+                                                </a>
                                             </div>
-
-                                            {/* Dietary - Moved Here */}
-                                            <div className="group">
-                                                <label className="block text-xs uppercase tracking-widest text-gray-400 mb-2 group-focus-within:text-gold transition-colors">Dietary Requirements</label>
-                                                <input
-                                                    type="text"
-                                                    value={dietary}
-                                                    onChange={(e) => setDietary(e.target.value)}
-                                                    className="w-full bg-transparent border-b border-gray-300 py-1 font-serif text-xl text-gray-800 placeholder:text-gray-200 focus:outline-none focus:border-gold transition-colors"
-                                                    placeholder="Allergies, Vegetarian, etc."
-                                                />
-                                            </div>
-
-                                            <p className="text-[10px] text-gray-400 italic text-center -mt-2">
-                                                If you want the full menu please request
-                                            </p>
 
 
                                             {/* Shuttle Service */}
