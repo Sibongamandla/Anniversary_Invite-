@@ -8,10 +8,16 @@ const BulkMessage = ({ guests = [] }) => {
     // Dynamic Base URL
     const baseUrl = window.location.origin;
 
+    // Calculate Days Remaining
+    const today = new Date();
+    const eventDate = new Date('2026-03-07T15:30:00');
+    const diffTime = eventDate - today;
+    const daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+
     const templates = {
-        countdown: `Hello {{name}}! 🥂\n\nWe are now in the final stretch leading up to our Anniversary Celebration! We cannot wait to share this moment with you on March 7th.\n\n📅 Date: Saturday, March 7th, 2026\n📍 Location: Stellenbosch (See Guide for map)\n\nPlease take a moment to review the Guest Guide for important details regarding the schedule and our 'Surprise' linen dress code:\n👉 ${baseUrl}/guide\n\nLet the countdown begin!`,
-        venue: `Hi {{name}} 👋\n\nA quick update regarding the venue for our celebration.\n\n📍 Venue: [Venue Name/Link]\n⏰ Arrival Time: 3:00 PM for 3:30 PM Start\n\nGoogle Maps Link: [Insert Link]\n\nPlease drive safely and we'll see you there!`,
-        rsvp: `Hello {{name}},\n\nWe are finalizing our guest list and catering numbers for our Anniversary Celebration.\n\nCould you please confirm your attendance by this Friday? We'd love to have you there! 🤍\n\nUpdate your RSVP here:\n👉 ${baseUrl}/rsvp`
+        countdown: `⏳ *THE FINAL COUNTDOWN: ${daysRemaining} DAYS TO GO!* ⏳\n\nHello {{name}}! 🥂\n\nWe are now in the final stretch! We cannot wait to share this moment with you.\n\n📅 Date: Saturday, March 7th, 2026\n📍 Location: Stellenbosch\n\nPlease review the Guest Guide for expanding details and our 'Surprise' linen dress code:\n👉 ${baseUrl}/guide\n\nSee you soon!`,
+        venue: `Hi {{name}} 👋\n\n*${daysRemaining} DAYS UNTIL WE CELEBRATE!* 🍾\n\nA quick update regarding the venue.\n\n📍 Venue: [Venue Name/Link]\n⏰ Arrival Time: 3:00 PM for 3:30 PM Start\n\nGoogle Maps Link: [Insert Link]\n\nPlease drive safely!`,
+        rsvp: `Hello {{name}},\n\nWith only *${daysRemaining} days left*, we are finalizing our guest list!\n\nCould you please confirm your attendance by this Friday? We'd love to have you there! 🤍\n\nUpdate your RSVP here:\n👉 ${baseUrl}/rsvp`
     };
 
     const generateLink = (guest) => {
