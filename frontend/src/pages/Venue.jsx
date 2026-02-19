@@ -151,8 +151,8 @@ const Venue = () => {
                                     <span className="relative z-10 font-bold">1</span>
                                 </div>
                                 <div>
-                                    <h4 className="text-white font-bold uppercase tracking-wider text-sm">Ceremony</h4>
-                                    <p className="text-gray-500 text-sm">Quoin Rock Gardens • 15:00</p>
+                                    <h4 className="text-white font-bold uppercase tracking-wider text-sm">Matrimonial</h4>
+                                    <p className="text-gray-500 text-sm">Quoin Rock Gardens • 16:00 (Arrival 15:30)</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-4 relative z-10">
@@ -161,7 +161,7 @@ const Venue = () => {
                                 </div>
                                 <div>
                                     <h4 className="text-white font-bold uppercase tracking-wider text-sm">Reception</h4>
-                                    <p className="text-gray-500 text-sm">The Hall • 18:30</p>
+                                    <p className="text-gray-500 text-sm">The Hall • Follows Matrimonial</p>
                                 </div>
                             </div>
 

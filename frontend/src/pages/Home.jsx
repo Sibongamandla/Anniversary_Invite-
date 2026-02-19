@@ -152,7 +152,7 @@ const Home = () => {
                             className="mt-8 md:mt-12 flex flex-col items-center"
                         >
                             <p className="font-serif text-xl md:text-2xl text-gold mb-4 tracking-widest uppercase">6th of March, 2026</p>
-                            <Countdown targetDate="2026-03-06T15:00:00+02:00" />
+                            <Countdown targetDate="2026-03-06T15:30:00+02:00" />
                         </motion.div>
 
 

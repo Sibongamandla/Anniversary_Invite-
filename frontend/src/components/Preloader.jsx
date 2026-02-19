@@ -77,7 +77,7 @@ const Preloader = ({ onComplete }) => {
             >
                 <div className="absolute top-0 w-full flex flex-col items-center pt-4 md:pt-8 gap-4">
                     <div className={`transition-opacity duration-500 delay-500 ${isExiting || progress < 20 ? 'opacity-0' : 'opacity-100'}`}>
-                        <Countdown targetDate="2026-03-06T15:00:00+02:00" />
+                        <Countdown targetDate="2026-03-06T15:30:00+02:00" />
                     </div>
 
                     {/* Progress Line */}

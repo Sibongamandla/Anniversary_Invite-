@@ -10,13 +10,13 @@ const BulkMessage = ({ guests = [] }) => {
 
     // Calculate Days Remaining
     const today = new Date();
-    const eventDate = new Date('2026-03-07T15:30:00');
+    const eventDate = new Date('2026-03-06T15:30:00');
     const diffTime = eventDate - today;
     const daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
 
     const templates = {
-        countdown: `⏳ *THE FINAL COUNTDOWN: ${daysRemaining} DAYS TO GO!* ⏳\n\nHello {{name}}! 🥂\n\nWe are now in the final stretch leading up to our **Vows and Vines** renewal! We cannot wait to share this moment with you.\n\n📅 Date: Saturday, March 7th, 2026\n📍 Location: Stellenbosch\n\nPlease review the Guest Guide for expanding details, including the **Sunset Surprise** and our linen dress code:\n👉 ${baseUrl}/guide\n\nSee you soon!`,
-        venue: `Hi {{name}} 👋\n\n*${daysRemaining} DAYS UNTIL WE CELEBRATE!* 🍾\n\nA quick update regarding the venue for our **Vows and Vines** celebration.\n\n📍 Venue: [Venue Name/Link]\n⏰ Arrival Time: 3:00 PM for 3:30 PM Start\n\nGoogle Maps Link: [Insert Link]\n\nPlease drive safely!`,
+        countdown: `⏳ *THE FINAL COUNTDOWN: ${daysRemaining} DAYS TO GO!* ⏳\n\nHello {{name}}! 🥂\n\nWe are now in the final stretch leading up to our **Vows and Vines** renewal! We cannot wait to share this moment with you.\n\n📅 Date: Friday, March 6th, 2026\n📍 Location: Stellenbosch\n\n*GUEST ARRIVAL: 15:30*\n*MATRIMONIAL: 16:00*\n\nPlease join us for our pre-reception which will be followed by our reception.\n\nPlease review the Guest Guide for expanding details, including the **Sunset Surprise** and our linen dress code:\n👉 ${baseUrl}/guide\n\nSee you soon!`,
+        venue: `Hi {{name}} 👋\n\n*${daysRemaining} DAYS UNTIL WE CELEBRATE!* 🍾\n\nA quick update regarding the venue for our **Vows and Vines** celebration.\n\n📍 Venue: [Venue Name/Link]\n⏰ Arrival Time: 15:30 for 16:00 Start\n\nGoogle Maps Link: [Insert Link]\n\nPlease drive safely!`,
         rsvp: `Hello {{name}},\n\nWith only *${daysRemaining} days left* until **Vows and Vines**, we are finalizing our guest list!\n\nCould you please confirm your attendance by this Friday? We'd love to have you there! 🤍\n\nUpdate your RSVP here:\n👉 ${baseUrl}/rsvp`
     };
 

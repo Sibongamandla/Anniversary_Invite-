@@ -20,8 +20,9 @@ const Program = () => {
             day: "Friday, 06 March 2026",
             title: "The Covenant Renewed",
             events: [
-                { time: "15:00", name: "Ceremony", desc: "We gather to renew our vows and celebrate a love matured.", icon: iconRings },
-                { time: "18:30", name: "Reception", desc: "An evening of laughter, joy, restaurant dining, and dancing.", icon: iconHeart }
+                { time: "15:30", name: "Guest Arrival", desc: "Welcome drinks served on the lawn.", icon: iconGrapes },
+                { time: "16:00", name: "Matrimonial", desc: "We gather to renew our vows and celebrate a love matured.", icon: iconRings },
+                { time: "Follows", name: "Pre-Reception & Reception", desc: "Please join us for our pre-reception which will be followed by our reception.", icon: iconHeart }
             ]
         },
         {
