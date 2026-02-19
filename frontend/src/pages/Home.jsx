@@ -207,6 +207,10 @@ const Home = () => {
                                                     <span className="text-gold text-lg">›</span>
                                                     <p><span className="font-bold text-gray-900">Sunset Surprise:</span> RSVP is now open for the post-ceremony event.</p>
                                                 </div>
+                                                <div className="flex gap-3">
+                                                    <span className="text-gold text-lg">›</span>
+                                                    <p><span className="font-bold text-gray-900">Beauty:</span> The list of suggested Make Up Artists has been updated.</p>
+                                                </div>
                                             </div>
                                             <button
                                                 onClick={() => setShowUpdateModal(false)}
