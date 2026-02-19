@@ -533,10 +533,16 @@ const RSVP = () => {
                             <div className="text-center space-y-6 relative z-10">
                                 <div className="text-gold text-4xl">❦</div>
                                 <h3 className="font-serif text-3xl text-gray-900">One Last Question...</h3>
-                                <p className="font-serif text-xl text-gray-700 leading-relaxed">
-                                    Do you want to come to the <span className="text-gold italic">Sunset Surprise</span> with the Bangers?
-                                </p>
-                                <p className="text-xs text-gray-500 uppercase tracking-widest">
+                                <div className="space-y-4">
+                                    <p className="font-serif text-xl text-gray-900 leading-relaxed font-medium">
+                                        Do you want to join the <span className="text-gold italic font-bold">Sunset Surprise</span> with the Bangers?
+                                    </p>
+                                    <p className="font-serif text-base text-gray-800 italic leading-relaxed px-4">
+                                        This is a complimentary, all-expenses-paid experience curated for your enjoyment.
+                                        Please know that your attendance is entirely optional—join us only if you wish.
+                                    </p>
+                                </div>
+                                <p className="text-xs text-gray-600 uppercase tracking-widest font-semibold pt-2">
                                     March 6th • Post-Ceremony
                                 </p>
 
