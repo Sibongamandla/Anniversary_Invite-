@@ -443,13 +443,7 @@ const RSVP = () => {
                                             <div className="h-px w-full bg-gray-100" />
 
                                             {/* Dress Code Info */}
-                                            <div className="text-center space-y-2 py-4 bg-gray-50/50 rounded p-4 border border-gray-100">
-                                                <p className="font-serif text-gold italic">Dress Code</p>
-                                                <p className="text-gray-600 font-serif">Surprise by the Bangers: <span className="text-gray-900">Linens of your choice</span></p>
-                                                <Link to="/guide" target="_blank" className="block text-[10px] uppercase tracking-widest text-gold underline hover:text-gray-900 transition-colors pt-1">
-                                                    View Mood Board in Guest Guide
-                                                </Link>
-                                            </div>
+
 
                                             {/* Plus One */}
                                             <div className="group">
